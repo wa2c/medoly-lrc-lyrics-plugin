@@ -1,0 +1,70 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.wa2c.android.medoly.plugin.action.viewlyrics.activity.MainActivity"
+    tools:ignore="MergeRootFrame">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="@dimen/main_button_width"
+                android:layout_height="wrap_content"
+                android:text="@string/label_button_search"
+                android:id="@+id/launchSearchButton"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/main_button_margin"
+                android:drawableLeft="@android:drawable/ic_menu_search"/>
+
+            <Button
+                android:layout_width="@dimen/main_button_width"
+                android:layout_height="wrap_content"
+                android:text="@string/label_button_cache"
+                android:id="@+id/launchCacheButton"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/main_button_margin"
+                android:drawableLeft="@android:drawable/ic_menu_edit"/>
+
+            <Button
+                android:id="@+id/launchSettingsButton"
+                android:layout_width="@dimen/main_button_width"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/main_button_margin"
+                android:text="@string/label_button_settings"
+                android:drawableLeft="@android:drawable/ic_menu_manage"/>
+
+            <Button
+                android:id="@+id/launchMedolyButton"
+                android:layout_width="@dimen/main_button_width"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/main_button_margin"
+                android:text="@string/label_button_launch_medoly" />
+
+            <TextView
+                android:id="@+id/noMedolyTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/message_no_medoly"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_margin="@dimen/main_button_margin" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>
+
+
+

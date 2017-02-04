@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+
+    <!-- App Infos -->
+    <string name="app_name">Medoly ViewLyrics Plugin</string>
+    <string name="base_app_name">Medoly</string>
+    <string name="package_name">com.wa2c.android.medoly.plugin.action.viewlyrics</string>
+    <string name="domain_name">wa2c.com</string>
+    <string name="app_mail_name">medoly</string>
+    <string name="app_mail_domain">wa2c.com</string>
+    <string name="app_author">wa2c</string>
+    <string name="app_market">market://details?id=com.wa2c.android.medoly.plugin.action.viewlyrics</string>
+    <string name="app_market_web">https://play.google.com/store/apps/details?id=com.wa2c.android.medoly.plugin.action.viewlyrics</string>
+
+    <!--<string name="app_user_agent">Mozilla/5.0 (X11; Linux x86_64) AppleWebKit (KHTML, like Gecko) Chrome Safari</string>-->
+    <string name="app_user_agent">Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.52 Safari/537.36</string>
+
+    <string name="sheet_id">1rAtZzpOmwkAigUJ4ENOCglaXPK5klmGfAhGasQrVg6U</string>
+    <string name="sheet_uri">https://docs.google.com/spreadsheets/d/%1s</string>
+
+    <!-- Site info -->
+
+    <!-- Library  -->
+    <string-array name="about_library_names">
+       <item>jsoup</item>
+        <item>xsoup</item>
+    </string-array>
+    <string-array name="about_library_urls">
+        <item>http://jsoup.org/</item>
+        <item>https://github.com/code4craft/xsoup</item>
+    </string-array>
+
+    <!-- Preferences -->
+    <string name="prefkey_selected_id">selected_id</string>
+    <string name="prefkey_selected_site_id">selected_site_id</string>
+
+    <string name="prefkey_operation_media_open_enabled">operation_media_open_enabled</string>
+    <string name="prefkey_previous_media_enabled">previous_media_enabled</string>
+    <string name="prefkey_success_message_show">success_message_show</string>
+    <string name="prefkey_failure_message_show">failure_message_show</string>
+    <string name="prefkey_application_details">application_details</string>
+    <string name="prefkey_about">about</string>
+
+    <string name="id_lyrics">Lyrics</string>
+
+</resources>
