@@ -61,7 +61,7 @@
     <string name="error_input_condition">Input search conditions.</string>
     <string name="label_search_item_separator"> / </string>
     <string name="label_search_item_download">Download:%1$d</string>
-    <string name="label_search_item_rating">Rating:%1$d</string>
+    <string name="label_search_item_rating">Rating:%1$.1f(%2$d)</string>
     <string name="label_search_item_from">From:%1$s</string>
     <string name="dialog_confirm_message_save_cache">Save the search result to cache.</string>
     <string name="dialog_confirm_label_save_cache">Save</string>

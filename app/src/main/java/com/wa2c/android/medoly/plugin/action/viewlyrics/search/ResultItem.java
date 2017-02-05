@@ -27,7 +27,7 @@ public class ResultItem {
     private String lyricUploader;
     /** Lyric rate. */
     private Double lyricRate;
-    /** Lyric download count. */
+    /** Lyric downloadLyricsText count. */
     private Integer lyricDownloadsCount;
     /** Lyric rate count. */
     private Integer lyricRatesCount;

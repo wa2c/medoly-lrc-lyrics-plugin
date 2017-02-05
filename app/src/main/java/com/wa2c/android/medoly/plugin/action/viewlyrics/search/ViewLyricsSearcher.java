@@ -25,9 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -61,14 +59,16 @@ public class ViewLyricsSearcher {
 
     private static final byte[] magickey = "Mlv1clt4.0".getBytes();
 
-    private static final String LYRICS_ENCODING = "UTF-8";
+    public static final String LYRICS_ENCODING = "UTF-8";
+
+
 
     /**
-     * Download lyrics.
+     * Download lyrics bytes.
      * @param urlText Lyrics URL.
-     * @return Lyrics text.
+     * @return Lyrics bytes.
      */
-    public static String download(String urlText) throws IOException {
+    public static byte[] downloadLyricsBytes(String urlText) throws IOException {
         final URL url = new URL(urlText);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
@@ -93,11 +93,22 @@ public class ViewLyricsSearcher {
             }
             lyricsBytes = bout.toByteArray();
         }
+        return lyricsBytes;
+    }
+
+    /**
+     * Download lyrics.
+     * @param urlText Lyrics URL.
+     * @return Lyrics text.
+     */
+    public static String downloadLyricsText(String urlText) throws IOException {
+        byte[] lyricsBytes = downloadLyricsBytes(urlText);
         if (lyricsBytes == null || lyricsBytes.length == 0)
             return null;
-
         return new String(lyricsBytes, LYRICS_ENCODING);
     }
+
+
 
     /*
      * Search function

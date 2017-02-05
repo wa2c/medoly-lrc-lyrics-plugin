@@ -11,7 +11,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -312,7 +311,7 @@ public class SearchActivity extends Activity {
     void downloadLyrics(ResultItem item) {
         try {
             if (item != null) {
-                String lyrics = ViewLyricsSearcher.download(item.getLyricURL());
+                String lyrics = ViewLyricsSearcher.downloadLyricsText(item.getLyricURL());
                 item.setLyrics(lyrics);
             }
         } catch (Exception e) {
@@ -424,7 +423,7 @@ public class SearchActivity extends Activity {
             holder.searchItemArtistTextView.setText(AppUtils.nvl(item.getMusicArtist(), "-"));
             holder.searchItemAlbumTextView.setText(AppUtils.nvl(item.getMusicAlbum(), "-"));
             holder.searchItemDownloadTextView.setText(getContext().getString(R.string.label_search_item_download, item.getLyricDownloadsCount()));
-            holder.searchItemRatingTextView.setText(getContext().getString(R.string.label_search_item_rating, item.getLyricRatesCount()));
+            holder.searchItemRatingTextView.setText(getContext().getString(R.string.label_search_item_rating, item.getLyricRate(), item.getLyricRatesCount()));
             holder.searchItemFromTextView.setText(getContext().getString(R.string.label_search_item_from, item.getLyricUploader()));
 
             return convertView;

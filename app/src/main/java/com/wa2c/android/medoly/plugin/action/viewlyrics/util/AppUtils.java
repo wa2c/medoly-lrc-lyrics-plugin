@@ -7,10 +7,15 @@ import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.TextUtils;
 
+import com.cybozu.labs.langdetect.Detector;
+import com.cybozu.labs.langdetect.DetectorFactory;
+import com.cybozu.labs.langdetect.LangDetectException;
 import com.google.gson.Gson;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
 
 import java.lang.reflect.Type;
 import java.text.Normalizer;
+import java.util.Arrays;
 
 
 /**
@@ -97,6 +102,53 @@ public class AppUtils {
             return null;
         }
     }
+
+
+    // Language
+
+    /** Language names. */
+    private static String[] languageNames;
+    /** Language profiles. */
+    private static String[] languageProfiles;
+
+    /**
+     * Get language names.
+     * @param context context.
+     * @return language names.
+     */
+    public static synchronized String[] getLanguageNames(Context context) {
+        if (languageNames == null)
+            languageNames = context.getResources().getStringArray(R.array.language_names);
+        return languageNames;
+    }
+
+    /**
+     * Get language profiles.
+     * @param context context.
+     * @return language profiles.
+     */
+    public static synchronized  String[] getLanguageProfiels(Context context) {
+        if (languageProfiles == null)
+            languageProfiles = context.getResources().getStringArray(R.array.language_profiles);
+        return languageProfiles;
+    }
+
+    /**
+     * Get language detector.
+     * @param context context.
+     * @return Language detector.
+     */
+    public static Detector createDetector(Context context) throws LangDetectException {
+        // Language profile
+        if (DetectorFactory.getLangList() == null || DetectorFactory.getLangList().size() == 0) {
+            // initialize
+            DetectorFactory.clear();
+            DetectorFactory.loadProfile(Arrays.asList(getLanguageProfiels(context)));
+        }
+        return DetectorFactory.create();
+    }
+
+
 
 
 
