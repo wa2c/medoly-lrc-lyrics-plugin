@@ -34,5 +34,4 @@ public class ResultItem {
 
     /** Lyrics. */
     private String lyrics;
-
 }

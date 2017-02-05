@@ -3,9 +3,9 @@ package com.wa2c.android.medoly.plugin.action.viewlyrics.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.cybozu.labs.langdetect.Detector;
@@ -24,6 +25,7 @@ import com.cybozu.labs.langdetect.LangDetectException;
 import com.cybozu.labs.langdetect.Language;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.db.SearchCacheHelper;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.dialog.ConfirmDialogFragment;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.Result;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.ResultItem;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.ViewLyricsSearcher;
@@ -41,16 +43,10 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -119,7 +115,14 @@ public class SearchActivity extends Activity {
     @ViewById
     ListView searchResultListView;
     @ViewById
+    ScrollView searchLyricsScrollView;
+    @ViewById
     TextView searchLyricsTextView;
+
+    @ViewById
+    View searchResultLoadingLayout;
+    @ViewById
+    View searchLyricsLoadingLayout;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -170,9 +173,24 @@ public class SearchActivity extends Activity {
             return;
         }
 
-        String title = searchTitleEditText.getText().toString();
-        String artist = searchArtistEditText.getText().toString();
-        saveBackground(title, artist, currentResultItem);
+        ConfirmDialogFragment dialog = ConfirmDialogFragment.newInstance(
+                getString(R.string.dialog_confirm_message_save_cache),
+                getString(R.string.label_confirmation),
+                getString(R.string.dialog_confirm_label_save_cache),
+                null,
+                getString(android.R.string.cancel)
+        );
+        dialog.setClickListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    String title = searchTitleEditText.getText().toString();
+                    String artist = searchArtistEditText.getText().toString();
+                    saveBackground(title, artist, currentResultItem);
+                }
+            }
+        });
+        dialog.show(this);
     }
 
     @OptionsItem(R.id.menu_search_open_cache)
@@ -228,73 +246,90 @@ public class SearchActivity extends Activity {
         InputMethodManager inputMethodMgr = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
         inputMethodMgr.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
+        String title = searchTitleEditText.getText().toString();
+        String artist = searchArtistEditText.getText().toString();
+        if (TextUtils.isEmpty(title) && TextUtils.isEmpty(artist)) {
+            AppUtils.showToast(this, R.string.error_input_condition);
+            return;
+        }
+
         // Clear view
         showSearchResult(null);
         showLyrics(null);
+        currentResultItem = null;
 
-        String title = searchTitleEditText.getText().toString();
-        String artist = searchArtistEditText.getText().toString();
+        searchResultListView.setVisibility(View.INVISIBLE);
+        searchResultLoadingLayout.setVisibility(View.VISIBLE);
         searchLyrics(title, artist);
     }
 
-    @ItemClick(R.id.searchResultListView)
-    void searchResultListViewItemClick(ResultItem item) {
-        currentResultItem = null;
-        downloadLyrics(item);
-        currentResultItem = item;
-    }
+    // Search
 
     @Background
     void searchLyrics(String title, String artist) {
+        Result result = null;
         try {
-            Result result = ViewLyricsSearcher.search(title, artist, 0);
-            showSearchResult(result);
+            result = ViewLyricsSearcher.search(title, artist, 0);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.e(e);
+        } finally {
+            showSearchResult(result);
         }
     }
 
     @UiThread
     void showSearchResult(Result result) {
-        searchResultAdapter.clear();
-        if (result != null)
-            searchResultAdapter.addAll(result.getInfoList());
-        searchResultAdapter.notifyDataSetChanged();
+        try {
+            searchResultAdapter.clear();
+            if (result != null)
+                searchResultAdapter.addAll(result.getInfoList());
+            searchResultAdapter.notifyDataSetChanged();
+        } finally {
+            searchResultListView.setVisibility(View.VISIBLE);
+            searchResultLoadingLayout.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    // Download
+
+    @ItemClick(R.id.searchResultListView)
+    void searchResultListViewItemClick(@NonNull ResultItem item) {
+        // Hide keyboard
+        InputMethodManager inputMethodMgr = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodMgr.hideSoftInputFromWindow(searchResultListView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+        // Clear view
+        showLyrics(null);
+
+        searchLyricsScrollView.setVisibility(View.INVISIBLE);
+        searchLyricsLoadingLayout.setVisibility(View.VISIBLE);
+        downloadLyrics(item);
     }
 
     @Background
-    void downloadLyrics(ResultItem info) {
-        StringBuilder builder = new StringBuilder();
-        HttpURLConnection con;
+    void downloadLyrics(ResultItem item) {
         try {
-            final URL url = new URL(info.getLyricURL());
-            con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            con.connect();
-            final int status = con.getResponseCode();
-            if (status == HttpURLConnection.HTTP_OK) {
-                final InputStream inputStream = con.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    builder.append(line).append(System.getProperty("line.separator"));
-                }
-                reader.close();
+            if (item != null) {
+                String lyrics = ViewLyricsSearcher.download(item.getLyricURL());
+                item.setLyrics(lyrics);
             }
-            info.setLyrics(builder.toString());
-            showLyrics(info.getLyrics());
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.e(e);
+        } finally {
+            showLyrics(item);
         }
     }
 
     @UiThread
-    void showLyrics(CharSequence lyrics) {
-        if (lyrics != null) {
-            searchLyricsTextView.setText(lyrics);
-        } else {
+    void showLyrics(ResultItem item) {
+        if (item == null) {
             searchLyricsTextView.setText(null);
+        } else {
+            searchLyricsTextView.setText(item.getLyrics());
         }
+        currentResultItem = item;
+        searchLyricsScrollView.setVisibility(View.VISIBLE);
+        searchLyricsLoadingLayout.setVisibility(View.INVISIBLE);
     }
 
 
@@ -357,7 +392,6 @@ public class SearchActivity extends Activity {
                 holder.searchItemDownloadTextView = (TextView)view.findViewById(R.id.searchItemDownloadTextView);
                 holder.searchItemRatingTextView = (TextView)view.findViewById(R.id.searchItemRatingTextView);
                 holder.searchItemFromTextView   = (TextView)view.findViewById(R.id.searchItemFromTextView);
-//                holder.searchItemUrlTextView    = (TextView)view.findViewById(R.id.searchItemUrlTextView);
                 view.setTag(holder);
                 convertView = view;
             } else {
@@ -371,10 +405,9 @@ public class SearchActivity extends Activity {
             holder.searchItemTitleTextView.setText(item.getMusicTitle());
             holder.searchItemArtistTextView.setText(AppUtils.nvl(item.getMusicArtist(), "-"));
             holder.searchItemAlbumTextView.setText(AppUtils.nvl(item.getMusicAlbum(), "-"));
-            holder.searchItemDownloadTextView.setText("Download:" + String.valueOf(item.getLyricDownloadsCount()));
-            holder.searchItemRatingTextView.setText("Rate:" + String.valueOf(item.getLyricRate()) + "(" + String.valueOf(item.getLyricRatesCount()) + ")" );
-            holder.searchItemFromTextView.setText("From:" + item.getLyricUploader());
-//            holder.searchItemUrlTextView.setText(item.getLyricURL());
+            holder.searchItemDownloadTextView.setText(getContext().getString(R.string.label_search_item_download, item.getLyricDownloadsCount()));
+            holder.searchItemRatingTextView.setText(getContext().getString(R.string.label_search_item_rating, item.getLyricRatesCount()));
+            holder.searchItemFromTextView.setText(getContext().getString(R.string.label_search_item_from, item.getLyricUploader()));
 
             return convertView;
         }
@@ -389,7 +422,6 @@ public class SearchActivity extends Activity {
         TextView searchItemDownloadTextView;
         TextView searchItemRatingTextView;
         TextView searchItemFromTextView;
-//        TextView searchItemUrlTextView;
     }
 
 }

@@ -10,17 +10,18 @@ import com.github.gfx.android.orma.annotation.Table;
 import com.google.gson.Gson;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.ResultItem;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Search condition. (Orma Model)
  */
 @Table(value = "search_cache", indexes = @Index(value= {"title", "artist"}))
-public class SearchCache {
+public class SearchCache implements Serializable {
 
     /** Key. */
     @PrimaryKey(autoincrement = true)
-    public long _id;
+    public Long _id;
 
     /** Search title. */
     @Column(indexed = true)

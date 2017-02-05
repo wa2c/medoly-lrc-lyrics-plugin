@@ -79,7 +79,7 @@ public class SearchCacheHelper {
             selector.where("title like ?", "%" + title + "%");
         // artist
         if (!TextUtils.isEmpty(artist))
-            selector.where("artist like ?", "%" + title + "%");
+            selector.where("artist like ?", "%" + artist + "%");
 
         return selector.orderBytitleAndArtistAsc()
                 .toList();

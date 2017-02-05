@@ -22,11 +22,6 @@ public class PluginReceiver extends BroadcastReceiver {
         Intent stopIntent = new Intent(context, DownloadIntentService_.class);
         context.stopService(stopIntent);
 
-//        // IntentService起動
-//        Intent serviceIntent = new Intent(intent);
-//        serviceIntent.setClassName(DownloadIntentService.class.getPackage().getName(), DownloadIntentService.class.getName());
-//        context.startService(serviceIntent);
-
         // IntentService 起動
         DownloadIntentService_.intent(context)
                 .search(intent)

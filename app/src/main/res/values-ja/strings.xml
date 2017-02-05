@@ -13,7 +13,7 @@
     <string name="timeout_milliseconds">読み込みタイムアウト (ms)</string>
     <string name="delay_milliseconds">読み込み遅延 (ms)</string>
 
-
+    <!-- Label -->
     <string name="label_title">タイトル</string>
     <string name="label_artist">アーティスト</string>
     <string name="label_album">アルバム</string>
@@ -21,6 +21,10 @@
     <string name="label_uploader">From</string>
     <string name="label_file_name">ファイル名</string>
     <string name="label_lang">言語</string>
+    <string name="label_confirmation">確認</string>
+
+    <string name="loading">Loading...</string>
+    <string name="label_close">閉じる</string>
 
     <!-- Package -->
     <string name="app_description">外部サイトから歌詞を取得します。</string>
@@ -32,13 +36,10 @@
     <string name="title_activity_search">検索</string>
     <string name="title_activity_cache">キャッシュ</string>
     <string name="title_activity_settings">設定</string>
-    <string name="menu_search_save_cache">キャッシュ保存</string>
-    <string name="menu_search_save_file">ファイル保存</string>
 
-    <!-- Post -->
+
+    <!-- Service -->
     <string name="message_no_media">メディアが選択されていません。</string>
-    <string name="message_no_site">サイト情報が取得されていません。サイト情報を更新してください。</string>
-    <string name="message_no_select_site">サイトを選択してください。</string>
     <string name="message_lyrics_success">歌詞を取得しました。</string>
     <string name="message_lyrics_failure">歌詞の取得に失敗しました。</string>
 
@@ -48,26 +49,33 @@
     <string name="label_button_settings">設定</string>
     <string name="label_button_launch_medoly">Medoly 起動</string>
     <string name="message_no_medoly">Medolyをインストールしてください。</string>
-    <string name="message_account_auth">アカウントの認証が完了しています。</string>
-    <string name="message_account_not_auth">アカウントが認証されていません。</string>
-    <string name="message_account_clear">アカウント情報をクリアしました。</string>
 
     <!-- Search Activity -->
+    <string name="menu_search_save_cache">キャッシュ保存</string>
+    <string name="menu_search_save_file">ファイル保存</string>
     <string name="message_save_file">歌詞をファイルに保存しました。</string>
     <string name="message_save_cache">検索結果をキャッシュに保存しました。</string>
-    <string name="error_exists_lyrics">歌詞を選択してください。</string>
     <string name="message_lyrics_save_succeeded">歌詞の保存を完了しました。</string>
     <string name="message_lyrics_save_failed">歌詞の保存に失敗しました。</string>
+    <string name="error_exists_lyrics">歌詞を選択してください。</string>
+    <string name="error_input_condition">検索条件を入力してください。</string>
+    <string name="label_search_item_separator"> / </string>
+    <string name="label_search_item_download">Download:%1$d</string>
+    <string name="label_search_item_rating">Rating:%1$d</string>
+    <string name="label_search_item_from">From:%1$s</string>
+    <string name="dialog_confirm_message_save_cache">検索結果をキャッシュに保存します。</string>
+    <string name="dialog_confirm_label_save_cache">保存</string>
 
     <!-- Cache Activity -->
     <string name="error_delete_cache_check">削除項目をチェックしてください。</string>
     <string name="message_delete_cache">検索結果をキャッシュから削除しました。</string>
+    <string name="dialog_cache_message_delete">チェック項目をキャッシュから削除します。</string>
+    <string name="dialog_cache_label_delete">削除</string>
 
 
     <!-- Site Activity -->
     <string name="message_renew_list_succeeded">サイト情報の更新を完了しました。</string>
     <string name="message_renew_list_failed">サイト情報の更新に失敗しました。</string>
-    <string name="loading">Loading...</string>
 
     <!-- Settings Activity -->
     <string name="settings_summary_current_value">[Current Value: %1$s]</string>

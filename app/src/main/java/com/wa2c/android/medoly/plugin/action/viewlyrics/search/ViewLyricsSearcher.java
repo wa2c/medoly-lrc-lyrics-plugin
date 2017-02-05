@@ -21,10 +21,13 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -58,6 +61,44 @@ public class ViewLyricsSearcher {
 
     private static final byte[] magickey = "Mlv1clt4.0".getBytes();
 
+    private static final String LYRICS_ENCODING = "UTF-8";
+
+    /**
+     * Download lyrics.
+     * @param urlText Lyrics URL.
+     * @return Lyrics text.
+     */
+    public static String download(String urlText) throws IOException {
+        final URL url = new URL(urlText);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.connect();
+        final int status = con.getResponseCode();
+
+        if (status != HttpURLConnection.HTTP_OK) {
+            // failed
+            return null;
+        }
+
+        byte[] lyricsBytes;
+        try (InputStream inputStream = con.getInputStream();
+             ByteArrayOutputStream bout = new ByteArrayOutputStream()){
+            byte [] buffer = new byte[4096];
+            while(true) {
+                int len = inputStream.read(buffer);
+                if(len < 0) {
+                    break;
+                }
+                bout.write(buffer, 0, len);
+            }
+            lyricsBytes = bout.toByteArray();
+        }
+        if (lyricsBytes == null || lyricsBytes.length == 0)
+            return null;
+
+        return new String(lyricsBytes, LYRICS_ENCODING);
+    }
+
     /*
      * Search function
      */
@@ -71,42 +112,36 @@ public class ViewLyricsSearcher {
     private static Result searchQuery(String searchQuery) throws IOException, NoSuchAlgorithmException, SAXException, ParserConfigurationException {
 
         URL searchUrl = new URL(url);
-
-        // 接続用HttpURLConnectionオブジェクト作成
         HttpURLConnection con = (HttpURLConnection) searchUrl.openConnection();
         con.setRequestMethod("POST");
         con.setInstanceFollowRedirects(false);
         con.setRequestProperty("User-Agent", clientUserAgent);
-
         con.connect();
 
-        OutputStream s = con.getOutputStream();
-        s.write(assembleQuery(searchQuery.getBytes("UTF-8")));
-        s.flush();
-        s.close();
-
-
-        if (con.getResponseCode() != HttpURLConnection.HTTP_OK)
-            return null;
-
-        BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "ISO_8859_1"));
+        // Request
+        try (OutputStream s = con.getOutputStream()) {
+            s.write(assembleQuery(searchQuery.getBytes("UTF-8")));
+            s.flush();
+            s.close();
+            if (con.getResponseCode() != HttpURLConnection.HTTP_OK)
+                return null;
+        }
 
         // Get full result
-        StringBuilder builder = new StringBuilder();
-        char[] buffer = new char[8192];
-        int read;
-        while ((read = rd.read(buffer, 0, buffer.length)) > 0) {
-            builder.append(buffer, 0, read);
+        try (BufferedReader rd = new BufferedReader(new InputStreamReader(con.getInputStream(), "ISO_8859_1"))) {
+            StringBuilder builder = new StringBuilder();
+            char[] buffer = new char[8192];
+            int read;
+            while ((read = rd.read(buffer, 0, buffer.length)) > 0) {
+                builder.append(buffer, 0, read);
+            }
+            String full = builder.toString();
+            // Decrypt, parse, store, and return the result list
+            Result r = parseResultXML(decryptResultXML(full));
+            List<ResultItem> inf = r.getInfoList();
+            Logger.d(inf);
+            return r;
         }
-        String full = builder.toString();
-
-        
-
-        // Decrypt, parse, store, and return the result list
-        Result r = parseResultXML(decryptResultXML(full));
-        List<ResultItem> inf = r.getInfoList();
-        Logger.d(inf);
-        return r;
     }
 
     /*

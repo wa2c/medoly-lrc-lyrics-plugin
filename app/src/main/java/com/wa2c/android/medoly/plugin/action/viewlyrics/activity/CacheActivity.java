@@ -3,7 +3,9 @@ package com.wa2c.android.medoly.plugin.action.viewlyrics.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -19,8 +21,11 @@ import android.widget.TextView;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.db.SearchCache;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.db.SearchCacheHelper;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.dialog.CacheDialogFragment;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.dialog.ConfirmDialogFragment;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.ResultItem;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.AppUtils;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.util.Logger;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -33,6 +38,10 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -42,6 +51,7 @@ import java.util.List;
 @OptionsMenu(R.menu.activity_cache)
 public class CacheActivity extends Activity {
 
+    private static final int REQUEST_CODE_SAVE_FILE = 1;
     public static final String INTENT_SEARCH_TITLE = "INTENT_SEARCH_TITLE";
     public static final String INTENT_SEARCH_ARTIST = "INTENT_SEARCH_ARTIST";
 
@@ -98,7 +108,23 @@ public class CacheActivity extends Activity {
             AppUtils.showToast(this, R.string.error_delete_cache_check);
             return;
         }
-        deleteCache(cacheAdapter.getCheckedSet());
+
+        ConfirmDialogFragment dialog = ConfirmDialogFragment.newInstance(
+                getString(R.string.dialog_cache_message_delete),
+                getString(R.string.label_confirmation),
+                getString(R.string.dialog_cache_label_delete),
+                null,
+                getString(android.R.string.cancel)
+        );
+        dialog.setClickListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    deleteCache(cacheAdapter.getCheckedSet());
+                }
+            }
+        });
+        dialog.show(this);
     }
 
     @OptionsItem(R.id.menu_cache_open_search)
@@ -136,10 +162,7 @@ public class CacheActivity extends Activity {
         searchCache(title, artist);
     }
 
-    @ItemClick(R.id.cacheListView)
-    void cacheListViewItemClick(SearchCache item) {
-
-    }
+    // Search
 
     @Background
     void searchCache(String title, String artist) {
@@ -158,6 +181,53 @@ public class CacheActivity extends Activity {
         cacheAdapter.notifyDataSetChanged();
     }
 
+    // Item
+
+    private SearchCache currentCacheItem;
+
+    @ItemClick(R.id.cacheListView)
+    void cacheListViewItemClick(@NonNull final SearchCache item) {
+        CacheDialogFragment dialog = CacheDialogFragment.newInstance(item);
+        dialog.setClickListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    currentCacheItem = item;
+                    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+                    intent.putExtra(Intent.EXTRA_TITLE, item.getResultItem().getMusicTitle() + ".lrc");
+                    startActivityForResult(intent, REQUEST_CODE_SAVE_FILE);
+                }
+            }
+        });
+        dialog.show(this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        if (requestCode == REQUEST_CODE_SAVE_FILE) {
+            // 歌詞のファイル保存
+            if (resultCode == RESULT_OK) {
+                Uri uri = resultData.getData();
+                try (OutputStream stream = getContentResolver().openOutputStream(uri);
+                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream,  "UTF-8"))) {
+                    writer.write(currentCacheItem.getResultItem().getLyrics());
+                    writer.flush();
+                    AppUtils.showToast(this, R.string.message_lyrics_save_succeeded);
+                } catch (IOException e) {
+                    Logger.e(e);
+                    AppUtils.showToast(this, R.string.message_lyrics_save_failed);
+                }
+            }
+        }
+
+        currentCacheItem = null;
+
+        // Hide keyboard
+        InputMethodManager inputMethodMgr = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodMgr.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
 
 
     /**
