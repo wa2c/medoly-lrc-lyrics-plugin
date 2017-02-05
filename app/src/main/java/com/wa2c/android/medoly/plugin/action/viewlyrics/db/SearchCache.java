@@ -21,7 +21,7 @@ public class SearchCache implements Serializable {
 
     /** Key. */
     @PrimaryKey(autoincrement = true)
-    public Long _id;
+    public long _id;
 
     /** Search title. */
     @Column(indexed = true)

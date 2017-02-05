@@ -67,15 +67,11 @@
     <string name="dialog_confirm_label_save_cache">保存</string>
 
     <!-- Cache Activity -->
+    <string name="menu_cache_delete">キャッシュ削除</string>
     <string name="error_delete_cache_check">削除項目をチェックしてください。</string>
     <string name="message_delete_cache">検索結果をキャッシュから削除しました。</string>
     <string name="dialog_cache_message_delete">チェック項目をキャッシュから削除します。</string>
     <string name="dialog_cache_label_delete">削除</string>
-
-
-    <!-- Site Activity -->
-    <string name="message_renew_list_succeeded">サイト情報の更新を完了しました。</string>
-    <string name="message_renew_list_failed">サイト情報の更新に失敗しました。</string>
 
     <!-- Settings Activity -->
     <string name="settings_summary_current_value">[Current Value: %1$s]</string>

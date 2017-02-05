@@ -11,11 +11,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -66,8 +68,8 @@ public class SearchActivity extends Activity {
     private SearchResultAdapter searchResultAdapter;
     /** Search cache helper. */
     private SearchCacheHelper searchCacheHelper;
-    /** Selected ResultItem object. */
-    private ResultItem currentResultItem;
+//    /** Selected ResultItem object. */
+//    private ResultItem currentResultItem;
 
     /** Language names. */
     private String[] languageNames;
@@ -162,7 +164,7 @@ public class SearchActivity extends Activity {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_TITLE, currentResultItem.getMusicTitle() + ".lrc");
+        intent.putExtra(Intent.EXTRA_TITLE,  searchResultAdapter.getSelectedItem().getMusicTitle() + ".lrc");
         startActivityForResult(intent, REQUEST_CODE_SAVE_FILE);
     }
 
@@ -186,7 +188,7 @@ public class SearchActivity extends Activity {
                 if (which == DialogInterface.BUTTON_POSITIVE) {
                     String title = searchTitleEditText.getText().toString();
                     String artist = searchArtistEditText.getText().toString();
-                    saveBackground(title, artist, currentResultItem);
+                    saveBackground(title, artist, searchResultAdapter.getSelectedItem());
                 }
             }
         });
@@ -235,7 +237,7 @@ public class SearchActivity extends Activity {
     }
 
     @Click(R.id.searchClearButton)
-    void searchClearButtonClick(View view) {
+    void searchClearButtonClick() {
         searchTitleEditText.setText(null);
         searchArtistEditText.setText(null);
     }
@@ -256,7 +258,7 @@ public class SearchActivity extends Activity {
         // Clear view
         showSearchResult(null);
         showLyrics(null);
-        currentResultItem = null;
+        searchResultAdapter.setSelectedItem(null);
 
         searchResultListView.setVisibility(View.INVISIBLE);
         searchResultLoadingLayout.setVisibility(View.VISIBLE);
@@ -327,7 +329,8 @@ public class SearchActivity extends Activity {
         } else {
             searchLyricsTextView.setText(item.getLyrics());
         }
-        currentResultItem = item;
+        searchResultAdapter.setSelectedItem(item);
+        searchResultAdapter.notifyDataSetChanged();
         searchLyricsScrollView.setVisibility(View.VISIBLE);
         searchLyricsLoadingLayout.setVisibility(View.INVISIBLE);
     }
@@ -346,7 +349,7 @@ public class SearchActivity extends Activity {
                 Uri uri = resultData.getData();
                 try (OutputStream stream = getContentResolver().openOutputStream(uri);
                      BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream,  "UTF-8"))) {
-                    writer.write(currentResultItem.getLyrics());
+                    writer.write(searchResultAdapter.getSelectedItem().getLyrics());
                     writer.flush();
                     AppUtils.showToast(this, R.string.message_lyrics_save_succeeded);
                 } catch (IOException e) {
@@ -357,22 +360,35 @@ public class SearchActivity extends Activity {
         }
 
         // Hide keyboard
-        InputMethodManager inputMethodMgr = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-        inputMethodMgr.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-    }
+        if (getCurrentFocus() != null) {
+            InputMethodManager inputMethodMgr = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodMgr.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }    }
 
     /**
      * Check existence of lyrics
      * @return true if exists lyrics.
      */
     private synchronized boolean existsLyrics() {
-        return (currentResultItem != null) && !TextUtils.isEmpty(currentResultItem.getLyricURL());
+        return (searchResultAdapter.getSelectedItem() != null) && !TextUtils.isEmpty(searchResultAdapter.getSelectedItem().getLyricURL());
     }
 
     /**
      * Search result adapter.
      */
     private static class SearchResultAdapter extends ArrayAdapter<ResultItem> {
+
+        /** Selected item. */
+        private ResultItem selectedItem = null;
+        /** Set selected item. */
+        void setSelectedItem(ResultItem item) {
+            this.selectedItem = item;
+        }
+        /** Get selected item. */
+        ResultItem getSelectedItem() {
+            return this.selectedItem;
+        }
+
 
         SearchResultAdapter(Context context) {
             super(context, R.layout.layout_search_item);
@@ -381,11 +397,12 @@ public class SearchActivity extends Activity {
         @NonNull
         @Override
         public View getView(final int position, View convertView, @NonNull final ViewGroup parent) {
-            // ビュー作成
+            // view
             final ListItemViewHolder holder;
             if (convertView == null) {
                 final View view = View.inflate(parent.getContext(), R.layout.layout_search_item, null);
                 holder = new ListItemViewHolder();
+                holder.searchItemRadioButton = (RadioButton)view.findViewById(R.id.searchItemRadioButton);
                 holder.searchItemTitleTextView  = (TextView)view.findViewById(R.id.searchItemTitleTextView);
                 holder.searchItemArtistTextView = (TextView)view.findViewById(R.id.searchItemArtistTextView);
                 holder.searchItemAlbumTextView  = (TextView)view.findViewById(R.id.searchItemAlbumTextView);
@@ -398,10 +415,11 @@ public class SearchActivity extends Activity {
                 holder = (ListItemViewHolder) convertView.getTag();
             }
 
-            // データ設定
+            // data
             ResultItem item = getItem(position);
             if (item == null)
                 item = new ResultItem();
+            holder.searchItemRadioButton.setChecked((item == selectedItem));
             holder.searchItemTitleTextView.setText(item.getMusicTitle());
             holder.searchItemArtistTextView.setText(AppUtils.nvl(item.getMusicArtist(), "-"));
             holder.searchItemAlbumTextView.setText(AppUtils.nvl(item.getMusicAlbum(), "-"));
@@ -416,6 +434,7 @@ public class SearchActivity extends Activity {
 
     /** リスト項目のビュー情報を保持するHolder。 */
     private static class ListItemViewHolder {
+        RadioButton searchItemRadioButton;
         TextView searchItemTitleTextView;
         TextView searchItemArtistTextView;
         TextView searchItemAlbumTextView;

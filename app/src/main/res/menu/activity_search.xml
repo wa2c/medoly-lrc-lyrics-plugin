@@ -1,9 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <item
         android:id="@+id/menu_search_save_file"
-        android:icon="@android:drawable/ic_menu_save"
+        android:icon="@drawable/ic_action_save_file"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
         android:title="@string/menu_search_save_file"
@@ -11,7 +10,7 @@
 
     <item
         android:id="@+id/menu_search_save_cache"
-        android:icon="@android:drawable/ic_menu_add"
+        android:icon="@drawable/ic_action_save_cache"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
         android:title="@string/menu_search_save_cache"
@@ -19,10 +18,10 @@
 
     <item
         android:id="@+id/menu_search_open_cache"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:icon="@drawable/ic_action_cache"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
-        android:title="@string/menu_search_save_cache"
+        android:title="@string/title_activity_cache"
         android:visible="true" />
 
 </menu>

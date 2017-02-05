@@ -25,7 +25,7 @@
         android:lines="1"
         android:maxLines="1"
         android:singleLine="true"
-        android:text="@string/label_title" />
+        android:text="@string/label_cache_item_title" />
 
     <TextView
         android:id="@+id/cacheItemArtistTextView"
@@ -38,10 +38,10 @@
         android:lines="1"
         android:maxLines="1"
         android:singleLine="true"
-        android:text="@string/label_artist" />
+        android:text="@string/label_cache_item_artist" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cacheItemArtistTextView"
         android:layout_toEndOf="@+id/cacheCheckBox"
@@ -51,35 +51,37 @@
             android:id="@+id/cacheItemFromTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:ellipsize="end"
             android:lines="1"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="@string/label_uploader" />
+            android:text="@string/label_cache_item_from" />
 
         <TextView
             android:id="@+id/cacheItemFileTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
             android:layout_weight="1"
-            android:ellipsize="end"
             android:lines="1"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="@string/label_file_name" />
+            android:text="@string/label_cache_item_file" />
 
         <TextView
             android:id="@+id/cacheItemLangTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:layout_weight="1"
-            android:ellipsize="end"
             android:lines="1"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="@string/label_lang"
-            android:visibility="gone"/>
+            android:text="@string/label_cache_item_lang"
+            android:visibility="gone" />
 
     </LinearLayout>
 

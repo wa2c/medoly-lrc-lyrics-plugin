@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <RadioButton
-        android:id="@+id/radioButton"
+        android:id="@+id/searchItemRadioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/radioButton"
+        android:layout_toStartOf="@+id/searchItemRadioButton"
         android:ellipsize="end"
         android:lines="1"
         android:maxLines="1"
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/searchItemTitleTextView"
-        android:layout_toStartOf="@+id/radioButton"
+        android:layout_toStartOf="@+id/searchItemRadioButton"
         android:orientation="horizontal">
 
         <TextView
@@ -78,10 +78,9 @@
 
         <TextView
             android:id="@+id/searchItemDownloadTextView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
-            android:layout_weight="1"
             android:ellipsize="end"
             android:lines="1"
             android:maxLines="1"
@@ -90,11 +89,10 @@
 
         <TextView
             android:id="@+id/searchItemRatingTextView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
-            android:layout_weight="1"
             android:ellipsize="end"
             android:lines="1"
             android:maxLines="1"
@@ -103,10 +101,9 @@
 
         <TextView
             android:id="@+id/searchItemFromTextView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_weight="1"
             android:ellipsize="end"
             android:lines="1"
             android:maxLines="1"

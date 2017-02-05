@@ -225,8 +225,10 @@ public class CacheActivity extends Activity {
         currentCacheItem = null;
 
         // Hide keyboard
-        InputMethodManager inputMethodMgr = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-        inputMethodMgr.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        if (getCurrentFocus() != null) {
+            InputMethodManager inputMethodMgr = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodMgr.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
 
@@ -245,7 +247,7 @@ public class CacheActivity extends Activity {
          * Get checked item positions.
          * @return Checked position.
          */
-        public HashSet<SearchCache> getCheckedSet() {
+        HashSet<SearchCache> getCheckedSet() {
             return checkedSet;
         }
 
@@ -272,11 +274,11 @@ public class CacheActivity extends Activity {
             // data
             final SearchCache item = getItem(position);
             holder.checkBox.setChecked(checkedSet.contains(item));
-            holder.titleTextView.setText("Title:" + AppUtils.nvl(item.title, ""));
-            holder.artistTextView.setText("Artist:" + AppUtils.nvl(item.artist, ""));
-            holder.fromTextView.setText("From:" + AppUtils.nvl(item.from, "-"));
-            holder.fileTextView.setText("Name:" + AppUtils.nvl(item.file_name, "-"));
-            holder.langTextView.setText("Lang:" + AppUtils.nvl(item.language, "-"));
+            holder.titleTextView.setText(getContext().getString(R.string.label_cache_item_title, AppUtils.nvl(item.title, "")));
+            holder.artistTextView.setText(getContext().getString(R.string.label_cache_item_artist, AppUtils.nvl(item.artist, "")));
+            holder.fromTextView.setText(getContext().getString(R.string.label_cache_item_from, AppUtils.nvl(item.from, "")));
+            holder.fileTextView.setText(getContext().getString(R.string.label_cache_item_file, AppUtils.nvl(item.file_name, "")));
+            holder.langTextView.setText(getContext().getString(R.string.label_cache_item_lang, AppUtils.nvl(item.language, "")));
 
             // event
             holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

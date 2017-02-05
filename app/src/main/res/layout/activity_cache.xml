@@ -59,8 +59,9 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/cacheInputClearButton"
-                android:src="@android:drawable/ic_menu_close_clear_cancel"
-                android:contentDescription="@null" />
+                android:src="@drawable/ic_action_cacnel"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop" />
 
         </TableRow>
 
@@ -84,11 +85,12 @@
                 android:labelFor="@id/cacheArtistEditText"/>
 
             <ImageButton
-                android:src="@android:drawable/ic_menu_search"
+                android:src="@drawable/ic_action_search"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/cacheInputSearchButton"
-                android:contentDescription="@null" />
+                android:contentDescription="@null"
+                android:scaleType="centerCrop" />
 
         </TableRow>
 

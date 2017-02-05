@@ -46,7 +46,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:contentDescription="@null"
-                android:src="@android:drawable/ic_menu_close_clear_cancel" />
+                android:src="@drawable/ic_action_cacnel"
+                android:scaleType="centerCrop" />
         </TableRow>
 
         <TableRow
@@ -76,7 +77,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:contentDescription="@null"
-                android:src="@android:drawable/ic_menu_search" />
+                android:src="@drawable/ic_action_search"
+                android:scaleType="centerCrop" />
 
         </TableRow>
 
