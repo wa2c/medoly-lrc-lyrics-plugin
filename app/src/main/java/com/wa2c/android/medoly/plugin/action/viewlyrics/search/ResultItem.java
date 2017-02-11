@@ -1,7 +1,4 @@
 package com.wa2c.android.medoly.plugin.action.viewlyrics.search;
-import com.cybozu.labs.langdetect.DetectorFactory;
-
-import java.util.Arrays;
 
 import lombok.Data;
 

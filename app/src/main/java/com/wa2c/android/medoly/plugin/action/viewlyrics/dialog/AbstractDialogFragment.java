@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
-
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
 
 import java.util.HashMap;

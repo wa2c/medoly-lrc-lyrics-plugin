@@ -5,15 +5,6 @@
     android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
-    <RadioButton
-        android:id="@+id/searchItemRadioButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
-
     <TextView
         android:id="@+id/searchItemTitleTextView"
         android:layout_width="match_parent"
@@ -111,5 +102,14 @@
             android:text="@string/label_search_item_from" />
 
     </LinearLayout>
+
+    <RadioButton
+        android:id="@+id/searchItemRadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

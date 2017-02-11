@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import com.wa2c.android.medoly.plugin.action.viewlyrics.db.SearchCache;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.db.SearchCacheHelper;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.dialog.CacheDialogFragment;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.dialog.ConfirmDialogFragment;
-import com.wa2c.android.medoly.plugin.action.viewlyrics.search.ResultItem;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.AppUtils;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.Logger;
 
@@ -274,11 +272,11 @@ public class CacheActivity extends Activity {
             // data
             final SearchCache item = getItem(position);
             holder.checkBox.setChecked(checkedSet.contains(item));
-            holder.titleTextView.setText(getContext().getString(R.string.label_cache_item_title, AppUtils.nvl(item.title, "")));
-            holder.artistTextView.setText(getContext().getString(R.string.label_cache_item_artist, AppUtils.nvl(item.artist, "")));
-            holder.fromTextView.setText(getContext().getString(R.string.label_cache_item_from, AppUtils.nvl(item.from, "")));
-            holder.fileTextView.setText(getContext().getString(R.string.label_cache_item_file, AppUtils.nvl(item.file_name, "")));
-            holder.langTextView.setText(getContext().getString(R.string.label_cache_item_lang, AppUtils.nvl(item.language, "")));
+            holder.titleTextView.setText(getContext().getString(R.string.label_cache_item_title, AppUtils.coalesce(item.title,)));
+            holder.artistTextView.setText(getContext().getString(R.string.label_cache_item_artist, AppUtils.coalesce(item.artist)));
+            holder.fromTextView.setText(getContext().getString(R.string.label_cache_item_from, AppUtils.coalesce(item.from)));
+            holder.fileTextView.setText(getContext().getString(R.string.label_cache_item_file, AppUtils.coalesce(item.file_name)));
+            holder.langTextView.setText(getContext().getString(R.string.label_cache_item_lang, AppUtils.coalesce(item.language)));
 
             // event
             holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

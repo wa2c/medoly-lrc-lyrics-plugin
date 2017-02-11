@@ -4,15 +4,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.github.gfx.android.orma.migration.ManualStepMigration;
 import com.google.gson.Gson;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.ResultItem;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 /**
  * Search cache adapter.

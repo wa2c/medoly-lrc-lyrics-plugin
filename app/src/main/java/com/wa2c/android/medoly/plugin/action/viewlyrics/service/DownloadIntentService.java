@@ -1,7 +1,6 @@
 package com.wa2c.android.medoly.plugin.action.viewlyrics.service;
 
 import android.app.IntentService;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -10,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.cybozu.labs.langdetect.Detector;
-import com.cybozu.labs.langdetect.DetectorFactory;
 import com.cybozu.labs.langdetect.LangDetectException;
 import com.cybozu.labs.langdetect.Language;
 import com.wa2c.android.medoly.library.LyricsProperty;
@@ -35,19 +33,11 @@ import org.androidannotations.annotations.EIntentService;
 import org.androidannotations.annotations.ServiceAction;
 import org.xml.sax.SAXException;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;

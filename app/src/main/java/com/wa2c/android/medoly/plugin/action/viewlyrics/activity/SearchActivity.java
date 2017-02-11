@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -397,6 +398,7 @@ public class SearchActivity extends Activity {
         @Override
         public View getView(final int position, View convertView, @NonNull final ViewGroup parent) {
             // view
+            final ListView listView = (ListView)parent;
             final ListItemViewHolder holder;
             if (convertView == null) {
                 final View view = View.inflate(parent.getContext(), R.layout.layout_search_item, null);
@@ -420,11 +422,18 @@ public class SearchActivity extends Activity {
                 item = new ResultItem();
             holder.searchItemRadioButton.setChecked((item == selectedItem));
             holder.searchItemTitleTextView.setText(item.getMusicTitle());
-            holder.searchItemArtistTextView.setText(AppUtils.nvl(item.getMusicArtist(), "-"));
-            holder.searchItemAlbumTextView.setText(AppUtils.nvl(item.getMusicAlbum(), "-"));
+            holder.searchItemArtistTextView.setText(AppUtils.coalesce(item.getMusicArtist(), "-"));
+            holder.searchItemAlbumTextView.setText(AppUtils.coalesce(item.getMusicAlbum(), "-"));
             holder.searchItemDownloadTextView.setText(getContext().getString(R.string.label_search_item_download, item.getLyricDownloadsCount()));
             holder.searchItemRatingTextView.setText(getContext().getString(R.string.label_search_item_rating, item.getLyricRate(), item.getLyricRatesCount()));
             holder.searchItemFromTextView.setText(getContext().getString(R.string.label_search_item_from, item.getLyricUploader()));
+
+            holder.searchItemRadioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listView.performItemClick(v, position, getItemId(position));
+                }
+            });
 
             return convertView;
         }

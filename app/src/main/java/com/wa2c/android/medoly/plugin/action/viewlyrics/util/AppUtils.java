@@ -2,9 +2,7 @@ package com.wa2c.android.medoly.plugin.action.viewlyrics.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.preference.PreferenceManager;
-import android.text.Html;
 import android.text.TextUtils;
 
 import com.cybozu.labs.langdetect.Detector;
@@ -150,17 +148,39 @@ public class AppUtils {
 
 
 
-
+    /**
+     * 引数で与えられた最初の空またはnull以外の値を返す.
+     * @param texts テキスト.
+     * @return 最初のnull以外のオブジェクト. 対象の値が無い場合は空文字.
+     */
+    public static CharSequence coalesce(CharSequence... texts) {
+        if (texts == null)
+            return "";
+        for (CharSequence text : texts) {
+            if (!TextUtils.isEmpty(text))
+                return text;
+        }
+        return "";
+    }
 
     /**
-     * 文字列が空の場合に代理文字を出力.
-     * @param text 文字列.
-     * @param substitute 文字列が空の場合に出力する文字.
-     * @return 文字列または代理文字.
+     * 文字列の比較. nullは最大.
+     * @param text1 文字列1.
+     * @param text2 文字列2.
+     * @return 比較結果.
      */
-    public static String nvl(String text, String substitute) {
-        return (!TextUtils.isEmpty(text)) ? text : substitute;
+    public static int compare(CharSequence text1, CharSequence text2) {
+        if (text1 == null && text2 == null)
+            return 0;
+        else if (text1 == null)
+            return 1;
+        else if (text2 == null)
+            return -1;
+        else
+            return text1.toString().compareTo(text2.toString());
     }
+
+
 //
 //    /**
 //     * 歌詞を調整する。
