@@ -36,7 +36,7 @@
             android:label="@string/title_activity_settings" />
 
         <service
-            android:name=".service.DownloadIntentService_"
+            android:name=".service.EventProcessService_"
             android:exported="false" />
 
         <receiver
@@ -48,6 +48,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="com.wa2c.android.medoly.plugin.category.TYPE_GET_LYRICS" />
                 <category android:name="com.wa2c.android.medoly.plugin.category.OPERATION_MEDIA_OPEN" />
+                <category android:name="com.wa2c.android.medoly.plugin.category.OPERATION_PLAY_START" />
             </intent-filter>
 
             <!-- Get lyrics -->

@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.ResultItem;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.util.AppUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -105,9 +106,9 @@ public class SearchCacheHelper {
             cache = new SearchCache();
             cache.title = title;
             cache.artist = artist;
-            cache.language = locale.getLanguage();
+            cache.language = (locale == null) ? null : locale.getLanguage();
             cache.from = result.getLyricUploader();
-            cache.file_name = result.getLyricURL().substring(result.getLyricURL().lastIndexOf("/") + 1).replace(".lrc", "");
+            cache.file_name =  result.getLyricURL().substring(result.getLyricURL().lastIndexOf("/") + 1).replace(".lrc", "");
             cache.result = gson.toJson(result);
             long id = od.insertIntoSearchCache(cache);
             return (id >= 0);

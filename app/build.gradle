@@ -51,9 +51,6 @@ dependencies {
     annotationProcessor 'org.androidannotations:androidannotations:4.2.0'
     compile 'org.androidannotations:androidannotations-api:4.2.0'
 
-    // Lombok
-    provided 'org.projectlombok:lombok:1.12.6'
-
     // Orma
     annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.1.1'
     compile 'com.github.gfx.android.orma:orma:4.1.1'

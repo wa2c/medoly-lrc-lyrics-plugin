@@ -209,7 +209,7 @@ public class CacheActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 Uri uri = resultData.getData();
                 try (OutputStream stream = getContentResolver().openOutputStream(uri);
-                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream,  "UTF-8"))) {
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream,  "UTF-8"))) {
                     writer.write(currentCacheItem.getResultItem().getLyrics());
                     writer.flush();
                     AppUtils.showToast(this, R.string.message_lyrics_save_succeeded);
@@ -272,7 +272,7 @@ public class CacheActivity extends Activity {
             // data
             final SearchCache item = getItem(position);
             holder.checkBox.setChecked(checkedSet.contains(item));
-            holder.titleTextView.setText(getContext().getString(R.string.label_cache_item_title, AppUtils.coalesce(item.title,)));
+            holder.titleTextView.setText(getContext().getString(R.string.label_cache_item_title, AppUtils.coalesce(item.title)));
             holder.artistTextView.setText(getContext().getString(R.string.label_cache_item_artist, AppUtils.coalesce(item.artist)));
             holder.fromTextView.setText(getContext().getString(R.string.label_cache_item_from, AppUtils.coalesce(item.from)));
             holder.fileTextView.setText(getContext().getString(R.string.label_cache_item_file, AppUtils.coalesce(item.file_name)));

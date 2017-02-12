@@ -22,8 +22,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.cybozu.labs.langdetect.Detector;
-import com.cybozu.labs.langdetect.DetectorFactory;
-import com.cybozu.labs.langdetect.LangDetectException;
 import com.cybozu.labs.langdetect.Language;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.db.SearchCacheHelper;
@@ -68,39 +66,11 @@ public class SearchActivity extends Activity {
     private SearchResultAdapter searchResultAdapter;
     /** Search cache helper. */
     private SearchCacheHelper searchCacheHelper;
-//    /** Selected ResultItem object. */
-//    private ResultItem currentResultItem;
-
-    /** Language names. */
-    private String[] languageNames;
-    /** Language profiles. */
-    private String[] languageProfiles;
 
     @Extra(INTENT_SEARCH_TITLE)
     String intentSearchTitle;
     @Extra(INTENT_SEARCH_ARTIST)
     String intentSearchArtist;
-
-    /**
-     * Get language names.
-     * @return language names.
-     */
-    private synchronized String[] getLanguageNames() {
-        if (this.languageNames == null)
-            this.languageNames = getResources().getStringArray(R.array.language_names);
-        return this.languageNames;
-    }
-
-    /**
-     * Get language profiles.
-     * @return language profiles.
-     */
-    private synchronized  String[] getLanguageProfiels() {
-        if (this.languageProfiles == null)
-            this.languageProfiles = getResources().getStringArray(R.array.language_profiles);
-        return this.languageProfiles;
-    }
-
 
     @ViewById
     Button searchTitleButton;
@@ -205,24 +175,7 @@ public class SearchActivity extends Activity {
 
     @Background
     void saveBackground(String title, String artist, ResultItem item) {
-        Locale locale = Locale.getDefault();
-        try {
-            // Language profile
-            if (DetectorFactory.getLangList() == null || DetectorFactory.getLangList().size() == 0) {
-                // initialize
-                DetectorFactory.clear();
-                DetectorFactory.loadProfile(Arrays.asList(getLanguageProfiels()));
-            }
-            Detector detector = DetectorFactory.create();
-            detector.append(item.getLyrics());
-            ArrayList<Language> languages = detector.getProbabilities();
-            if (languages != null || languages.size() != 0)
-                locale = new Locale(languages.get(0).lang);
-        } catch (LangDetectException e) {
-            Logger.e(e);
-        }
-
-        if (searchCacheHelper.insertOrUpdate(title, artist, locale, item))
+        if (searchCacheHelper.insertOrUpdate(title, artist, null, item))
             AppUtils.showToast(this, R.string.message_save_cache);
     }
 
@@ -314,6 +267,14 @@ public class SearchActivity extends Activity {
             if (item != null) {
                 String lyrics = ViewLyricsSearcher.downloadLyricsText(item.getLyricURL());
                 item.setLyrics(lyrics);
+
+                Detector d = AppUtils.getDetector(SearchActivity.this, "ja");
+                if (d != null) {
+                    d.append(lyrics);
+                    ArrayList<Language> list = d.getProbabilities();
+                    Logger.d(list);
+                }
+
             }
         } catch (Exception e) {
             Logger.e(e);

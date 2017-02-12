@@ -3,17 +3,25 @@ package com.wa2c.android.medoly.plugin.action.viewlyrics.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.cybozu.labs.langdetect.Detector;
 import com.cybozu.labs.langdetect.DetectorFactory;
 import com.cybozu.labs.langdetect.LangDetectException;
+import com.cybozu.labs.langdetect.Language;
 import com.google.gson.Gson;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
 
 import java.lang.reflect.Type;
 import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
@@ -104,20 +112,74 @@ public class AppUtils {
 
     // Language
 
-    /** Language names. */
-    private static String[] languageNames;
+    private static final Map<String, Integer> languageProfileMap = new TreeMap<String, Integer>() {
+        {
+            put("af"    ,  R.string.language_profile_af    );
+            put("ar"    ,  R.string.language_profile_ar    );
+            put("bg"    ,  R.string.language_profile_bg    );
+            put("bn"    ,  R.string.language_profile_bn    );
+            put("cs"    ,  R.string.language_profile_cs    );
+            put("da"    ,  R.string.language_profile_da    );
+            put("de"    ,  R.string.language_profile_de    );
+            put("el"    ,  R.string.language_profile_el    );
+            put("en"    ,  R.string.language_profile_en    );
+            put("es"    ,  R.string.language_profile_es    );
+            put("et"    ,  R.string.language_profile_et    );
+            put("fa"    ,  R.string.language_profile_fa    );
+            put("fi"    ,  R.string.language_profile_fi    );
+            put("fr"    ,  R.string.language_profile_fr    );
+            put("gu"    ,  R.string.language_profile_gu    );
+            put("he"    ,  R.string.language_profile_he    );
+            put("hi"    ,  R.string.language_profile_hi    );
+            put("hr"    ,  R.string.language_profile_hr    );
+            put("hu"    ,  R.string.language_profile_hu    );
+            put("id"    ,  R.string.language_profile_id    );
+            put("it"    ,  R.string.language_profile_it    );
+            put("ja"    ,  R.string.language_profile_ja    );
+            put("kn"    ,  R.string.language_profile_kn    );
+            put("ko"    ,  R.string.language_profile_ko    );
+            put("lt"    ,  R.string.language_profile_lt    );
+            put("lv"    ,  R.string.language_profile_lv    );
+            put("mk"    ,  R.string.language_profile_mk    );
+            put("ml"    ,  R.string.language_profile_ml    );
+            put("mr"    ,  R.string.language_profile_mr    );
+            put("ne"    ,  R.string.language_profile_ne    );
+            put("nl"    ,  R.string.language_profile_nl    );
+            put("no"    ,  R.string.language_profile_no    );
+            put("pa"    ,  R.string.language_profile_pa    );
+            put("pl"    ,  R.string.language_profile_pl    );
+            put("pt"    ,  R.string.language_profile_pt    );
+            put("ro"    ,  R.string.language_profile_ro    );
+            put("ru"    ,  R.string.language_profile_ru    );
+            put("sk"    ,  R.string.language_profile_sk    );
+            put("sl"    ,  R.string.language_profile_sl    );
+            put("so"    ,  R.string.language_profile_so    );
+            put("sq"    ,  R.string.language_profile_sq    );
+            put("sv"    ,  R.string.language_profile_sv    );
+            put("sw"    ,  R.string.language_profile_sw    );
+            put("ta"    ,  R.string.language_profile_ta    );
+            put("te"    ,  R.string.language_profile_te    );
+            put("th"    ,  R.string.language_profile_th    );
+            put("tl"    ,  R.string.language_profile_tl    );
+            put("tr"    ,  R.string.language_profile_tr    );
+            put("uk"    ,  R.string.language_profile_uk    );
+            put("ur"    ,  R.string.language_profile_ur    );
+            put("vi"    ,  R.string.language_profile_vi    );
+            put("zh-cn" ,  R.string.language_profile_zh_cn );
+            put("zh-tw" ,  R.string.language_profile_zh_tw );
+        }
+    };
+
+
     /** Language profiles. */
     private static String[] languageProfiles;
 
     /**
      * Get language names.
-     * @param context context.
      * @return language names.
      */
-    public static synchronized String[] getLanguageNames(Context context) {
-        if (languageNames == null)
-            languageNames = context.getResources().getStringArray(R.array.language_names);
-        return languageNames;
+    public static String[] getLanguageNames() {
+        return languageProfileMap.keySet().toArray(new String[languageProfileMap.size()]);
     }
 
     /**
@@ -125,10 +187,43 @@ public class AppUtils {
      * @param context context.
      * @return language profiles.
      */
-    public static synchronized  String[] getLanguageProfiels(Context context) {
-        if (languageProfiles == null)
-            languageProfiles = context.getResources().getStringArray(R.array.language_profiles);
+    public static synchronized String[] getLanguageProfiles(Context context) {
+        if (languageProfiles == null) {
+            List<String> languageProfileList = new ArrayList<>(languageProfileMap.size());
+            for (int id : languageProfileMap.values()) {
+                languageProfileList.add(context.getString(id));
+            }
+            languageProfiles = languageProfileList.toArray(new String[languageProfileList.size()]);
+        }
         return languageProfiles;
+    }
+
+    /**
+     * Get language detector.
+     * @param context context.
+     * @param lang language text.
+     * @return detector.
+     */
+    public static Detector getDetector(@NonNull Context context, String lang) {
+        try {
+            List<String> profileList = new ArrayList<>();
+            profileList.add(context.getString(languageProfileMap.get("en")));
+
+            Integer stringId =languageProfileMap.get(lang);
+            if (stringId == null)
+                return null;
+            final String profile = context.getString(stringId);
+            profileList.add(profile);
+
+            if (profileList.size() < 2)
+                return null; // needs more than 2 profile to get detector
+            DetectorFactory.clear();
+            DetectorFactory.loadProfile(profileList);
+            return DetectorFactory.create();
+        } catch (LangDetectException e) {
+            Logger.e(e);
+            return null;
+        }
     }
 
     /**
@@ -141,12 +236,27 @@ public class AppUtils {
         if (DetectorFactory.getLangList() == null || DetectorFactory.getLangList().size() == 0) {
             // initialize
             DetectorFactory.clear();
-            DetectorFactory.loadProfile(Arrays.asList(getLanguageProfiels(context)));
+            DetectorFactory.loadProfile(Arrays.asList(getLanguageProfiles(context)));
         }
         return DetectorFactory.create();
     }
 
 
+
+    /**
+     * 引数で与えられた最初のnull以外の値を返す.
+     * @param objects オブジェクト.
+     * @return 最初のnull以外のオブジェクト。全てnullの場合はnull.
+     */
+    public static Object coalesce(Object... objects) {
+        if (objects == null)
+            return null;
+        for (Object obj : objects) {
+            if (obj != null)
+                return obj;
+        }
+        return null;
+    }
 
     /**
      * 引数で与えられた最初の空またはnull以外の値を返す.

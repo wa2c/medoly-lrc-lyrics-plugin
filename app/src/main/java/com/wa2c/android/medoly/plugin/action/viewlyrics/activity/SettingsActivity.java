@@ -18,6 +18,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
+import android.support.v4.content.res.TypedArrayUtils;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -29,18 +30,25 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wa2c.android.medoly.library.MediaProperty;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.util.AppUtils;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.Logger;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.util.SeekBarPreference;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 /**
- * 設定画面のアクティビティ。
+ * Settings activity
  */
 public class SettingsActivity extends PreferenceActivity {
 
@@ -52,13 +60,11 @@ public class SettingsActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
 
-        // アクションバー
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setTitle(R.string.title_activity_settings);
         }
     }
 
@@ -79,11 +85,11 @@ public class SettingsActivity extends PreferenceActivity {
 
 
     /**
-     * 設定画面フラグメント。
+     * Settings fragment.
      */
     public static class SettingsFragment extends PreferenceFragment {
 
-        /** サマリの長さマップ。 */
+        /** Summary length map. */
         private static final HashMap<Preference, Integer> summaryLengthMap = new LinkedHashMap<>();
 
         /**
@@ -94,6 +100,43 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_settings);
 
+            // language priority
+            {
+                String[] languagesTemp = AppUtils.getLanguageNames();
+                String[] languages = new String[languagesTemp.length + 1];
+                System.arraycopy(languagesTemp, 0, languages, 1, languagesTemp.length);
+                String[] languageNames = new String[languages.length];
+                // not set item
+                languages[0] = "";
+                languageNames[0] = getString(R.string.settings_not_set);
+                for (int i = 1; i < languages.length; i++) {
+                    String[] langs = languages[i].split("-");
+                    if (langs.length == 1)
+                        languageNames[i] = (new Locale(langs[0])).getDisplayName();
+                    else if (langs.length == 2)
+                        languageNames[i] = (new Locale(langs[0], langs[1])).getDisplayName();
+                    else if (langs.length >= 3)
+                        languageNames[i] = (new Locale(langs[0], langs[1], langs[2])).getDisplayName();
+                }
+                // first language
+                ListPreference p1 = (ListPreference) findPreference(getString(R.string.pref_search_first_language));
+                p1.setEntryValues(languages);
+                p1.setEntries(languageNames);
+                // second language
+                ListPreference p2 = (ListPreference) findPreference(getString(R.string.pref_search_second_language));
+                p2.setEntryValues(languages);
+                p2.setEntries(languageNames);
+                // third language
+                ListPreference p3 = (ListPreference) findPreference(getString(R.string.pref_search_third_language));
+                p3.setEntryValues(languages);
+                p3.setEntries(languageNames);
+                // NOTE: set default value on xml file.
+
+                // initialize
+                findPreference(getString(R.string.pref_search_second_language)).setEnabled(!TextUtils.isEmpty(p1.getValue()));
+                findPreference(getString(R.string.pref_search_third_language)).setEnabled(!TextUtils.isEmpty(p1.getValue()) && !TextUtils.isEmpty(p2.getValue()));
+            }
+
             // アプリ情報
             findPreference(getString(R.string.prefkey_application_details)).setOnPreferenceClickListener(applicationDetailsPreferenceClickListener);
             // About
@@ -101,6 +144,7 @@ public class SettingsActivity extends PreferenceActivity {
 
             initSummary(getPreferenceScreen());
         }
+
         /**
          * onResume event.
          */
@@ -122,7 +166,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 
         /**
-         * アプリ情報。
+         * App info.
          */
         private Preference.OnPreferenceClickListener applicationDetailsPreferenceClickListener = new Preference.OnPreferenceClickListener() {
             @Override
@@ -201,8 +245,8 @@ public class SettingsActivity extends PreferenceActivity {
         };
 
         /**
-         * サマリを初期化する。
-         * @param p 対象項目。
+         * Initialize summary.
+         * @param p target item.
          */
         private void initSummary(Preference p) {
             if (p == null) return;
@@ -233,8 +277,8 @@ public class SettingsActivity extends PreferenceActivity {
         }
 
         /**
-         * サマリを更新する。
-         * @param p 対象項目。
+         * Update summary.
+         * @param p target preference.
          */
         private void updatePrefSummary(Preference p) {
             if (p == null) return;
@@ -298,11 +342,32 @@ public class SettingsActivity extends PreferenceActivity {
                 }
                 pref.setText(text); // 一度値を更新
                 p.setSummary(summary.subSequence(0, summaryLengthMap.get(p)) + getString(R.string.settings_summary_current_value, text));
+            } else if (p instanceof SeekBarPreference) {
+                // SeekBarPreference
+                SeekBarPreference pref = (SeekBarPreference) p;
+                //pref.setProgress(pref.getProgress()); // 一度値を更新
+                p.setSummary(summary.subSequence(0, summaryLengthMap.get(p)) + getString(R.string.settings_summary_current_value, String.valueOf(pref.getProgress())));
+            }
+
+            // individual
+            if (key.equals(getString(R.string.pref_search_first_language)) ||
+                    key.equals(getString(R.string.pref_search_second_language)) ||
+                    key.equals(getString(R.string.pref_search_third_language))) {
+                // first language
+                Preference p1 = findPreference(getString(R.string.pref_search_first_language));
+                String lang1 = p.getSharedPreferences().getString(p1.getKey(), "");
+                // second language
+                Preference p2 = findPreference(getString(R.string.pref_search_second_language));
+                String lang2 = p.getSharedPreferences().getString(p2.getKey(), "");
+                p2.setEnabled(!TextUtils.isEmpty(lang1));
+                // third language
+                Preference p3 = findPreference(getString(R.string.pref_search_third_language));
+                p3.setEnabled(!TextUtils.isEmpty(lang2));
             }
         }
 
         /**
-         * 設定更新時の処理。
+         * On change settings.
          */
         private SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override

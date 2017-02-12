@@ -1,36 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<CheckBoxPreference
-		android:defaultValue="false"
-		android:key="@string/prefkey_operation_media_open_enabled"
-		android:summary="@string/pref_summary_operation_media_open_enabled"
-		android:title="@string/pref_title_operation_media_open_enabled" />
-	<CheckBoxPreference
-		android:defaultValue="false"
-		android:key="@string/prefkey_previous_media_enabled"
-		android:summary="@string/pref_summary_previous_media_enabled"
-		android:title="@string/pref_title_previous_media_enabled" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/pref_use_cache"
+        android:summary="@string/pref_summary_use_cache"
+        android:title="@string/pref_title_use_cache" />
 
-	<CheckBoxPreference
-		android:defaultValue="false"
-		android:key="@string/prefkey_success_message_show"
-		android:summary="@string/pref_summary_post_success_message_show"
-		android:title="@string/pref_title_post_success_message_show" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/pref_cache_event"
+        android:summary="@string/pref_summary_cache_event"
+        android:title="@string/pref_title_cache_event" />
 
-	<CheckBoxPreference
-		android:defaultValue="true"
-		android:key="@string/prefkey_failure_message_show"
-		android:summary="@string/pref_summary_post_failure_message_show"
-		android:title="@string/pref_title_post_failure_message_show" />
 
-	<Preference
-		android:key="@string/prefkey_application_details"
-		android:summary="@string/pref_summary_application_details"
-		android:title="@string/pref_title_application_details" />
-	<Preference
-		android:key="@string/prefkey_about"
-		android:title="@string/pref_title_about" />
+    <ListPreference
+        android:defaultValue=""
+        android:key="@string/pref_search_first_language"
+        android:summary="@string/pref_summary_search_first_language"
+        android:title="@string/pref_title_search_first_language" />
+
+    <ListPreference
+        android:defaultValue=""
+        android:key="@string/pref_search_second_language"
+        android:summary="@string/pref_summary_search_second_language"
+        android:title="@string/pref_title_search_second_language" />
+
+    <ListPreference
+        android:defaultValue=""
+        android:key="@string/pref_search_third_language"
+        android:summary="@string/pref_summary_search_third_language"
+        android:title="@string/pref_title_search_third_language" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/pref_search_non_preferred_language"
+        android:summary="@string/pref_summary_search_non_preferred_language"
+        android:title="@string/pref_title_search_non_preferred_language" />
+
+    <com.wa2c.android.medoly.plugin.action.viewlyrics.util.SeekBarPreference
+        android:key="@string/pref_search_language_threshold"
+        android:title="@string/pref_title_search_language_threshold"
+        android:summary="@string/pref_summary_search_language_threshold"
+        android:dialogMessage=""
+        android:defaultValue="50"
+        android:text=""
+        android:max="100" />
+
+
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/prefkey_operation_media_open_enabled"
+        android:summary="@string/pref_summary_operation_media_open_enabled"
+        android:title="@string/pref_title_operation_media_open_enabled" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/prefkey_previous_media_enabled"
+        android:summary="@string/pref_summary_previous_media_enabled"
+        android:title="@string/pref_title_previous_media_enabled" />
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/prefkey_success_message_show"
+        android:summary="@string/pref_summary_post_success_message_show"
+        android:title="@string/pref_title_post_success_message_show" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/prefkey_failure_message_show"
+        android:summary="@string/pref_summary_post_failure_message_show"
+        android:title="@string/pref_title_post_failure_message_show" />
+
+    <Preference
+        android:key="@string/prefkey_application_details"
+        android:summary="@string/pref_summary_application_details"
+        android:title="@string/pref_title_application_details" />
+    <Preference
+        android:key="@string/prefkey_about"
+        android:title="@string/pref_title_about" />
 
 
 </PreferenceScreen>

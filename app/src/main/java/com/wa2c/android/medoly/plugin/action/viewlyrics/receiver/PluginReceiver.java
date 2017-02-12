@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.wa2c.android.medoly.plugin.action.viewlyrics.service.DownloadIntentService_;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.service.EventProcessService_;
 
 
 /**
@@ -19,11 +19,11 @@ public class PluginReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // 既存のサービス強制停止
-        Intent stopIntent = new Intent(context, DownloadIntentService_.class);
+        Intent stopIntent = new Intent(context, EventProcessService_.class);
         context.stopService(stopIntent);
 
         // IntentService 起動
-        DownloadIntentService_.intent(context)
+        EventProcessService_.intent(context)
                 .search(intent)
                 .start();
     }

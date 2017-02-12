@@ -44,6 +44,8 @@
     <string name="message_lyrics_failure">歌詞の取得に失敗しました。</string>
 
     <!-- Main Activity -->
+    <string name="label_spinner_event">実行イベント</string>
+    <string name="label_spinner_event_none">イベント無効</string>
     <string name="label_button_search">検索</string>
     <string name="label_button_cache">キャッシュ</string>
     <string name="label_button_settings">設定</string>
@@ -75,8 +77,26 @@
 
     <!-- Settings Activity -->
     <string name="settings_summary_current_value">[Current Value: %1$s]</string>
+    <string name="settings_not_set">設定しない</string>
 
     <!-- Preferences -->
+    <string name="pref_title_use_cache">キャッシュ使用</string>
+    <string name="pref_summary_use_cache">検索時にキャッシュから歌詞を検索します。</string>
+    <string name="pref_title_cache_event">イベント検索結果を保存</string>
+    <string name="pref_summary_cache_event">イベント検索で取得した歌詞をキャッシュに保存します。</string>
+    <string name="pref_title_cache_event_non_result">イベント検索結果無しを保存</string>
+    <string name="pref_summary_cache_event_non_result">イベント検索で歌詞が見つからない場合もキャッシュに結果を保存します。</string>
+    <string name="pref_title_search_first_language">第1優先言語</string>
+    <string name="pref_summary_search_first_language">指定した言語を最優先検索対象にします。</string><!--Set the top priority language of lyrics to search.-->
+    <string name="pref_title_search_second_language">第2優先言語</string>
+    <string name="pref_summary_search_second_language">指定した言語を第2優先検索対象にします。</string>
+    <string name="pref_title_search_third_language">第3優先言語</string>
+    <string name="pref_summary_search_third_language">指定した言語を第3優先検索対象にします。</string>
+    <string name="pref_title_search_non_preferred_language">優先外言語の歌詞を取得</string>
+    <string name="pref_summary_search_non_preferred_language">優先検索対象言語が取得できない場合、その他の言語を取得します。</string>
+    <string name="pref_title_search_language_threshold">言語判定のしきい値。</string>
+    <string name="pref_summary_search_language_threshold">対象言語を判定するためのしきい値を、0 – 100の間で指定します。(初期値: 50)</string>
+
     <string name="pref_title_operation_media_open_enabled">メディア開始イベント</string>
     <string name="pref_summary_operation_media_open_enabled">メディアを開いた時に歌詞の取得を実行します。</string>
     <string name="pref_title_previous_media_enabled">前回メディア実行</string>

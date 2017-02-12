@@ -44,6 +44,8 @@
     <string name="message_lyrics_failure">Failed to get lyrics.</string>
 
     <!-- Main Activity -->
+    <string name="label_spinner_event">Event</string>
+    <string name="label_spinner_event_none">Invalidate event</string>
     <string name="label_button_search">Search</string>
     <string name="label_button_cache">Cache</string>
     <string name="label_button_settings">Settings</string>
@@ -67,10 +69,12 @@
     <string name="dialog_confirm_label_save_cache">Save</string>
 
     <!-- Cache Activity -->
+    <string name="menu_cache_delete">Delete cache</string>
     <string name="error_delete_cache_check">Check the deletion items.</string>
     <string name="message_delete_cache">Deleted the checked caches.</string>
     <string name="dialog_cache_message_delete">Delete checked caches.</string>
     <string name="dialog_cache_label_delete">Delete</string>
+
     <string name="label_cache_item_title">Title:%1$s</string>
     <string name="label_cache_item_artist">Artist:%1$s</string>
     <string name="label_cache_item_from">From:%1$s</string>
@@ -80,8 +84,27 @@
 
     <!-- Settings Activity -->
     <string name="settings_summary_current_value">[Current Value: %1$s]</string>
+    <string name="settings_not_set">Not set</string>
 
     <!-- Preferences -->
+    <string name="pref_title_use_cache">Use Cache</string>
+    <string name="pref_summary_use_cache">Search cache on searching.</string>
+    <string name="pref_title_cache_event">Save Lyrics On Event</string>
+    <string name="pref_summary_cache_event">Save the lyrics of event search result in the cache.</string>
+    <string name="pref_title_cache_event_non_result">Save Empty Result On Event</string>
+    <string name="pref_summary_cache_event_non_result">Save empty data of the event search result in the cache.</string>
+    <string name="pref_title_search_first_language">First Language</string>
+    <string name="pref_summary_search_first_language">Set the top priority language of lyrics to search.</string><!--Set the top priority language of lyrics to search.-->
+    <string name="pref_title_search_second_language">Second Language</string>
+    <string name="pref_summary_search_second_language">Set the second priority language of lyrics to search.</string>
+    <string name="pref_title_search_third_language">Third Language</string>
+    <string name="pref_summary_search_third_language">Set the third priority language of lyrics to search.</string>
+    <string name="pref_title_search_non_preferred_language">Get Non-Preferred Language</string>
+    <string name="pref_summary_search_non_preferred_language">Get the other language lyrics if priority language can not found.</string>
+    <string name="pref_title_search_language_threshold">Language Threshold</string>
+    <string name="pref_summary_search_language_threshold">Set the threshold for language determination to between 0.0 – 1.0. (Default: 0.5)</string>
+
+
     <string name="pref_title_operation_media_open_enabled">Run At Media Open</string>
     <string name="pref_summary_operation_media_open_enabled">Get the lyrics at the time of media loading.</string>
     <string name="pref_title_previous_media_enabled">Read Previous Media Lyrics</string>

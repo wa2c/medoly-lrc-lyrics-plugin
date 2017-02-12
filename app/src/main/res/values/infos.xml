@@ -24,8 +24,20 @@
     </string-array>
 
     <!-- Preferences -->
+    <string name="prefkey_plugin_event">prefkey_plugin_event</string>
+
+
     <string name="prefkey_selected_id">selected_id</string>
     <string name="prefkey_selected_site_id">selected_site_id</string>
+
+    <string name="pref_use_cache">pref_use_cache</string>
+    <string name="pref_cache_event">pref_cache_event</string>
+    <string name="pref_cache_event_non_result">pref_cache_event_non_result</string>
+    <string name="pref_search_first_language">pref_search_first_language</string>
+    <string name="pref_search_second_language">pref_search_second_language</string>
+    <string name="pref_search_third_language">pref_search_third_language</string>
+    <string name="pref_search_non_preferred_language">pref_search_non_preferred_language</string>
+    <string name="pref_search_language_threshold">pref_search_language_threshold</string>
 
     <string name="prefkey_operation_media_open_enabled">operation_media_open_enabled</string>
     <string name="prefkey_previous_media_enabled">previous_media_enabled</string>

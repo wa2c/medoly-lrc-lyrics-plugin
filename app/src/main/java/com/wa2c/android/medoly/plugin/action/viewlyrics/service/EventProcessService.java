@@ -26,11 +26,13 @@ import com.wa2c.android.medoly.plugin.action.viewlyrics.db.SearchCacheHelper;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.Result;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.ResultItem;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.ViewLyricsSearcher;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.util.AppPrefs_;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.AppUtils;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.Logger;
 
 import org.androidannotations.annotations.EIntentService;
 import org.androidannotations.annotations.ServiceAction;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -38,6 +40,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -47,23 +53,26 @@ import javax.xml.parsers.ParserConfigurationException;
  *  Download intent service.
  */
 @EIntentService
-public class DownloadIntentService extends IntentService {
+public class EventProcessService extends IntentService {
 
     private SharedPreferences pref;
 
 
+    @Pref
+    AppPrefs_ appPrefs;
 
 
     /**
      * Constructor.
      */
-    public DownloadIntentService() {
-        super(DownloadIntentService.class.getSimpleName());
+    public EventProcessService() {
+        super(EventProcessService.class.getSimpleName());
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         // Do nothing here
+
     }
 
     @ServiceAction
@@ -73,24 +82,16 @@ public class DownloadIntentService extends IntentService {
         MedolyIntentParam param = new MedolyIntentParam(intent);
         try {
 
-            if (param.hasCategories(PluginOperationCategory.OPERATION_MEDIA_OPEN)) {
-//                // Open
-//                if (!param.isEvent() || sharedPreferences.getBoolean(getApplicationContext().getString(R.string.prefkey_operation_media_open_enabled), false)) {
-//                    downloadLyrics(param);
-//                    return;
-//                }
+            if ((param.hasCategories(PluginOperationCategory.OPERATION_MEDIA_OPEN) && appPrefs.prefPluginEvent().get() == 1) ||
+                (param.hasCategories(PluginOperationCategory.OPERATION_PLAY_START) && appPrefs.prefPluginEvent().get() == 2)) {
+                // MEDIA_OPEN / PLAY_START
+                executeSearch(param);
+                return;
             } else if (param.hasCategories(PluginOperationCategory.OPERATION_EXECUTE)) {
                 // Execute
                 if (param.hasExecuteId("execute_id_get_lyrics")) {
                     // Get Lyrics
-                    ResultItem resultItem = getLyrics(param);
-                    sendLyricsResult(param, resultItem);
-                    if (pref.getBoolean(getString(R.string.prefkey_success_message_show), false)) {
-                        AppUtils.showToast(this, R.string.message_lyrics_success);
-                    }
-//                    if (pref.getBoolean(getString(R.string.prefkey_failure_message_show), false)) {
-//                        AppUtils.showToast(this, R.string.message_lyrics_failure);
-//                    }
+                    executeSearch(param);
                     return;
                 } else if (param.hasExecuteId("execute_id_search_lyrics")) {
                     // Search lyrics
@@ -105,17 +106,32 @@ public class DownloadIntentService extends IntentService {
                     return;
                 }
             }
-        } catch (Exception e) {
-            Logger.e(e);
-        }
-
-        // Error
-        try {
             sendLyricsResult(param, null);
         } catch (Exception e) {
-            AppUtils.showToast(this, R.string.error_app);
             Logger.e(e);
+            AppUtils.showToast(this, R.string.error_app);
+
+            // Error
+            try {
+                sendLyricsResult(param, null);
+            } catch (Exception e1) {
+                Logger.e(e1);
+            }
         }
+    }
+
+    private boolean executeSearch(MedolyIntentParam param) throws SAXException, NoSuchAlgorithmException, ParserConfigurationException, IOException {
+        ResultItem resultItem = getLyrics(param);
+        if (resultItem == null) {
+            if (pref.getBoolean(getString(R.string.prefkey_failure_message_show), false)) {
+                AppUtils.showToast(this, R.string.message_lyrics_failure);
+            }
+        }
+        sendLyricsResult(param, resultItem);
+        if (pref.getBoolean(getString(R.string.prefkey_success_message_show), false)) {
+            AppUtils.showToast(this, R.string.message_lyrics_success);
+        }
+        return true;
     }
 
     /**
@@ -146,9 +162,8 @@ public class DownloadIntentService extends IntentService {
 
         ResultItem resultItem = null;
 
-        // get cache
-        boolean previousMediaEnabled = pref.getBoolean(getApplicationContext().getString(R.string.prefkey_previous_media_enabled), false);
-        if (previousMediaEnabled) {
+        // use cache
+        if (appPrefs.pref_use_cache().get()) {
             SearchCacheHelper cacheHelper = new SearchCacheHelper(this);
             SearchCache cache = cacheHelper.select(title, artist);
             if (cache != null) {
@@ -161,10 +176,32 @@ public class DownloadIntentService extends IntentService {
             // search
             Result result = ViewLyricsSearcher.search(title, artist, 0);
 
+            // sort
+            List<ResultItem> itemList= result.getInfoList();
+            Collections.sort(itemList, new Comparator<ResultItem>() {
+                @Override
+                public int compare(ResultItem o1, ResultItem o2) {
+                    double o1Rating = o1.getLyricRate();
+                    double o2Rating = o2.getLyricRate();
+                    if (o1Rating != o2Rating)
+                        return Double.compare(o1Rating, o2Rating);
+
+                    int o1RatingCount = o1.getLyricRatesCount();
+                    int o2RatingCount = o2.getLyricRatesCount();
+                    if (o1RatingCount != o2RatingCount)
+                        return Integer.compare(o1RatingCount, o2RatingCount);
+
+                    int o1Download = o1.getLyricDownloadsCount();
+                    int o2Download = o2.getLyricDownloadsCount();
+                    return Integer.compare(o1Download, o2Download);
+                }
+            });
+
             // detect language
             for (ResultItem item : result.getInfoList()) {
                 try {
                     String text = ViewLyricsSearcher.downloadLyricsText(item.getLyricURL());
+
                     Language lang = detectLanguage(text);
                     if (lang == null)
                         continue;
@@ -182,12 +219,13 @@ public class DownloadIntentService extends IntentService {
             // set first item if not found
             if (resultItem == null && result.getInfoList().size() > 0)
                 resultItem = result.getInfoList().get(0);
+
+            // save to cache.
+            if (resultItem != null && appPrefs.pref_cache_event().get()) {
+                saveCache(param, Locale.JAPAN, resultItem);
+            }
         }
 
-        // save to cache.
-        if (resultItem != null) {
-            saveCache(param, Locale.JAPAN, resultItem);
-        }
 
         return resultItem;
     }
@@ -216,7 +254,7 @@ public class DownloadIntentService extends IntentService {
      */
     private void sendLyricsResult(@NonNull MedolyIntentParam param, ResultItem resultItem) throws IOException {
         PropertyData propertyData = new PropertyData();
-        if (resultItem != null) {
+        if (resultItem != null && resultItem.getLyricURL() != null) {
             Uri fileUri = saveLyricsFile(resultItem); // save lyrics and get uri
             propertyData.put(LyricsProperty.DATA_URI, (fileUri == null) ? null : fileUri.toString());
             propertyData.put(LyricsProperty.SOURCE_TITLE, getString(R.string.lyrics_source_name));

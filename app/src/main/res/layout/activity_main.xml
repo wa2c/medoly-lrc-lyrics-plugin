@@ -17,6 +17,30 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/executeEventLayout">
+
+                <TextView
+                    android:text="@string/label_spinner_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/executeEventTextView"
+                    style="@android:style/TextAppearance.Holo.Medium"
+                    android:padding="8dp" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/executeEventSpinner"
+                    android:layout_gravity="center"
+                    android:padding="8dp" />
+            </LinearLayout>
+
             <Button
                 android:layout_width="@dimen/main_button_width"
                 android:layout_height="wrap_content"
@@ -51,15 +75,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/main_button_margin"
                 android:text="@string/label_button_launch_medoly" />
-
-            <TextView
-                android:id="@+id/noMedolyTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/message_no_medoly"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_margin="@dimen/main_button_margin" />
 
         </LinearLayout>
     </ScrollView>
