@@ -32,7 +32,7 @@ import android.widget.TextView;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.AppUtils;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.Logger;
-import com.wa2c.android.medoly.plugin.action.viewlyrics.util.SeekBarPreference;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.view.SeekBarPreference;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

@@ -1,4 +1,4 @@
-package com.wa2c.android.medoly.plugin.action.viewlyrics.util;
+package com.wa2c.android.medoly.plugin.action.viewlyrics.view;
 
 import android.content.Context;
 import android.content.DialogInterface;

@@ -173,13 +173,6 @@ public class EventProcessService extends IntentService {
 
             // detect result item
             resultItem = detectResultItem(result);
-            if (resultItem == null && appPrefs.pref_search_non_preferred_language().get()) {
-                // get non-preferred language
-                if (result.getInfoList() != null && result.getInfoList().size() > 0)
-                    resultItem = result.getInfoList().get(0);
-            }
-
-
 
             // save to cache.
             if (resultItem != null && appPrefs.pref_cache_result().get()) {
@@ -199,23 +192,28 @@ public class EventProcessService extends IntentService {
      * @return result item.
      */
     private ResultItem detectResultItem(Result result) {
+        // sort
+        List<ResultItem> itemList = result.getInfoList();
+        if (itemList == null || itemList.size() == 0)
+            return null;
+
         ResultItem resultItem = null;
         try {
-            // sort
-            List<ResultItem> itemList = result.getInfoList();
+
             Collections.sort(itemList, new Comparator<ResultItem>() {
                 @Override
                 public int compare(ResultItem o1, ResultItem o2) {
+                    // order by rating
                     double o1Rating = o1.getLyricRate();
                     double o2Rating = o2.getLyricRate();
                     if (o1Rating != o2Rating)
                         return Double.compare(o1Rating, o2Rating);
-
+                    // order by rating count
                     int o1RatingCount = o1.getLyricRatesCount();
                     int o2RatingCount = o2.getLyricRatesCount();
                     if (o1RatingCount != o2RatingCount)
                         return Integer.compare(o1RatingCount, o2RatingCount);
-
+                    // order by download count
                     int o1Download = o1.getLyricDownloadsCount();
                     int o2Download = o2.getLyricDownloadsCount();
                     return Integer.compare(o1Download, o2Download);
@@ -223,53 +221,68 @@ public class EventProcessService extends IntentService {
             });
 
             // detect language
-            int threshold = appPrefs.pref_search_language_threshold().get();
-            ResultItem[] selectedResult = new ResultItem[3]; // language 0: first, 1:second: 2: third
-            for (ResultItem item : itemList) {
-                try {
-                    String text = ViewLyricsSearcher.downloadLyricsText(item.getLyricURL());
-                    Detector detector = AppUtils.createDetectorAll(this);
-                    detector.append(text);
-                    List<Language> langList = detector.getProbabilities();
-                    for (Language l : langList) {
-                        if (l.prob * 100 < threshold)
-                            continue;
-                        if (TextUtils.isEmpty(appPrefs.pref_search_first_language().get()) && selectedResult[0] == null)
-                            continue;
-                        if (l.lang.equals(appPrefs.pref_search_first_language().get())) {
-                            selectedResult[0] = item;
-                            selectedResult[0].setLanguage(l.lang);
+            if (TextUtils.isEmpty(appPrefs.pref_search_first_language().get())) {
+                // not exists preferred language
+                resultItem = itemList.get(0);
+            } else {
+                // preferred language
+                int threshold = appPrefs.pref_search_language_threshold().get();
+                ResultItem[] selectedResult = new ResultItem[3]; // language 0: first, 1:second: 2: third
+                for (ResultItem item : itemList) {
+                    try {
+                        String text = ViewLyricsSearcher.downloadLyricsText(item.getLyricURL());
+                        Detector detector = AppUtils.createDetectorAll(this);
+                        detector.append(text);
+                        List<Language> langList = detector.getProbabilities();
+                        for (Language l : langList) {
+                            if (l.prob * 100 < threshold)
+                                continue;
+                            if (TextUtils.isEmpty(appPrefs.pref_search_first_language().get()) && selectedResult[0] == null)
+                                continue;
+                            if (l.lang.equals(appPrefs.pref_search_first_language().get())) {
+                                selectedResult[0] = item;
+                                selectedResult[0].setLanguage(l.lang);
+                                selectedResult[0].setLyrics(text);
+                            }
+                            if (TextUtils.isEmpty(appPrefs.pref_search_second_language().get()))
+                                continue;
+                            if (l.lang.equals(appPrefs.pref_search_second_language().get()) && selectedResult[1] == null) {
+                                selectedResult[1] = item;
+                                selectedResult[1].setLanguage(l.lang);
+                                selectedResult[1].setLyrics(text);
+                            }
+                            if (TextUtils.isEmpty(appPrefs.pref_search_third_language().get()))
+                                continue;
+                            if (l.lang.equals(appPrefs.pref_search_third_language().get()) && selectedResult[2] == null) {
+                                selectedResult[2] = item;
+                                selectedResult[2].setLanguage(l.lang);
+                                selectedResult[2].setLyrics(text);
+                            }
                         }
-                        if (TextUtils.isEmpty(appPrefs.pref_search_second_language().get()))
-                            continue;
-                        if (l.lang.equals(appPrefs.pref_search_second_language().get()) && selectedResult[1] == null) {
-                            selectedResult[1] = item;
-                            selectedResult[1].setLanguage(l.lang);
-                        }
-                        if (TextUtils.isEmpty(appPrefs.pref_search_third_language().get()))
-                            continue;
-                        if (l.lang.equals(appPrefs.pref_search_third_language().get()) && selectedResult[2] == null) {
-                            selectedResult[2] = item;
-                            selectedResult[2].setLanguage(l.lang);
-                        }
-                    }
 
-                    if (selectedResult[0] != null) {
-                        resultItem = selectedResult[0];
-                        resultItem.setLanguage(appPrefs.pref_search_first_language().get());
-                        break;
+                        if (selectedResult[0] != null) {
+                            resultItem = selectedResult[0];
+                            resultItem.setLanguage(appPrefs.pref_search_first_language().get());
+                            break;
+                        }
+                    } catch (LangDetectException e) {
+                        Logger.e(e);
                     }
-                } catch (LangDetectException e) {
-                    Logger.e(e);
                 }
+                if (resultItem == null)
+                    resultItem = selectedResult[2];
+                if (resultItem == null)
+                    resultItem = selectedResult[3];
             }
-            if (resultItem == null)
-                resultItem = selectedResult[2];
-            if (resultItem == null)
-                resultItem = selectedResult[3];
         } catch (Exception e) {
             Logger.d(e);
         }
+
+        // get non-preferred language
+        if (resultItem == null && appPrefs.pref_search_non_preferred_language().get()) {
+            resultItem = itemList.get(0);
+        }
+
         return resultItem;
     }
 
