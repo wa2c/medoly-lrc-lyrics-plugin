@@ -175,7 +175,7 @@ public class SearchActivity extends Activity {
 
     @Background
     void saveBackground(String title, String artist, ResultItem item) {
-        if (searchCacheHelper.insertOrUpdate(title, artist, null, item))
+        if (searchCacheHelper.insertOrUpdate(title, artist, item))
             AppUtils.showToast(this, R.string.message_save_cache);
     }
 
@@ -267,14 +267,6 @@ public class SearchActivity extends Activity {
             if (item != null) {
                 String lyrics = ViewLyricsSearcher.downloadLyricsText(item.getLyricURL());
                 item.setLyrics(lyrics);
-
-                Detector d = AppUtils.getDetector(SearchActivity.this, "ja");
-                if (d != null) {
-                    d.append(lyrics);
-                    ArrayList<Language> list = d.getProbabilities();
-                    Logger.d(list);
-                }
-
             }
         } catch (Exception e) {
             Logger.e(e);

@@ -87,17 +87,16 @@ public class SearchCacheHelper {
      * Insert or update cache.
      * @param title Search title.
      * @param artist Search artist.
-     * @param locale Result locale.
      * @param result Result item.
      * @return true as succeeded.
      */
-    public boolean insertOrUpdate(@NonNull String title, String artist, Locale locale, @NonNull  ResultItem result) {
+    public boolean insertOrUpdate(@NonNull String title, String artist, ResultItem result) {
         OrmaDatabase od = provideOrmaDatabase(context);
         SearchCache cache = select(title, artist);
         if (cache != null) {
             int count = od.updateSearchCache()
                     ._idEq(cache._id)
-                    .language(locale.getLanguage())
+                    .language(result.getLanguage())
                     .result(gson.toJson(result))
                     .execute();
             return (count > 0);
@@ -106,7 +105,7 @@ public class SearchCacheHelper {
             cache = new SearchCache();
             cache.title = title;
             cache.artist = artist;
-            cache.language = (locale == null) ? null : locale.getLanguage();
+            cache.language = result.getLanguage();
             cache.from = result.getLyricUploader();
             cache.file_name =  result.getLyricURL().substring(result.getLyricURL().lastIndexOf("/") + 1).replace(".lrc", "");
             cache.result = gson.toJson(result);

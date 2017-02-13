@@ -107,11 +107,6 @@
     <string name="pref_title_search_language_threshold">Language Threshold</string>
     <string name="pref_summary_search_language_threshold">Set the threshold for language determination to between 0.0 – 1.0. (Default: 0.5)</string>
 
-
-    <string name="pref_title_operation_media_open_enabled">Run At Media Open</string>
-    <string name="pref_summary_operation_media_open_enabled">Get the lyrics at the time of media loading.</string>
-    <string name="pref_title_previous_media_enabled">Read Previous Media Lyrics</string>
-    <string name="pref_summary_previous_media_enabled">Enable to get the lyrics for the same media that has got already last time.</string>
     <string name="pref_title_post_success_message_show">Show Success Message</string>
     <string name="pref_summary_post_success_message_show">Show the message when send succeeded.</string>
     <string name="pref_title_post_failure_message_show">Show Failure Message</string>

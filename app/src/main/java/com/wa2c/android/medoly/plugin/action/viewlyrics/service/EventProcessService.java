@@ -39,12 +39,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -123,12 +120,12 @@ public class EventProcessService extends IntentService {
     private boolean executeSearch(MedolyIntentParam param) throws SAXException, NoSuchAlgorithmException, ParserConfigurationException, IOException {
         ResultItem resultItem = getLyrics(param);
         if (resultItem == null) {
-            if (pref.getBoolean(getString(R.string.prefkey_failure_message_show), false)) {
+            if (pref.getBoolean(getString(R.string.pref_failure_message_show), false)) {
                 AppUtils.showToast(this, R.string.message_lyrics_failure);
             }
         }
         sendLyricsResult(param, resultItem);
-        if (pref.getBoolean(getString(R.string.prefkey_success_message_show), false)) {
+        if (pref.getBoolean(getString(R.string.pref_success_message_show), false)) {
             AppUtils.showToast(this, R.string.message_lyrics_success);
         }
         return true;
@@ -144,8 +141,6 @@ public class EventProcessService extends IntentService {
      * @throws IOException
      */
     private ResultItem getLyrics(MedolyIntentParam param) throws SAXException, NoSuchAlgorithmException, ParserConfigurationException, IOException {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-
         // media info are not exists
         if (param.getMediaUri() == null) {
             AppUtils.showToast(getApplicationContext(), R.string.message_no_media);
@@ -176,8 +171,38 @@ public class EventProcessService extends IntentService {
             // search
             Result result = ViewLyricsSearcher.search(title, artist, 0);
 
+            // detect result item
+            resultItem = detectResultItem(result);
+            if (resultItem == null && appPrefs.pref_search_non_preferred_language().get()) {
+                // get non-preferred language
+                if (result.getInfoList() != null && result.getInfoList().size() > 0)
+                    resultItem = result.getInfoList().get(0);
+            }
+
+
+
+            // save to cache.
+            if (resultItem != null && appPrefs.pref_cache_result().get()) {
+                saveCache(param, resultItem);
+            } else if (resultItem == null) {
+                saveCache(param, resultItem);
+            }
+        }
+
+        return resultItem;
+    }
+
+
+    /**
+     * Detect language.
+     * @param result result.
+     * @return result item.
+     */
+    private ResultItem detectResultItem(Result result) {
+        ResultItem resultItem = null;
+        try {
             // sort
-            List<ResultItem> itemList= result.getInfoList();
+            List<ResultItem> itemList = result.getInfoList();
             Collections.sort(itemList, new Comparator<ResultItem>() {
                 @Override
                 public int compare(ResultItem o1, ResultItem o2) {
@@ -198,52 +223,54 @@ public class EventProcessService extends IntentService {
             });
 
             // detect language
+            int threshold = appPrefs.pref_search_language_threshold().get();
+            ResultItem[] selectedResult = new ResultItem[3]; // language 0: first, 1:second: 2: third
             for (ResultItem item : itemList) {
                 try {
                     String text = ViewLyricsSearcher.downloadLyricsText(item.getLyricURL());
+                    Detector detector = AppUtils.createDetectorAll(this);
+                    detector.append(text);
+                    List<Language> langList = detector.getProbabilities();
+                    for (Language l : langList) {
+                        if (l.prob * 100 < threshold)
+                            continue;
+                        if (TextUtils.isEmpty(appPrefs.pref_search_first_language().get()) && selectedResult[0] == null)
+                            continue;
+                        if (l.lang.equals(appPrefs.pref_search_first_language().get())) {
+                            selectedResult[0] = item;
+                            selectedResult[0].setLanguage(l.lang);
+                        }
+                        if (TextUtils.isEmpty(appPrefs.pref_search_second_language().get()))
+                            continue;
+                        if (l.lang.equals(appPrefs.pref_search_second_language().get()) && selectedResult[1] == null) {
+                            selectedResult[1] = item;
+                            selectedResult[1].setLanguage(l.lang);
+                        }
+                        if (TextUtils.isEmpty(appPrefs.pref_search_third_language().get()))
+                            continue;
+                        if (l.lang.equals(appPrefs.pref_search_third_language().get()) && selectedResult[2] == null) {
+                            selectedResult[2] = item;
+                            selectedResult[2].setLanguage(l.lang);
+                        }
+                    }
 
-                    Language lang = detectLanguage(text);
-                    if (lang == null)
-                        continue;
-                    Locale locale = new Locale(lang.lang);
-                    if (Locale.JAPANESE.equals(locale)) {
-                        item.setLyrics(text);
-                        resultItem = item;
+                    if (selectedResult[0] != null) {
+                        resultItem = selectedResult[0];
+                        resultItem.setLanguage(appPrefs.pref_search_first_language().get());
                         break;
                     }
                 } catch (LangDetectException e) {
                     Logger.e(e);
                 }
             }
-
-            // set first item if not found
-            if (resultItem == null && result.getInfoList().size() > 0)
-                resultItem = result.getInfoList().get(0);
-
-            // save to cache.
-            if (resultItem != null && appPrefs.pref_cache_result().get()) {
-                saveCache(param, Locale.JAPAN, resultItem);
-            }
+            if (resultItem == null)
+                resultItem = selectedResult[2];
+            if (resultItem == null)
+                resultItem = selectedResult[3];
+        } catch (Exception e) {
+            Logger.d(e);
         }
-
-
         return resultItem;
-    }
-
-
-    /**
-     * Detect language.
-     * @param lyricsText Lyrics text.
-     * @return Language
-     */
-    private Language detectLanguage(String lyricsText) throws LangDetectException {
-        Detector detector = AppUtils.createDetector(this);
-        detector.append(lyricsText);
-        ArrayList<Language> languages = detector.getProbabilities();
-        if (languages != null && languages.size() != 0)
-            return languages.get(0);
-        else
-            return null;
     }
 
 
@@ -301,17 +328,16 @@ public class EventProcessService extends IntentService {
     /**
      * Save lyrics info to cache.
      * @param param Parameter.
-     * @param locale Locale.
      * @param resultItem Result item.
      */
-    private void saveCache(MedolyIntentParam param, Locale locale,  ResultItem resultItem) {
+    private void saveCache(MedolyIntentParam param, ResultItem resultItem) {
         if (param == null || param.getPropertyData() == null || resultItem == null)
             return;
 
         String title = param.getPropertyData().getFirst(MediaProperty.TITLE);
         String artist = param.getPropertyData().getFirst(MediaProperty.ARTIST);
         SearchCacheHelper searchCacheHelper = new SearchCacheHelper(this);
-        searchCacheHelper.insertOrUpdate(title, artist, locale, resultItem);
+        searchCacheHelper.insertOrUpdate(title, artist, resultItem);
     }
 
 }

@@ -28,6 +28,8 @@ public class ResultItem {
 
     /** Lyrics. */
     private String lyrics;
+    /** Language. */
+    private String language;
 
     // Getter / Setter
 
@@ -117,5 +119,13 @@ public class ResultItem {
 
     public void setLyrics(String lyrics) {
         this.lyrics = lyrics;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

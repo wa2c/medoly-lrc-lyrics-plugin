@@ -18,7 +18,6 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
-import android.support.v4.content.res.TypedArrayUtils;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -30,17 +29,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wa2c.android.medoly.library.MediaProperty;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.AppUtils;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.Logger;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.SeekBarPreference;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -138,9 +133,9 @@ public class SettingsActivity extends PreferenceActivity {
             }
 
             // アプリ情報
-            findPreference(getString(R.string.prefkey_application_details)).setOnPreferenceClickListener(applicationDetailsPreferenceClickListener);
+            findPreference(getString(R.string.pref_application_details)).setOnPreferenceClickListener(applicationDetailsPreferenceClickListener);
             // About
-            findPreference(getString(R.string.prefkey_about)).setOnPreferenceClickListener(aboutPreferenceClickListener);
+            findPreference(getString(R.string.pref_about)).setOnPreferenceClickListener(aboutPreferenceClickListener);
 
             initSummary(getPreferenceScreen());
         }

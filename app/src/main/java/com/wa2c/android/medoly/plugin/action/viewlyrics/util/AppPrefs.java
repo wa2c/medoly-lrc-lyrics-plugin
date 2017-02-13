@@ -29,4 +29,8 @@ public interface AppPrefs {
     String pref_search_second_language();
 
     String pref_search_third_language();
+
+    boolean pref_search_non_preferred_language();
+
+    int pref_search_language_threshold();
 }

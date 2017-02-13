@@ -231,9 +231,9 @@ public class AppUtils {
      * @param context context.
      * @return Language detector.
      */
-    public static Detector createDetector(Context context) throws LangDetectException {
+    public static Detector createDetectorAll(Context context) throws LangDetectException {
         // Language profile
-        if (DetectorFactory.getLangList() == null || DetectorFactory.getLangList().size() == 0) {
+        if (DetectorFactory.getLangList() == null || DetectorFactory.getLangList().size() < languageProfileMap.size()) {
             // initialize
             DetectorFactory.clear();
             DetectorFactory.loadProfile(Arrays.asList(getLanguageProfiles(context)));
@@ -248,10 +248,10 @@ public class AppUtils {
      * @param objects オブジェクト.
      * @return 最初のnull以外のオブジェクト。全てnullの場合はnull.
      */
-    public static Object coalesce(Object... objects) {
+    public static <T> T coalesce(T... objects) {
         if (objects == null)
             return null;
-        for (Object obj : objects) {
+        for (T obj : objects) {
             if (obj != null)
                 return obj;
         }

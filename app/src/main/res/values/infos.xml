@@ -24,12 +24,6 @@
     </string-array>
 
     <!-- Preferences -->
-    <string name="prefkey_plugin_event">prefkey_plugin_event</string>
-
-
-    <string name="prefkey_selected_id">selected_id</string>
-    <string name="prefkey_selected_site_id">selected_site_id</string>
-
     <string name="pref_use_cache">pref_use_cache</string>
     <string name="pref_cache_result">pref_cache_result</string>
     <string name="pref_cache_non_result">pref_cache_non_result</string>
@@ -39,13 +33,9 @@
     <string name="pref_search_non_preferred_language">pref_search_non_preferred_language</string>
     <string name="pref_search_language_threshold">pref_search_language_threshold</string>
 
-    <string name="prefkey_operation_media_open_enabled">operation_media_open_enabled</string>
-    <string name="prefkey_previous_media_enabled">previous_media_enabled</string>
-    <string name="prefkey_success_message_show">success_message_show</string>
-    <string name="prefkey_failure_message_show">failure_message_show</string>
-    <string name="prefkey_application_details">application_details</string>
-    <string name="prefkey_about">about</string>
-
-    <string name="id_lyrics">Lyrics</string>
+    <string name="pref_success_message_show">pref_success_message_show</string>
+    <string name="pref_failure_message_show">pref_failure_message_show</string>
+    <string name="pref_application_details">pref_application_details</string>
+    <string name="pref_about">pref_about</string>
 
 </resources>
