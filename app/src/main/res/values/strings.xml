@@ -87,12 +87,15 @@
     <string name="settings_not_set">Not set</string>
 
     <!-- Preferences -->
-    <string name="pref_title_use_cache">Use Cache</string>
-    <string name="pref_summary_use_cache">Search cache on searching.</string>
-    <string name="pref_title_cache_event">Save Lyrics On Event</string>
-    <string name="pref_summary_cache_event">Save the lyrics of event search result in the cache.</string>
-    <string name="pref_title_cache_event_non_result">Save Empty Result On Event</string>
-    <string name="pref_summary_cache_event_non_result">Save empty data of the event search result in the cache.</string>
+    <string name="title_preference_category_event">Event</string>
+    <string name="title_preference_category_other">Other</string>
+
+    <string name="pref_title_use_cache">Search Cache</string>
+    <string name="pref_summary_use_cache">Search the lyrics in the cache.</string>
+    <string name="pref_title_cache_result">Save Lyrics</string>
+    <string name="pref_summary_cache_result">Save the lyrics of event search result in the cache.</string>
+    <string name="pref_title_cache_non_result">Save Empty Result</string>
+    <string name="pref_summary_cache_non_result">Save empty data of the event search result in the cache.</string>
     <string name="pref_title_search_first_language">First Language</string>
     <string name="pref_summary_search_first_language">Set the top priority language of lyrics to search.</string><!--Set the top priority language of lyrics to search.-->
     <string name="pref_title_search_second_language">Second Language</string>

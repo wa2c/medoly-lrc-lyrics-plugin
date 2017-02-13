@@ -31,8 +31,8 @@
     <string name="prefkey_selected_site_id">selected_site_id</string>
 
     <string name="pref_use_cache">pref_use_cache</string>
-    <string name="pref_cache_event">pref_cache_event</string>
-    <string name="pref_cache_event_non_result">pref_cache_event_non_result</string>
+    <string name="pref_cache_result">pref_cache_result</string>
+    <string name="pref_cache_non_result">pref_cache_non_result</string>
     <string name="pref_search_first_language">pref_search_first_language</string>
     <string name="pref_search_second_language">pref_search_second_language</string>
     <string name="pref_search_third_language">pref_search_third_language</string>

@@ -162,7 +162,7 @@ public class EventProcessService extends IntentService {
 
         ResultItem resultItem = null;
 
-        // use cache
+        // search cache
         if (appPrefs.pref_use_cache().get()) {
             SearchCacheHelper cacheHelper = new SearchCacheHelper(this);
             SearchCache cache = cacheHelper.select(title, artist);
@@ -198,7 +198,7 @@ public class EventProcessService extends IntentService {
             });
 
             // detect language
-            for (ResultItem item : result.getInfoList()) {
+            for (ResultItem item : itemList) {
                 try {
                     String text = ViewLyricsSearcher.downloadLyricsText(item.getLyricURL());
 
@@ -221,7 +221,7 @@ public class EventProcessService extends IntentService {
                 resultItem = result.getInfoList().get(0);
 
             // save to cache.
-            if (resultItem != null && appPrefs.pref_cache_event().get()) {
+            if (resultItem != null && appPrefs.pref_cache_result().get()) {
                 saveCache(param, Locale.JAPAN, resultItem);
             }
         }

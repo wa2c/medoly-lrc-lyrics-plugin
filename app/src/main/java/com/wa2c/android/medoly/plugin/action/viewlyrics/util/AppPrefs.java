@@ -13,11 +13,16 @@ public interface AppPrefs {
     @DefaultInt(0)
     int prefPluginEvent();
 
+
+
+    @DefaultBoolean(true)
     boolean pref_use_cache();
 
-    boolean pref_cache_event();
+    @DefaultBoolean(true)
+    boolean pref_cache_result();
 
-    boolean pref_cache_event_non_result();
+    @DefaultBoolean(true)
+    boolean pref_cache_non_result();
 
     String pref_search_first_language();
 

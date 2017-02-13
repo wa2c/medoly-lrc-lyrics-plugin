@@ -80,12 +80,15 @@
     <string name="settings_not_set">設定しない</string>
 
     <!-- Preferences -->
-    <string name="pref_title_use_cache">キャッシュ使用</string>
-    <string name="pref_summary_use_cache">検索時にキャッシュから歌詞を検索します。</string>
-    <string name="pref_title_cache_event">イベント検索結果を保存</string>
-    <string name="pref_summary_cache_event">イベント検索で取得した歌詞をキャッシュに保存します。</string>
-    <string name="pref_title_cache_event_non_result">イベント検索結果無しを保存</string>
-    <string name="pref_summary_cache_event_non_result">イベント検索で歌詞が見つからない場合もキャッシュに結果を保存します。</string>
+    <string name="title_preference_category_event">イベント</string>
+    <string name="title_preference_category_other">その他</string>
+
+    <string name="pref_title_use_cache">キャッシュ検索</string>
+    <string name="pref_summary_use_cache">イベント検索でキャッシュから歌詞を検索します。</string>
+    <string name="pref_title_cache_result">キャッシュ保存</string>
+    <string name="pref_summary_cache_result">イベント検索で取得した歌詞をキャッシュに保存します。</string>
+    <string name="pref_title_cache_non_result">結果無しを保存</string>
+    <string name="pref_summary_cache_non_result">イベント検索で歌詞が見つからない場合もキャッシュに結果を保存します。</string>
     <string name="pref_title_search_first_language">第1優先言語</string>
     <string name="pref_summary_search_first_language">指定した言語を最優先検索対象にします。</string><!--Set the top priority language of lyrics to search.-->
     <string name="pref_title_search_second_language">第2優先言語</string>
