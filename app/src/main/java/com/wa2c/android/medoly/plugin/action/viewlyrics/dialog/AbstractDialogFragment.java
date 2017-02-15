@@ -79,10 +79,9 @@ public abstract class AbstractDialogFragment extends DialogFragment {
      */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        super.onCreateDialog(savedInstanceState);
         context = getActivity();
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        return null;
+        return super.onCreateDialog(savedInstanceState);
     }
 
     /**

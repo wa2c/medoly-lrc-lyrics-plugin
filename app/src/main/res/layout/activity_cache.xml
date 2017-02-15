@@ -37,7 +37,7 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="40dp" >
+            android:layout_height="@android:dimen/app_icon_size" >
 
             <TextView
                 android:text="@string/label_title"
@@ -56,10 +56,10 @@
                 android:labelFor="@id/cacheTitleEditText"/>
 
             <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@android:dimen/app_icon_size"
+                android:layout_height="@android:dimen/app_icon_size"
                 android:id="@+id/cacheInputClearButton"
-                android:src="@drawable/ic_action_cacnel"
+                android:src="@drawable/ic_action_cancel"
                 android:contentDescription="@null"
                 android:scaleType="centerCrop" />
 
@@ -67,7 +67,7 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="40dp" >
+            android:layout_height="@android:dimen/app_icon_size" >
 
             <TextView
                 android:text="@string/label_artist"
@@ -86,8 +86,8 @@
 
             <ImageButton
                 android:src="@drawable/ic_action_search"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@android:dimen/app_icon_size"
+                android:layout_height="@android:dimen/app_icon_size"
                 android:id="@+id/cacheInputSearchButton"
                 android:contentDescription="@null"
                 android:scaleType="centerCrop" />

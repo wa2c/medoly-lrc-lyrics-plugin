@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -21,11 +20,10 @@ import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.cybozu.labs.langdetect.Detector;
-import com.cybozu.labs.langdetect.Language;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.db.SearchCacheHelper;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.dialog.ConfirmDialogFragment;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.dialog.NormalizeDialogFragment;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.Result;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.ResultItem;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.ViewLyricsSearcher;
@@ -47,9 +45,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
 
 /**
  * Search Activity.
@@ -131,10 +126,12 @@ public class SearchActivity extends Activity {
             return;
         }
 
+        String fileName = searchResultAdapter.getSelectedItem().getMusicTitle() + " - " + searchResultAdapter.getSelectedItem().getMusicArtist() + ".lrc";
+
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_TITLE,  searchResultAdapter.getSelectedItem().getMusicTitle() + ".lrc");
+        intent.putExtra(Intent.EXTRA_TITLE, fileName);
         startActivityForResult(intent, REQUEST_CODE_SAVE_FILE);
     }
 
@@ -180,13 +177,31 @@ public class SearchActivity extends Activity {
     }
 
     @Click(R.id.searchTitleButton)
-    void searchTitleButtonClick(View view) {
-
+    void searchTitleButtonClick() {
+        final NormalizeDialogFragment dialogFragment = NormalizeDialogFragment.newInstance(searchTitleEditText.getText().toString(), intentSearchTitle);
+        dialogFragment.setClickListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    searchTitleEditText.setText(dialogFragment.getInputText());
+                }
+            }
+        });
+        dialogFragment.show(this);
     }
 
     @Click(R.id.searchArtistButton)
-    void searchArtistButtonClick(View view) {
-
+    void searchArtistButtonClick() {
+        final NormalizeDialogFragment dialogFragment = NormalizeDialogFragment.newInstance(searchArtistEditText.getText().toString(), intentSearchArtist);
+        dialogFragment.setClickListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE) {
+                    searchArtistEditText.setText(dialogFragment.getInputText());
+                }
+            }
+        });
+        dialogFragment.show(this);
     }
 
     @Click(R.id.searchClearButton)

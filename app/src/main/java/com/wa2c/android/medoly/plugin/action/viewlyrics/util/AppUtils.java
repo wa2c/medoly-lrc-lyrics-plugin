@@ -244,9 +244,9 @@ public class AppUtils {
 
 
     /**
-     * 引数で与えられた最初のnull以外の値を返す.
-     * @param objects オブジェクト.
-     * @return 最初のnull以外のオブジェクト。全てnullの場合はnull.
+     * Get first non-null object.
+     * @param objects Objects.
+     * @return First non-null object. null as all null.
      */
     public static <T> T coalesce(T... objects) {
         if (objects == null)
@@ -259,9 +259,9 @@ public class AppUtils {
     }
 
     /**
-     * 引数で与えられた最初の空またはnull以外の値を返す.
-     * @param texts テキスト.
-     * @return 最初のnull以外のオブジェクト. 対象の値が無い場合は空文字.
+     * Get first non-null text.
+     * @param texts Texts.
+     * @return First non-null object. empty text as all null.
      */
     public static CharSequence coalesce(CharSequence... texts) {
         if (texts == null)
@@ -273,51 +273,12 @@ public class AppUtils {
         return "";
     }
 
-    /**
-     * 文字列の比較. nullは最大.
-     * @param text1 文字列1.
-     * @param text2 文字列2.
-     * @return 比較結果.
-     */
-    public static int compare(CharSequence text1, CharSequence text2) {
-        if (text1 == null && text2 == null)
-            return 0;
-        else if (text1 == null)
-            return 1;
-        else if (text2 == null)
-            return -1;
-        else
-            return text1.toString().compareTo(text2.toString());
-    }
 
-
-//
-//    /**
-//     * 歌詞を調整する。
-//     * @param text 歌詞テキスト。
-//     * @return 調整後の歌詞テキスト。
-//     */
-//    public static String adjustLyrics(String text) {
-//        if (TextUtils.isEmpty(text))
-//            return null;
-//
-//        // タグ除去
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            text = Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY).toString();
-//        } else {
-//            text = Html.fromHtml(text).toString();
-//        }
-//
-//        // トリミング
-//        text = trimLines(text);
-//
-//        return text;
-//    }
 
     /**
-     * 全角を含めてトリミング。
-     * @param text 元テキスト。
-     * @return トリミングテキスト。
+     * Trim spaces including full-width characters.
+     * @param text Text.
+     * @return Trimmed text.
      */
     public static String trimLines(String text) {
         if (TextUtils.isEmpty(text))
@@ -326,19 +287,17 @@ public class AppUtils {
         return text.replaceAll("(?m)^[\\t 　]*", "").replaceAll("(?m)[\\t 　]*$", "").trim();
     }
 
-
-
     /**
-     * 比較向けにテキストをノーマライズ。
-     * @param text テキスト。
-     * @return 変換後テキスト。
+     * Normalize text.
+     * @param text text.
+     * @return Normalized text.
      */
     public static String normalizeText(String text) {
         if (TextUtils.isEmpty(text))
             return "";
 
         // 正規化
-        String output = trimLines(removeParentheses(Normalizer.normalize(text, Normalizer.Form.NFKC)).toLowerCase());
+        String output = trimLines(Normalizer.normalize(text, Normalizer.Form.NFKC)).toLowerCase();
         // 特殊文字正規化
         return output
                 .replace("゠", "=")
@@ -351,7 +310,7 @@ public class AppUtils {
      * @param text テキスト。
      * @return 括弧を取り除いたテキスト。
      */
-    private static String removeParentheses(String text) {
+    public static String removeParentheses(String text) {
         if (TextUtils.isEmpty(text))
             return "";
 
@@ -371,39 +330,49 @@ public class AppUtils {
                 .replaceAll("(^[^\\「]+)\\「.*?\\」", "$1")
                 .replaceAll("(^[^\\『]+)\\『.*?\\』", "$1")
                 .replaceAll("(^[^\\〖]+)\\〖.*?\\〗", "$1")
-                .replaceAll("(^[^\\-]+)-.*?-", "$1")
-                .replaceAll("(^[^\\－]+)－.*?－", "$1")
-                .replaceAll(" (~|～|〜|〰).*", "");
-
-    }
-
-
-    /**
-     * 2つのテキストを比較して、ほぼ同じ場合はtrue。
-     * @param text1 比較テキスト1。
-     * @param text2 比較テキスト2。
-     * @return ほぼ一致する場合はtrue。
-     */
-    public static boolean similarText(String text1, String text2) {
-        if (TextUtils.isEmpty(text1) || TextUtils.isEmpty(text2))
-            return false;
-
-        String it = removeWhitespace(normalizeText(text1), false);
-        String ot = removeWhitespace(normalizeText(text2), false);
-        return it.equals(ot);
+                ;
     }
 
     /**
-     * 空白を置換える
-     * @param text テキスト。
-     * @param insertSpace スペースに置換える場合はtrue。
-     * @return 変換後テキスト。
+     * Remove text after dash characters.
+     * @param text text.
+     * @return removed text.
      */
-    private static String removeWhitespace(String text, boolean insertSpace) {
+    public static String removeDash(String text) {
         if (TextUtils.isEmpty(text))
             return "";
 
-        return text.replaceAll("(\\s|　)", insertSpace ? " " : "");
+        return text
+                .replaceAll("\\s+(-|－|―|ー|ｰ|~|～|〜|〰|=|＝).*", "");
+    }
+
+    /**
+     * Remove attached info.
+     * @param text text.
+     * @return removed text.
+     */
+    public static String removeTextInfo(String text) {
+        if (TextUtils.isEmpty(text))
+            return "";
+
+        return text
+                .replaceAll("off vocal", "")
+                .replaceAll("no vocal", "")
+                .replaceAll("less vocal", "")
+                .replaceAll("without.*", "")
+                .replaceAll("w/o.*", "")
+                .replaceAll("backtrack", "")
+                .replaceAll("backing track", "")
+                .replaceAll("karaoke", "")
+                .replaceAll("カラオケ", "")
+                .replaceAll("からおけ", "")
+                .replaceAll("歌無.*", "")
+                .replaceAll("vocal only", "")
+                .replaceAll("instrumental.*", "")
+                .replaceAll("inst\\..*", "")
+                .replaceAll("インスト.*", "")
+                ;
+
     }
 
 }

@@ -74,7 +74,7 @@
                 android:resource="@string/label_execute_search_lyrics" />
             <meta-data
                 android:name="execute_icon_search_lyrics"
-                android:resource="@drawable/ic_action_search" />
+                android:resource="@drawable/ic_action_find" />
 
         </receiver>
 

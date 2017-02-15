@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="site_name">サイト名</string>
-    <string name="site_uri">サイトURI</string>
-    <string name="search_uri">検索URI</string>
-    <string name="search_anchor_parse_text">検索アンカーパース文字列</string>
-    <string name="search_anchor_parse_type">検索アンカーパース種別</string>
-    <string name="search_lyrics_parse_text">歌詞パース文字列</string>
-    <string name="search_lyrics_parse_type">歌詞パース種別</string>
-    <string name="uri_encoding">URI文字コード</string>
-    <string name="page_encoding">ページ文字コード</string>
-    <string name="timeout_milliseconds">読み込みタイムアウト (ms)</string>
-    <string name="delay_milliseconds">読み込み遅延 (ms)</string>
-
     <!-- Label -->
     <string name="label_title">タイトル</string>
     <string name="label_artist">アーティスト</string>
@@ -22,13 +10,14 @@
     <string name="label_file_name">ファイル名</string>
     <string name="label_lang">言語</string>
     <string name="label_confirmation">確認</string>
+    <string name="label_edit">編集</string>
 
     <string name="loading">Loading...</string>
     <string name="label_close">閉じる</string>
 
     <!-- Package -->
-    <string name="app_description">外部サイトから歌詞を取得します。</string>
-    <string name="class_receiver_label">歌詞取得アクション</string>
+    <string name="app_description">ViewLyrics.comより歌詞を取得します。</string>
+    <string name="class_receiver_label">歌詞検索アクション</string>
     <string name="label_execute_get_lyrics">歌詞取得</string>
     <string name="label_execute_search_lyrics">歌詞検索</string>
 
@@ -90,14 +79,14 @@
     <string name="pref_title_cache_non_result">結果無しを保存</string>
     <string name="pref_summary_cache_non_result">イベント検索で歌詞が見つからない場合もキャッシュに結果を保存します。</string>
     <string name="pref_title_search_first_language">第1優先言語</string>
-    <string name="pref_summary_search_first_language">指定した言語を最優先検索対象にします。</string><!--Set the top priority language of lyrics to search.-->
+    <string name="pref_summary_search_first_language">指定した言語を最優先検索対象にします。</string>
     <string name="pref_title_search_second_language">第2優先言語</string>
     <string name="pref_summary_search_second_language">指定した言語を第2優先検索対象にします。</string>
     <string name="pref_title_search_third_language">第3優先言語</string>
     <string name="pref_summary_search_third_language">指定した言語を第3優先検索対象にします。</string>
     <string name="pref_title_search_non_preferred_language">優先外言語の歌詞を取得</string>
     <string name="pref_summary_search_non_preferred_language">優先検索対象言語が取得できない場合、その他の言語を取得します。</string>
-    <string name="pref_title_search_language_threshold">言語判定のしきい値。</string>
+    <string name="pref_title_search_language_threshold">言語判定のしきい値</string>
     <string name="pref_summary_search_language_threshold">対象言語を判定するためのしきい値を、0 – 100の間で指定します。(初期値: 50)</string>
 
     <string name="pref_title_post_success_message_show">成功メッセージ表示</string>
