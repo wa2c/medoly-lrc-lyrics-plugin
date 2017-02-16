@@ -64,6 +64,12 @@ public class MainActivity extends Activity {
 
     @AfterViews
     void afterViews() {
+        android.app.ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(true);
+        }
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         adapter.add(getString(R.string.label_spinner_event_none));
         adapter.add(getString(R.string.label_plugin_operation_media_open));
