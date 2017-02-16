@@ -163,6 +163,9 @@ public class EventProcessService extends IntentService {
             SearchCache cache = cacheHelper.select(title, artist);
             if (cache != null) {
                 resultItem = cache.getResultItem();
+                if (resultItem == null && appPrefs.pref_cache_non_result().get()) {
+                    return null; // returns even if it is null
+                }
             }
         }
 
@@ -175,10 +178,12 @@ public class EventProcessService extends IntentService {
             resultItem = detectResultItem(result);
 
             // save to cache.
-            if (resultItem != null && appPrefs.pref_cache_result().get()) {
-                saveCache(param, resultItem);
-            } else if (resultItem == null) {
-                saveCache(param, resultItem);
+            if (appPrefs.pref_cache_result().get()) {
+                if (resultItem != null) {
+                    saveCache(param, resultItem);
+                } else if (appPrefs.pref_cache_non_result().get()) {
+                    saveCache(param, null);
+                }
             }
         }
 
@@ -344,7 +349,7 @@ public class EventProcessService extends IntentService {
      * @param resultItem Result item.
      */
     private void saveCache(MedolyIntentParam param, ResultItem resultItem) {
-        if (param == null || param.getPropertyData() == null || resultItem == null)
+        if (param == null || param.getPropertyData() == null)
             return;
 
         String title = param.getPropertyData().getFirst(MediaProperty.TITLE);

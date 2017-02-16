@@ -10,7 +10,6 @@ import com.wa2c.android.medoly.plugin.action.viewlyrics.util.AppUtils;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Search cache adapter.
@@ -59,7 +58,7 @@ public class SearchCacheHelper {
     public SearchCache select(String title, String artist) {
         OrmaDatabase od = provideOrmaDatabase(context);
         return od.selectFromSearchCache()
-                .titleAndArtistEq(title, artist)
+                .titleAndArtistEq(AppUtils.coalesce(title), AppUtils.coalesce(artist))
                 .valueOrNull();
     }
 
@@ -87,17 +86,32 @@ public class SearchCacheHelper {
      * Insert or update cache.
      * @param title Search title.
      * @param artist Search artist.
-     * @param result Result item.
+     * @param resultItem Result item.
      * @return true as succeeded.
      */
-    public boolean insertOrUpdate(@NonNull String title, String artist, ResultItem result) {
+    public boolean insertOrUpdate(@NonNull String title, String artist, ResultItem resultItem) {
         OrmaDatabase od = provideOrmaDatabase(context);
+
+        String language = null;
+        String from = null;
+        String file_name = null;
+        String result = gson.toJson(resultItem);
+        if (resultItem != null) {
+            language = resultItem.getLanguage();
+            from = resultItem.getLyricUploader();
+            file_name = resultItem.getLyricURL().substring(resultItem.getLyricURL().lastIndexOf("/") + 1).replace(".lrc", "");
+        }
+
+        title = AppUtils.coalesce(title);
+        artist = AppUtils.coalesce(artist);
+
         SearchCache cache = select(title, artist);
         if (cache != null) {
-            int count = od.updateSearchCache()
-                    ._idEq(cache._id)
-                    .language(result.getLanguage())
-                    .result(gson.toJson(result))
+            int count = od.updateSearchCache()._idEq(cache._id)
+                    .language(language)
+                    .from(from)
+                    .file_name(file_name)
+                    .result(result)
                     .execute();
             return (count > 0);
         } else {
@@ -105,15 +119,20 @@ public class SearchCacheHelper {
             cache = new SearchCache();
             cache.title = title;
             cache.artist = artist;
-            cache.language = result.getLanguage();
-            cache.from = result.getLyricUploader();
-            cache.file_name =  result.getLyricURL().substring(result.getLyricURL().lastIndexOf("/") + 1).replace(".lrc", "");
-            cache.result = gson.toJson(result);
+            cache.language = language;
+            cache.from = from;
+            cache.file_name =  file_name;
+            cache.result = result;
             long id = od.insertIntoSearchCache(cache);
             return (id >= 0);
         }
     }
 
+    /**
+     * Delete cache.
+     * @param caches Cache.
+     * @return true as succeeded.
+     */
     public boolean delete(final Collection<SearchCache> caches) {
         if (caches == null || caches.size() == 0)
             return false;

@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import com.cybozu.labs.langdetect.Detector;
 import com.cybozu.labs.langdetect.DetectorFactory;
 import com.cybozu.labs.langdetect.LangDetectException;
-import com.cybozu.labs.langdetect.Language;
 import com.google.gson.Gson;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
 
@@ -17,8 +16,6 @@ import java.lang.reflect.Type;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -263,10 +260,10 @@ public class AppUtils {
      * @param texts Texts.
      * @return First non-null object. empty text as all null.
      */
-    public static CharSequence coalesce(CharSequence... texts) {
+    public static String coalesce(String... texts) {
         if (texts == null)
             return "";
-        for (CharSequence text : texts) {
+        for (String text : texts) {
             if (!TextUtils.isEmpty(text))
                 return text;
         }

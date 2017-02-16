@@ -49,14 +49,15 @@ public class CacheDialogFragment extends AbstractDialogFragment {
         // view
         final View content = View.inflate(getActivity(), R.layout.dialog_cache, null);
         TextView textView = (TextView)content.findViewById(R.id.dialogCacheLyricsTextView);
-        textView.setText(result.getLyrics());
+        textView.setText(result != null ? result.getLyrics() : getString(R.string.message_dialog_cache_none));
 
         // build dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.title_activity_cache);
         builder.setView(content);
         builder.setNegativeButton(R.string.label_close, clickListener);
-        builder.setPositiveButton(R.string.menu_search_save_file, clickListener);
+        if (result != null)
+            builder.setPositiveButton(R.string.menu_search_save_file, clickListener);
         return  builder.create();
     }
 

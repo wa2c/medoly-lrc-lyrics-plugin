@@ -72,7 +72,9 @@
     <string name="error_delete_cache_check">削除項目をチェックしてください。</string>
     <string name="message_delete_cache">検索結果をキャッシュから削除しました。</string>
     <string name="message_dialog_cache_delete">チェック項目をキャッシュから削除します。</string>
+
     <string name="label_dialog_cache_delete">削除</string>
+    <string name="message_dialog_cache_none">歌詞がありません。</string>
 
     <!-- Settings Activity -->
     <string name="settings_summary_current_value">[現在の設定: %1$s]</string>

@@ -15,12 +15,14 @@
             android:paddingBottom="@dimen/dialog_vertical_margin"
             android:paddingLeft="@dimen/dialog_horizontal_margin"
             android:paddingRight="@dimen/dialog_horizontal_margin"
-            android:paddingTop="@dimen/dialog_vertical_margin">
+            android:paddingTop="@dimen/dialog_vertical_margin"
+            android:gravity="fill_horizontal">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/dialogCacheLyricsTextView" />
+                android:id="@+id/dialogCacheLyricsTextView"
+                android:layout_gravity="center_horizontal" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

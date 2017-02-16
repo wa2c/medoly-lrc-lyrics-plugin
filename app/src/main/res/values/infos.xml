@@ -13,6 +13,12 @@
     <string name="app_market_web">https://play.google.com/store/apps/details?id=com.wa2c.android.medoly.plugin.action.viewlyrics</string>
     <string name="lyrics_source_name">ViewLyrics.com</string>
 
+    <string name="label_cache_item_title">Title:%1$s</string>
+    <string name="label_cache_item_artist">Artist:%1$s</string>
+    <string name="label_cache_item_from">From:%1$s</string>
+    <string name="label_cache_item_file">Name:%1$s</string>
+    <string name="label_cache_item_lang">Lang:%1$s</string>
+
     <!-- Library  -->
     <string-array name="about_library_names">
        <item>jsoup</item>
