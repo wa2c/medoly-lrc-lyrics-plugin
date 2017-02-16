@@ -108,9 +108,9 @@ public class CacheActivity extends Activity {
         }
 
         ConfirmDialogFragment dialog = ConfirmDialogFragment.newInstance(
-                getString(R.string.dialog_cache_message_delete),
+                getString(R.string.message_dialog_cache_delete),
                 getString(R.string.label_confirmation),
-                getString(R.string.dialog_cache_label_delete),
+                getString(R.string.label_dialog_cache_delete),
                 null,
                 getString(android.R.string.cancel)
         );

@@ -356,23 +356,22 @@ public class AppUtils {
             return "";
 
         return text
-                .replaceAll("off vocal", "")
-                .replaceAll("no vocal", "")
-                .replaceAll("less vocal", "")
-                .replaceAll("without.*", "")
-                .replaceAll("w/o.*", "")
-                .replaceAll("backtrack", "")
-                .replaceAll("backing track", "")
-                .replaceAll("karaoke", "")
-                .replaceAll("カラオケ", "")
-                .replaceAll("からおけ", "")
-                .replaceAll("歌無.*", "")
-                .replaceAll("vocal only", "")
-                .replaceAll("instrumental.*", "")
-                .replaceAll("inst\\..*", "")
-                .replaceAll("インスト.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?off vocal.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?no vocal.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?less vocal.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?without.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?w/o.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?backtrack.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?backing track.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?karaoke.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?カラオケ.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?からおけ.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?歌無.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?vocal only.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?instrumental.*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?inst\\..*", "")
+                .replaceAll("(?i)[\\(\\<\\[\\{\\s]?インスト.*", "")
                 ;
-
     }
 
 }

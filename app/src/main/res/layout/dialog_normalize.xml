@@ -9,27 +9,27 @@
     >
 
     <TextView
-        android:text="変更前"
+        android:text="@string/label_dialog_normalize_before_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dialogNormalizeBeforeTitleTextView" />
 
     <TextView
-        android:text="TextView"
+        android:text=""
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dialogNormalizeBeforeTextView"
         style="@android:style/TextAppearance.Holo.Medium"
-        android:layout_marginLeft="8dp" />
+        android:layout_marginStart="8dp" />
 
     <TextView
-        android:text="変更後"
+        android:text="@string/label_dialog_normalize_after_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dialogNormalizeAfterTitleTextView" />
 
     <TextView
-        android:text="TextView"
+        android:text=""
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dialogNormalizeAfterTextView"
@@ -39,39 +39,39 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_alignBottom="@+id/searchInputLayout"
         android:background="@drawable/divider"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp" />
 
     <CheckBox
-        android:text="正規化"
+        android:text="@string/label_dialog_normalize_normalize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dialogNormalizeCheckBox" />
 
     <CheckBox
-        android:text="括弧内を削除"
+        android:text="@string/label_dialog_normalize_remove_parentheses"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dialogNormalizeParenthesesCheckBox" />
 
     <CheckBox
-        android:text="ダッシュ以降を削除"
+        android:text="@string/label_dialog_normalize_remove_dash"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dialogNormalizeDashCheckBox" />
 
     <CheckBox
-        android:text="付属情報を削除 ('without', etc.)"
+        android:text="@string/label_dialog_normalize_remove_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dialogNormalizeInfoCheckBox" />
 
     <Button
-        android:text="リセット"
+        android:text="@string/label_dialog_normalize_reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/dialogNormalizeResetButton"
         android:layout_gravity="center_horizontal" />
+
 </LinearLayout>

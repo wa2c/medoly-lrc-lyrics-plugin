@@ -2,6 +2,7 @@ package com.wa2c.android.medoly.plugin.action.viewlyrics.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -63,7 +64,6 @@ public class MainActivity extends Activity {
 
     @AfterViews
     void afterViews() {
-
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         adapter.add(getString(R.string.label_spinner_event_none));
         adapter.add(getString(R.string.label_plugin_operation_media_open));

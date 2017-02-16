@@ -12,7 +12,7 @@
     <string name="label_confirmation">Confirmation</string>
     <string name="label_edit">Edit</string>
 
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="label_close">Close</string>
 
     <!-- Package -->
@@ -54,15 +54,25 @@
     <string name="label_search_item_download">Download:%1$d</string>
     <string name="label_search_item_rating">Rating:%1$.1f(%2$d)</string>
     <string name="label_search_item_from">From:%1$s</string>
-    <string name="dialog_confirm_message_save_cache">Save the search result to cache.</string>
-    <string name="dialog_confirm_label_save_cache">Save</string>
+
+    <string name="message_dialog_confirm_save_cache">Save the search result to cache.</string>
+    <string name="label_dialog_confirm_save_cache">Save</string>
+
+    <string name="title_dialog_normalize">Quick Edit</string>
+    <string name="label_dialog_normalize_before_edit">Before</string>
+    <string name="label_dialog_normalize_after_edit">After</string>
+    <string name="label_dialog_normalize_normalize">Normalize</string>
+    <string name="label_dialog_normalize_remove_parentheses">Remove parenthesis</string>
+    <string name="label_dialog_normalize_remove_dash">Delete dash and beyond</string>
+    <string name="label_dialog_normalize_remove_info">Delete info(e.g., &quot;off vocal&quot;)</string>
+    <string name="label_dialog_normalize_reset">Reset</string>
 
     <!-- Cache Activity -->
     <string name="menu_cache_delete">Delete cache</string>
     <string name="error_delete_cache_check">Check the deletion items.</string>
     <string name="message_delete_cache">Deleted the checked caches.</string>
-    <string name="dialog_cache_message_delete">Delete checked caches.</string>
-    <string name="dialog_cache_label_delete">Delete</string>
+    <string name="message_dialog_cache_delete">Delete checked caches.</string>
+    <string name="label_dialog_cache_delete">Delete</string>
 
     <string name="label_cache_item_title">Title:%1$s</string>
     <string name="label_cache_item_artist">Artist:%1$s</string>

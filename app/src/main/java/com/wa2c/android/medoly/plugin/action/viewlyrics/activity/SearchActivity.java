@@ -143,9 +143,9 @@ public class SearchActivity extends Activity {
         }
 
         ConfirmDialogFragment dialog = ConfirmDialogFragment.newInstance(
-                getString(R.string.dialog_confirm_message_save_cache),
+                getString(R.string.message_dialog_confirm_save_cache),
                 getString(R.string.label_confirmation),
-                getString(R.string.dialog_confirm_label_save_cache),
+                getString(R.string.label_dialog_confirm_save_cache),
                 null,
                 getString(android.R.string.cancel)
         );

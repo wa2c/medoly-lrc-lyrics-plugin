@@ -100,7 +100,7 @@ public class NormalizeDialogFragment extends AbstractDialogFragment {
         // build dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(baseView);
-        builder.setTitle(R.string.label_title);
+        builder.setTitle(R.string.title_dialog_normalize);
         builder.setNegativeButton(R.string.label_close, clickListener);
         builder.setPositiveButton(R.string.label_edit, clickListener);
         return  builder.create();

@@ -12,7 +12,7 @@
     <string name="label_confirmation">確認</string>
     <string name="label_edit">編集</string>
 
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="label_close">閉じる</string>
 
     <!-- Package -->
@@ -54,15 +54,25 @@
     <string name="label_search_item_download">Download:%1$d</string>
     <string name="label_search_item_rating">Rating:%1$.1f(%2$d)</string>
     <string name="label_search_item_from">From:%1$s</string>
-    <string name="dialog_confirm_message_save_cache">検索結果をキャッシュに保存します。</string>
-    <string name="dialog_confirm_label_save_cache">保存</string>
+
+    <string name="message_dialog_confirm_save_cache">検索結果をキャッシュに保存します。</string>
+    <string name="label_dialog_confirm_save_cache">保存</string>
+
+    <string name="title_dialog_normalize">クイック編集</string>
+    <string name="label_dialog_normalize_before_edit">変更前</string>
+    <string name="label_dialog_normalize_after_edit">変更後</string>
+    <string name="label_dialog_normalize_normalize">正規化</string>
+    <string name="label_dialog_normalize_remove_parentheses">括弧内を削除</string>
+    <string name="label_dialog_normalize_remove_dash">ダッシュ以降を削除</string>
+    <string name="label_dialog_normalize_remove_info">付属情報を削除(e.g., &quot;off vocal&quot;)</string>
+    <string name="label_dialog_normalize_reset">リセット</string>
 
     <!-- Cache Activity -->
     <string name="menu_cache_delete">キャッシュ削除</string>
     <string name="error_delete_cache_check">削除項目をチェックしてください。</string>
     <string name="message_delete_cache">検索結果をキャッシュから削除しました。</string>
-    <string name="dialog_cache_message_delete">チェック項目をキャッシュから削除します。</string>
-    <string name="dialog_cache_label_delete">削除</string>
+    <string name="message_dialog_cache_delete">チェック項目をキャッシュから削除します。</string>
+    <string name="label_dialog_cache_delete">削除</string>
 
     <!-- Settings Activity -->
     <string name="settings_summary_current_value">[現在の設定: %1$s]</string>
