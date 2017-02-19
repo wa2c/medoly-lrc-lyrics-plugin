@@ -52,9 +52,7 @@
             android:summary="@string/pref_summary_search_language_threshold"
             android:text=""
             android:title="@string/pref_title_search_language_threshold" />
-    </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/title_preference_category_other">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/pref_success_message_show"
@@ -62,10 +60,14 @@
             android:title="@string/pref_title_post_success_message_show" />
 
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="@string/pref_failure_message_show"
             android:summary="@string/pref_summary_post_failure_message_show"
             android:title="@string/pref_title_post_failure_message_show" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/title_preference_category_other">
 
         <Preference
             android:key="@string/pref_application_details"
@@ -74,6 +76,7 @@
 
         <Preference
             android:key="@string/pref_about"
+            android:summary="@string/pref_summary_about"
             android:title="@string/pref_title_about" />
 
     </PreferenceCategory>

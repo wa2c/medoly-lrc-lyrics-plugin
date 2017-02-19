@@ -95,6 +95,10 @@ public class SearchActivity extends Activity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+
+        searchResultListView.setAdapter(searchResultAdapter);
+        searchTitleEditText.setText(intentSearchTitle);
+        searchArtistEditText.setText(intentSearchArtist);
     }
 
     @AfterViews

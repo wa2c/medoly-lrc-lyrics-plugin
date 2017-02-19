@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
-    <!-- App Infos -->
+    <!-- App Info -->
     <string name="app_name">Medoly ViewLyrics Plugin</string>
     <string name="base_app_name">Medoly</string>
     <string name="package_name">com.wa2c.android.medoly.plugin.action.viewlyrics</string>
@@ -9,6 +9,9 @@
     <string name="app_mail_name">medoly</string>
     <string name="app_mail_domain">wa2c.com</string>
     <string name="app_author">wa2c</string>
+    <string name="app_license">MIT License</string>
+    <string name="app_license_url">https://opensource.org/licenses/mit-license.php</string>
+    <string name="app_privacy_policy_url">http://example.com/</string>
     <string name="app_market">market://details?id=com.wa2c.android.medoly.plugin.action.viewlyrics</string>
     <string name="app_market_web">https://play.google.com/store/apps/details?id=com.wa2c.android.medoly.plugin.action.viewlyrics</string>
     <string name="lyrics_source_name">ViewLyrics.com</string>
@@ -19,14 +22,20 @@
     <string name="label_cache_item_file">Name:%1$s</string>
     <string name="label_cache_item_lang">Lang:%1$s</string>
 
+    <string name="label_header_separator">:</string>
+
     <!-- Library  -->
     <string-array name="about_library_names">
-       <item>jsoup</item>
-        <item>xsoup</item>
+       <item>AndroidAnnotation</item>
+        <item>Orma</item>
+        <item>language detection</item>
+        <item>Gson</item>
     </string-array>
     <string-array name="about_library_urls">
-        <item>http://jsoup.org/</item>
-        <item>https://github.com/code4craft/xsoup</item>
+        <item>http://androidannotations.org/</item>
+        <item>https://github.com/gfx/Android-Orma</item>
+        <item>https://github.com/shuyo/language-detection/blob/wiki/ProjectHome.md</item>
+        <item>https://github.com/google/gson</item>
     </string-array>
 
     <!-- Preferences -->
@@ -38,9 +47,9 @@
     <string name="pref_search_third_language">pref_search_third_language</string>
     <string name="pref_search_non_preferred_language">pref_search_non_preferred_language</string>
     <string name="pref_search_language_threshold">pref_search_language_threshold</string>
-
     <string name="pref_success_message_show">pref_success_message_show</string>
     <string name="pref_failure_message_show">pref_failure_message_show</string>
+
     <string name="pref_application_details">pref_application_details</string>
     <string name="pref_about">pref_about</string>
 

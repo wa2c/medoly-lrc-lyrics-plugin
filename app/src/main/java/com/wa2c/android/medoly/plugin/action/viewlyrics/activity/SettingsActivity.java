@@ -22,6 +22,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.dialog.AboutDialogFragment;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.AppUtils;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.Logger;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.view.SeekBarPreference;
@@ -173,68 +175,14 @@ public class SettingsActivity extends PreferenceActivity {
                 return true;
             }
         };
+
         /**
          * About.
          */
         private Preference.OnPreferenceClickListener aboutPreferenceClickListener = new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                RelativeLayout layoutView = (RelativeLayout) View.inflate(getActivity(), R.layout.layout_about, null);
-
-                // Version
-                try {
-                    PackageInfo packageInfo = getActivity().getPackageManager().getPackageInfo( getActivity().getPackageName(), PackageManager.GET_ACTIVITIES);
-                    ((TextView)layoutView.findViewById(R.id.aboutAppVersionTextView)).setText("Ver. " + packageInfo.versionName);
-                } catch (NameNotFoundException e) {
-                    Logger.e(e);
-                }
-
-                // Developer
-                ((TextView)layoutView.findViewById(R.id.aboutDeveloperNameTextView)).setText(getString(R.string.app_author));
-
-                // Link
-                Linkify.TransformFilter filter = new Linkify.TransformFilter() {
-                    @Override
-                    public String transformUrl(Matcher match, String url) {
-                        return getString(R.string.app_market_web);
-                    }
-                };
-                Linkify.addLinks(
-                        (TextView)layoutView.findViewById(R.id.aboutGooglePlayTextView),
-                        Pattern.compile("Google Play"),
-                        getString(R.string.app_market_web),
-                        null,
-                        filter);
-
-                // Contact
-                ((TextView)layoutView.findViewById(R.id.aboutEmailTextView)).setText(getString(R.string.app_mail_name) + "@" + getString(R.string.app_mail_domain));
-
-                // Library
-                String[] libraryNames = getResources().getStringArray(R.array.about_library_names);
-                String[] libraryUrls = getResources().getStringArray(R.array.about_library_urls);
-
-                for (int i = 0; i < libraryNames.length; i++) {
-                    TextView libTextView;
-                    LinearLayout libraryLayout = (LinearLayout) layoutView.findViewById(R.id.abountLibraryLayout);
-                    libTextView = new TextView(getActivity());
-                    libTextView.setMovementMethod(LinkMovementMethod.getInstance());
-//                    if (Build.VERSION.SDK_INT >= 24) {
-//                        libTextView.setText(Html.fromHtml("<a href=\"" + libraryUrls[i] + "\">" +  libraryNames[i] + "</a>", Html.FROM_HTML_MODE_COMPACT));
-//                    } else {
-//                        libTextView.setText(Html.fromHtml("<a href=\"" + libraryUrls[i] + "\">" +  libraryNames[i] + "</a>"));
-//                    }
-                    libTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-                    libraryLayout.setPadding(2, 2, 2, 2);
-                    libraryLayout.addView(libTextView);
-                }
-
-                // ダイアログ作成
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(R.string.pref_title_about);
-                builder.setView(layoutView);
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.create().show();
-
+                AboutDialogFragment.newInstance().show(getActivity());
                 return true;
             }
         };

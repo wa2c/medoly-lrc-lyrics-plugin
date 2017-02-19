@@ -41,7 +41,7 @@
 
         <receiver
             android:name=".receiver.PluginReceiver"
-            android:label="@string/class_receiver_label">
+            android:label="@string/label_class_receiver_">
             <intent-filter>
                 <action android:name="com.wa2c.android.medoly.plugin.action.ACTION_MEDIA" />
 

@@ -3,6 +3,7 @@ package com.wa2c.android.medoly.plugin.action.viewlyrics.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 

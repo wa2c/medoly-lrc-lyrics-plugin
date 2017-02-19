@@ -1,6 +1,7 @@
 package com.wa2c.android.medoly.plugin.action.viewlyrics.dialog;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -9,9 +10,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.util.AppUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +41,7 @@ public abstract class AbstractDialogFragment extends DialogFragment {
      */
     public void show(Activity activity) {
         if (activity == null) {
-            Toast.makeText(getActivity(), R.string.error_dialog_dismissed, Toast.LENGTH_SHORT).show();
+            AppUtils.showToast(getActivity(), R.string.error_dialog_dismissed);
             return;
         }
 
@@ -59,7 +60,7 @@ public abstract class AbstractDialogFragment extends DialogFragment {
      */
     public void show(Fragment fragment) {
         if (fragment == null) {
-            Toast.makeText(getActivity(), R.string.error_dialog_dismissed, Toast.LENGTH_SHORT).show();
+            AppUtils.showToast(getActivity(), R.string.error_dialog_dismissed);
             return;
         }
 
@@ -82,6 +83,14 @@ public abstract class AbstractDialogFragment extends DialogFragment {
         context = getActivity();
         preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         return super.onCreateDialog(savedInstanceState);
+    }
+
+    /**
+     * onStart.
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     /**

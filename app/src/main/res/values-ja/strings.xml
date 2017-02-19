@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Package -->
+    <string name="app_description">LRC形式の歌詞を取得します。</string>
+    <string name="label_class_receiver_">歌詞検索アクション</string>
+    <string name="label_execute_get_lyrics">歌詞取得</string>
+    <string name="label_execute_search_lyrics">歌詞検索</string>
+
     <!-- Label -->
     <string name="label_title">タイトル</string>
     <string name="label_artist">アーティスト</string>
@@ -15,22 +21,15 @@
     <string name="loading">Loading…</string>
     <string name="label_close">閉じる</string>
 
-    <!-- Package -->
-    <string name="app_description">ViewLyrics.comより歌詞を取得します。</string>
-    <string name="class_receiver_label">歌詞検索アクション</string>
-    <string name="label_execute_get_lyrics">歌詞取得</string>
-    <string name="label_execute_search_lyrics">歌詞検索</string>
+    <!-- Service -->
+    <string name="message_no_media">メディアが選択されていません。</string>
+    <string name="message_lyrics_success">歌詞を取得しました。</string>
+    <string name="message_lyrics_failure">歌詞の取得に失敗しました。</string>
 
     <!-- Activity -->
     <string name="title_activity_search">検索</string>
     <string name="title_activity_cache">キャッシュ</string>
     <string name="title_activity_settings">設定</string>
-
-
-    <!-- Service -->
-    <string name="message_no_media">メディアが選択されていません。</string>
-    <string name="message_lyrics_success">歌詞を取得しました。</string>
-    <string name="message_lyrics_failure">歌詞の取得に失敗しました。</string>
 
     <!-- Main Activity -->
     <string name="label_spinner_event">実行イベント</string>
@@ -55,9 +54,21 @@
     <string name="label_search_item_rating">Rating:%1$.1f(%2$d)</string>
     <string name="label_search_item_from">From:%1$s</string>
 
+    <!-- Cache Activity -->
+    <string name="menu_cache_delete">キャッシュ削除</string>
+    <string name="error_delete_cache_check">削除項目をチェックしてください。</string>
+    <string name="message_delete_cache">検索結果をキャッシュから削除しました。</string>
+    <string name="message_dialog_cache_delete">チェック項目をキャッシュから削除します。</string>
+
+    <!-- Settings Activity -->
+    <string name="settings_summary_current_value">[現在の設定: %1$s]</string>
+    <string name="settings_not_set">設定しない</string>
+
+    <!-- Cache Dialog -->
     <string name="message_dialog_confirm_save_cache">検索結果をキャッシュに保存します。</string>
     <string name="label_dialog_confirm_save_cache">保存</string>
 
+    <!-- Normalize Dialog -->
     <string name="title_dialog_normalize">クイック編集</string>
     <string name="label_dialog_normalize_before_edit">変更前</string>
     <string name="label_dialog_normalize_after_edit">変更後</string>
@@ -67,18 +78,19 @@
     <string name="label_dialog_normalize_remove_info">付属情報を削除(e.g., &quot;off vocal&quot;)</string>
     <string name="label_dialog_normalize_reset">リセット</string>
 
-    <!-- Cache Activity -->
-    <string name="menu_cache_delete">キャッシュ削除</string>
-    <string name="error_delete_cache_check">削除項目をチェックしてください。</string>
-    <string name="message_delete_cache">検索結果をキャッシュから削除しました。</string>
-    <string name="message_dialog_cache_delete">チェック項目をキャッシュから削除します。</string>
-
+    <!-- Cache Dialog -->
     <string name="label_dialog_cache_delete">削除</string>
     <string name="message_dialog_cache_none">歌詞がありません。</string>
 
-    <!-- Settings Activity -->
-    <string name="settings_summary_current_value">[現在の設定: %1$s]</string>
-    <string name="settings_not_set">設定しない</string>
+    <!-- About Dialog -->
+    <string name="label_dialog_about_ver">Ver. %1$s</string>
+    <string name="label_dialog_about_developer">Developer</string>
+    <string name="label_dialog_about_email">Email</string>
+    <string name="label_dialog_about_license">License</string>
+    <string name="label_dialog_about_privacy_policy">Privacy Policy</string>
+    <string name="label_dialog_about_google_play">Google Play</string>
+    <string name="label_dialog_about_link">Link</string>
+    <string name="label_dialog_about_library">[Library]</string>
 
     <!-- Preferences -->
     <string name="title_preference_category_event">イベント</string>
@@ -100,15 +112,15 @@
     <string name="pref_summary_search_non_preferred_language">優先検索対象言語が取得できない場合、その他の言語を取得します。</string>
     <string name="pref_title_search_language_threshold">言語判定のしきい値</string>
     <string name="pref_summary_search_language_threshold">対象言語を判定するためのしきい値を、0 – 100の間で指定します。(初期値: 50)</string>
-
     <string name="pref_title_post_success_message_show">成功メッセージ表示</string>
-    <string name="pref_summary_post_success_message_show">送信に成功した際にメッセージを表示します。</string>
+    <string name="pref_summary_post_success_message_show">歌詞の取得に成功した際にメッセージを表示します。</string>
     <string name="pref_title_post_failure_message_show">失敗メッセージ表示</string>
-    <string name="pref_summary_post_failure_message_show">送信に失敗した際にメッセージを表示します。</string>
+    <string name="pref_summary_post_failure_message_show">歌詞の取得に失敗した際にメッセージを表示します。</string>
+
     <string name="pref_title_application_details">アプリ情報</string>
-    <string name="pref_summary_application_details">アプリ情報を表示します。</string>
+    <string name="pref_summary_application_details">端末のアプリ情報を表示します。</string>
     <string name="pref_title_about">About</string>
-    <string name="pref_summary_about">About</string>
+    <string name="pref_summary_about">このアプリについて。</string>
 
     <!-- System -->
     <string name="error_app">エラーが発生したため、操作に失敗しました。</string>
