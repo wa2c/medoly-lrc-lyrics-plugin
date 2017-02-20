@@ -2,12 +2,15 @@ package com.wa2c.android.medoly.plugin.action.viewlyrics.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.activity.SearchActivity;
+import com.wa2c.android.medoly.plugin.action.viewlyrics.activity.SearchActivity_;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.db.SearchCache;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.search.ResultItem;
 
@@ -44,7 +47,7 @@ public class CacheDialogFragment extends AbstractDialogFragment {
         super.onCreateDialog(savedInstanceState);
 
         // data
-        SearchCache cache = (SearchCache)getArguments().getSerializable(ARG_CACHE);
+        final SearchCache cache = (SearchCache)getArguments().getSerializable(ARG_CACHE);
         ResultItem result = cache.getResultItem();
 
         // view
@@ -57,8 +60,18 @@ public class CacheDialogFragment extends AbstractDialogFragment {
         builder.setTitle(R.string.title_activity_cache);
         builder.setView(content);
         builder.setNegativeButton(R.string.label_close, clickListener);
-        if (result != null)
+        if (result != null) {
             builder.setPositiveButton(R.string.menu_search_save_file, clickListener);
+            builder.setNeutralButton(R.string.label_dialog_cache_research, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(getActivity(), SearchActivity_.class);
+                    intent.putExtra(SearchActivity.INTENT_SEARCH_TITLE, cache.title);
+                    intent.putExtra(SearchActivity.INTENT_SEARCH_ARTIST, cache.artist);
+                    startActivity(intent);
+                }
+            });
+        }
         return  builder.create();
     }
 

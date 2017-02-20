@@ -54,9 +54,6 @@ public class AboutDialogFragment extends AbstractDialogFragment {
             Logger.e(e);
         }
 
-        // Developer
-        ((TextView)layoutView.findViewById(R.id.dialogAboutDeveloperTextView)).setText(getString(R.string.app_author));
-
         // Email
         ((TextView)layoutView.findViewById(R.id.dialogAboutEmailTextView)).setText(getString(R.string.app_mail_name) + "@" + getString(R.string.app_mail_domain));
 

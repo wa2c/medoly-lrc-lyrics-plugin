@@ -79,6 +79,7 @@
     <string name="label_dialog_normalize_reset">リセット</string>
 
     <!-- Cache Dialog -->
+    <string name="label_dialog_cache_research">再検索</string>
     <string name="label_dialog_cache_delete">削除</string>
     <string name="message_dialog_cache_none">歌詞がありません。</string>
 

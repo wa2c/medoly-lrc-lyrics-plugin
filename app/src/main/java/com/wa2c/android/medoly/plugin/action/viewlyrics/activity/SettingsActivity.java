@@ -1,12 +1,8 @@
 package com.wa2c.android.medoly.plugin.action.viewlyrics.activity;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -20,28 +16,22 @@ import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
-import android.util.TypedValue;
-import android.view.Gravity;
+import android.util.SparseIntArray;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.wa2c.android.medoly.plugin.action.viewlyrics.R;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.dialog.AboutDialogFragment;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.AppUtils;
-import com.wa2c.android.medoly.plugin.action.viewlyrics.util.Logger;
 import com.wa2c.android.medoly.plugin.action.viewlyrics.view.SeekBarPreference;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 /**
@@ -99,34 +89,54 @@ public class SettingsActivity extends PreferenceActivity {
 
             // language priority
             {
-                String[] languagesTemp = AppUtils.getLanguageNames();
-                String[] languages = new String[languagesTemp.length + 1];
-                System.arraycopy(languagesTemp, 0, languages, 1, languagesTemp.length);
-                String[] languageNames = new String[languages.length];
-                // not set item
-                languages[0] = "";
-                languageNames[0] = getString(R.string.settings_not_set);
-                for (int i = 1; i < languages.length; i++) {
+                String[] languages = AppUtils.getLanguageNames();
+                String[] languageLabels = new String[languages.length];
+                for (int i = 0; i < languageLabels.length; i++) {
                     String[] langs = languages[i].split("-");
                     if (langs.length == 1)
-                        languageNames[i] = (new Locale(langs[0])).getDisplayName();
+                        languageLabels[i] = (new Locale(langs[0])).getDisplayName();
                     else if (langs.length == 2)
-                        languageNames[i] = (new Locale(langs[0], langs[1])).getDisplayName();
+                        languageLabels[i] = (new Locale(langs[0], langs[1])).getDisplayName();
                     else if (langs.length >= 3)
-                        languageNames[i] = (new Locale(langs[0], langs[1], langs[2])).getDisplayName();
+                        languageLabels[i] = (new Locale(langs[0], langs[1], langs[2])).getDisplayName();
                 }
+
+                // sort labels
+                List<String> sortedLanguageLabelList = new ArrayList<>(Arrays.asList(languageLabels));
+                Collections.sort(sortedLanguageLabelList);
+
+                // make index exchange map
+                HashMap<String, Integer> sortedIndexMap = new HashMap<>(languageLabels.length);
+                for (int i = 0; i < sortedLanguageLabelList.size(); i++) {
+                    sortedIndexMap.put(sortedLanguageLabelList.get(i), i);
+                }
+                SparseIntArray indexMap = new SparseIntArray(languageLabels.length);
+                for (int i = 0; i < languageLabels.length; i++) {
+                    indexMap.put(i, sortedIndexMap.get(languageLabels[i]));
+                }
+
+                // sort values
+                List<String> sortedLanguageList = new ArrayList<>(Arrays.asList(languages));
+                for (int i = 0; i < languages.length; i++) {
+                    sortedLanguageList.set(indexMap.get(i), languages[i]);
+                }
+
+                // default value
+                sortedLanguageList.add(0, "");
+                sortedLanguageLabelList.add(0, getString(R.string.settings_not_set));
+
                 // first language
                 ListPreference p1 = (ListPreference) findPreference(getString(R.string.pref_search_first_language));
-                p1.setEntryValues(languages);
-                p1.setEntries(languageNames);
+                p1.setEntryValues(sortedLanguageList.toArray(new String[sortedLanguageList.size()]));
+                p1.setEntries(sortedLanguageLabelList.toArray(new String[sortedLanguageLabelList.size()]));
                 // second language
                 ListPreference p2 = (ListPreference) findPreference(getString(R.string.pref_search_second_language));
-                p2.setEntryValues(languages);
-                p2.setEntries(languageNames);
+                p2.setEntryValues(sortedLanguageList.toArray(new String[sortedLanguageList.size()]));
+                p2.setEntries(sortedLanguageLabelList.toArray(new String[sortedLanguageLabelList.size()]));
                 // third language
                 ListPreference p3 = (ListPreference) findPreference(getString(R.string.pref_search_third_language));
-                p3.setEntryValues(languages);
-                p3.setEntries(languageNames);
+                p3.setEntryValues(sortedLanguageList.toArray(new String[sortedLanguageList.size()]));
+                p3.setEntries(sortedLanguageLabelList.toArray(new String[sortedLanguageLabelList.size()]));
                 // NOTE: set default value on xml file.
 
                 // initialize

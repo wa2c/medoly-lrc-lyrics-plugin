@@ -79,6 +79,7 @@
     <string name="label_dialog_normalize_reset">Reset</string>
 
     <!-- Cache Dialog -->
+    <string name="label_dialog_cache_research">Research</string>
     <string name="label_dialog_cache_delete">Delete</string>
     <string name="message_dialog_cache_none">No lyrics.</string>
 

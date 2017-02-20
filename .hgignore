@@ -35,3 +35,4 @@ proguard/
 Token.java
 syntax: glob
 .idea/misc.xml
+app/app.iml

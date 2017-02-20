@@ -1,7 +1,6 @@
 package com.wa2c.android.medoly.plugin.action.viewlyrics.dialog;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
