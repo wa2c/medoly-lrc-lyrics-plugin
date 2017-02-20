@@ -30,12 +30,14 @@
         <item>Orma</item>
         <item>language detection</item>
         <item>Gson</item>
+        <item>ViewLyricsOpenSearcher</item>
     </string-array>
     <string-array name="about_library_urls">
         <item>http://androidannotations.org/</item>
         <item>https://github.com/gfx/Android-Orma</item>
         <item>https://github.com/shuyo/language-detection/blob/wiki/ProjectHome.md</item>
         <item>https://github.com/google/gson</item>
+        <item>https://github.com/PedroHLC/ViewLyricsOpenSearcher</item>
     </string-array>
 
     <!-- Preferences -->

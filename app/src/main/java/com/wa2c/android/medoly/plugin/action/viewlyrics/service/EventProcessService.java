@@ -73,7 +73,7 @@ public class EventProcessService extends IntentService {
     }
 
     @ServiceAction
-    void search(Intent intent) {
+    synchronized void search(Intent intent) {
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
         MedolyIntentParam param = new MedolyIntentParam(intent);

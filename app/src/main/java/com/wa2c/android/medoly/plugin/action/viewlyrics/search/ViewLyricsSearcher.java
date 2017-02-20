@@ -8,7 +8,10 @@ package com.wa2c.android.medoly.plugin.action.viewlyrics.search;
  * @version 0.9.03-beta
  * @works Search and get results
  */
-
+/**
+ * Modified:  wa2c.
+ * Date:      2017-02-21
+ */
 import android.text.TextUtils;
 
 import com.wa2c.android.medoly.plugin.action.viewlyrics.util.Logger;
