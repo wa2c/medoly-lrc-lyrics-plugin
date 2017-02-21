@@ -2,6 +2,8 @@ package com.wa2c.android.medoly.plugin.action.viewlyrics.util;
 
 import org.androidannotations.annotations.sharedpreferences.DefaultBoolean;
 import org.androidannotations.annotations.sharedpreferences.DefaultInt;
+import org.androidannotations.annotations.sharedpreferences.DefaultString;
+import org.androidannotations.annotations.sharedpreferences.DefaultStringSet;
 import org.androidannotations.annotations.sharedpreferences.SharedPref;
 
 /**
@@ -10,9 +12,7 @@ import org.androidannotations.annotations.sharedpreferences.SharedPref;
 @SharedPref(value = SharedPref.Scope.APPLICATION_DEFAULT)
 public interface AppPrefs {
     @DefaultInt(0)
-    int prefPluginEvent();
-
-
+    int pref_plugin_event();
 
     @DefaultBoolean(true)
     boolean pref_use_cache();
@@ -23,13 +23,24 @@ public interface AppPrefs {
     @DefaultBoolean(true)
     boolean pref_cache_non_result();
 
+    @DefaultString("")
     String pref_search_first_language();
 
+    @DefaultString("")
     String pref_search_second_language();
 
+    @DefaultString("")
     String pref_search_third_language();
 
+    @DefaultBoolean(true)
     boolean pref_search_non_preferred_language();
 
+    @DefaultInt(50)
     int pref_search_language_threshold();
+
+    @DefaultBoolean(false)
+    boolean pref_success_message_show();
+
+    @DefaultBoolean(false)
+    boolean pref_failure_message_show();
 }

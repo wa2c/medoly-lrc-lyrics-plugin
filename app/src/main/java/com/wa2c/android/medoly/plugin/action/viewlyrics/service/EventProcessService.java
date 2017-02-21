@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
 import com.cybozu.labs.langdetect.Detector;
@@ -52,12 +53,12 @@ import javax.xml.parsers.ParserConfigurationException;
 @EIntentService
 public class EventProcessService extends IntentService {
 
-    private SharedPreferences pref;
-
+    private static final String SHARED_DIR_NAME = "lyrics";
+    private static final String SHARED_FILE_NAME = "lyrics.lrc";
+    private static final String PROVIDER_AUTHORITIES = "com.wa2c.android.medoly.plugin.action.viewlyrics.fileprovider";
 
     @Pref
     AppPrefs_ appPrefs;
-
 
     /**
      * Constructor.
@@ -74,13 +75,11 @@ public class EventProcessService extends IntentService {
 
     @ServiceAction
     synchronized void search(Intent intent) {
-        pref = PreferenceManager.getDefaultSharedPreferences(this);
-
         MedolyIntentParam param = new MedolyIntentParam(intent);
         try {
 
-            if ((param.hasCategories(PluginOperationCategory.OPERATION_MEDIA_OPEN) && appPrefs.prefPluginEvent().get() == 1) ||
-                (param.hasCategories(PluginOperationCategory.OPERATION_PLAY_START) && appPrefs.prefPluginEvent().get() == 2)) {
+            if ((param.hasCategories(PluginOperationCategory.OPERATION_MEDIA_OPEN) && appPrefs.pref_plugin_event().get() == 1) ||
+                (param.hasCategories(PluginOperationCategory.OPERATION_PLAY_START) && appPrefs.pref_plugin_event().get() == 2)) {
                 // MEDIA_OPEN / PLAY_START
                 executeSearch(param);
                 return;
@@ -120,12 +119,12 @@ public class EventProcessService extends IntentService {
     private boolean executeSearch(MedolyIntentParam param) throws SAXException, NoSuchAlgorithmException, ParserConfigurationException, IOException {
         ResultItem resultItem = getLyrics(param);
         if (resultItem == null) {
-            if (pref.getBoolean(getString(R.string.pref_failure_message_show), false)) {
+            if (appPrefs.pref_failure_message_show().get()) {
                 AppUtils.showToast(this, R.string.message_lyrics_failure);
             }
         }
         sendLyricsResult(param, resultItem);
-        if (pref.getBoolean(getString(R.string.pref_success_message_show), false)) {
+        if (appPrefs.pref_success_message_show().get()) {
             AppUtils.showToast(this, R.string.message_lyrics_success);
         }
         return true;
@@ -299,13 +298,14 @@ public class EventProcessService extends IntentService {
      */
     private void sendLyricsResult(@NonNull MedolyIntentParam param, ResultItem resultItem) throws IOException {
         PropertyData propertyData = new PropertyData();
+        Uri fileUri = null;
         if (resultItem != null && resultItem.getLyricURL() != null) {
-            Uri fileUri = saveLyricsFile(resultItem); // save lyrics and get uri
+            fileUri = saveLyricsFile(resultItem); // save lyrics and get uri
             propertyData.put(LyricsProperty.DATA_URI, (fileUri == null) ? null : fileUri.toString());
             propertyData.put(LyricsProperty.SOURCE_TITLE, getString(R.string.lyrics_source_name));
             propertyData.put(LyricsProperty.SOURCE_URI, resultItem.getLyricURL());
         }
-
+        getApplicationContext().grantUriPermission(param.getSrcPackage(), fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         Intent returnIntent = param.createReturnIntent();
         returnIntent.addCategory(PluginTypeCategory.TYPE_PUT_LYRICS.getCategoryValue()); // カテゴリ
         returnIntent.putExtra(MedolyEnvironment.PLUGIN_VALUE_KEY, propertyData);
@@ -327,20 +327,35 @@ public class EventProcessService extends IntentService {
             return null;
 
         // Create folder
-        File lyricsDir = new File(getExternalCacheDir(), "lyrics");
-        if (!lyricsDir.exists()) {
+        File sharedLyricsDir = new File(this.getFilesDir(), SHARED_DIR_NAME);
+        if (!sharedLyricsDir.exists()) {
             //noinspection ResultOfMethodCallIgnored
-            lyricsDir.mkdir();
+            sharedLyricsDir.mkdir();
         }
-
-        // Write lyrics.
-        File lyricsFile = new File(lyricsDir, "lyrics.txt");
-        try (FileOutputStream outputStream = new FileOutputStream(lyricsFile)) {
+        File sharedLyricsFile = new File(sharedLyricsDir, SHARED_FILE_NAME);
+        try (FileOutputStream outputStream = new FileOutputStream(sharedLyricsFile)) {
             outputStream.write(lyricsBytes);
             outputStream.flush();
         }
 
-        return Uri.fromFile(lyricsFile);
+        return FileProvider.getUriForFile(this, PROVIDER_AUTHORITIES, sharedLyricsFile);
+
+// file://
+//        // Create folder
+//        File lyricsDir = new File(getExternalCacheDir(), "lyrics");
+//        if (!lyricsDir.exists()) {
+//            //noinspection ResultOfMethodCallIgnored
+//            lyricsDir.mkdir();
+//        }
+//
+//        // Write lyrics.
+//        File lyricsFile = new File(lyricsDir, "lyrics.txt");
+//        try (FileOutputStream outputStream = new FileOutputStream(lyricsFile)) {
+//            outputStream.write(lyricsBytes);
+//            outputStream.flush();
+//        }
+//
+//        return Uri.fromFile(lyricsFile);
     }
 
     /**

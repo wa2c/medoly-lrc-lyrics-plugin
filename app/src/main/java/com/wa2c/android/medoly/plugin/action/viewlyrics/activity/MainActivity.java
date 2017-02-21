@@ -76,7 +76,7 @@ public class MainActivity extends Activity {
         executeEventSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                appPrefs.prefPluginEvent().put(position);
+                appPrefs.pref_plugin_event().put(position);
             }
 
             @Override
@@ -85,7 +85,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        executeEventSpinner.setSelection(appPrefs.prefPluginEvent().get());
+        executeEventSpinner.setSelection(appPrefs.pref_plugin_event().get());
 
     }
 
