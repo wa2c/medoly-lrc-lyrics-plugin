@@ -79,7 +79,7 @@
         </receiver>
 
         <receiver
-            android:name=".util.ToastReceiver"
+            android:name=".receiver.ToastReceiver"
             android:exported="false" />
 
         <provider

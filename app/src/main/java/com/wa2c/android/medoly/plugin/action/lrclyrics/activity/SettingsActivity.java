@@ -139,7 +139,7 @@ public class SettingsActivity extends PreferenceActivity {
                 findPreference(getString(R.string.pref_search_third_language)).setEnabled(!TextUtils.isEmpty(p1.getValue()) && !TextUtils.isEmpty(p2.getValue()));
             }
 
-            // アプリ情報
+            // App info
             findPreference(getString(R.string.pref_application_details)).setOnPreferenceClickListener(applicationDetailsPreferenceClickListener);
             // About
             findPreference(getString(R.string.pref_about)).setOnPreferenceClickListener(aboutPreferenceClickListener);
@@ -199,7 +199,7 @@ public class SettingsActivity extends PreferenceActivity {
         private void initSummary(Preference p) {
             if (p == null) return;
 
-            // サマリの長さ取得
+            // get summary length
             CharSequence summary = p.getSummary();
             if (summary != null && summary.length() > 0) {
                 if (summary.toString().lastIndexOf("\n") != 0) p.setSummary(summary + "\n"); // 改行追加
@@ -208,7 +208,7 @@ public class SettingsActivity extends PreferenceActivity {
                 summaryLengthMap.put(p, 0);
             }
 
-            // サマリ更新
+            // update summary
             if (p instanceof PreferenceCategory) {
                 PreferenceCategory pCat = (PreferenceCategory) p;
                 for (int i = 0; i < pCat.getPreferenceCount(); i++) {
@@ -236,11 +236,11 @@ public class SettingsActivity extends PreferenceActivity {
             if (TextUtils.isEmpty(key)) return;
             if (TextUtils.isEmpty(summary)) summary = "";
 
-            // 種別毎
+            // for instance type
             if (p instanceof ListPreference) {
                 // ListPreference
                 ListPreference pref = (ListPreference) p;
-                pref.setValue(p.getSharedPreferences().getString(pref.getKey(), "")); // 一度値を更新
+                pref.setValue(p.getSharedPreferences().getString(pref.getKey(), ""));
                 p.setSummary(summary.subSequence(0, summaryLengthMap.get(p)) + getString(R.string.settings_summary_current_value, pref.getEntry()));
             } else if (p instanceof MultiSelectListPreference) {
                 // MultiSelectListPreference
@@ -265,19 +265,19 @@ public class SettingsActivity extends PreferenceActivity {
                 EditTextPreference pref = (EditTextPreference) p;
                 String text = p.getSharedPreferences().getString(pref.getKey(), ""); // 値が更新されない場合があるので、pref.getText() は使用しない
 
-                // 数値型の補正
+                // adjust numeric values
                 int inputType = pref.getEditText().getInputType();
                 try {
                     if ( (inputType & InputType.TYPE_CLASS_NUMBER) > 0) {
                         if ((inputType & InputType.TYPE_NUMBER_FLAG_DECIMAL) > 0) {
-                            // 小数
+                            // float
                             float val = Float.valueOf(text);
                             if ((inputType & InputType.TYPE_NUMBER_FLAG_SIGNED) == 0 && val < 0) {
                                 val = 0;
                             }
                             text = String.valueOf(val);
                         } else {
-                            // 整数
+                            // integer
                             int val = Integer.valueOf(text);
                             if ((inputType & InputType.TYPE_NUMBER_FLAG_SIGNED) == 0 && val < 0) {
                                 val = 0;
@@ -288,12 +288,12 @@ public class SettingsActivity extends PreferenceActivity {
                 } catch (NumberFormatException e) {
                     text = "0";
                 }
-                pref.setText(text); // 一度値を更新
+                pref.setText(text); // update once
                 p.setSummary(summary.subSequence(0, summaryLengthMap.get(p)) + getString(R.string.settings_summary_current_value, text));
             } else if (p instanceof SeekBarPreference) {
                 // SeekBarPreference
                 SeekBarPreference pref = (SeekBarPreference) p;
-                //pref.setProgress(pref.getProgress()); // 一度値を更新
+                //pref.setProgress(pref.getProgress());
                 p.setSummary(summary.subSequence(0, summaryLengthMap.get(p)) + getString(R.string.settings_summary_current_value, String.valueOf(pref.getProgress())));
             }
 
@@ -320,7 +320,6 @@ public class SettingsActivity extends PreferenceActivity {
         private SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                // サマリ更新
                 updatePrefSummary(findPreference(key));
             }
         };

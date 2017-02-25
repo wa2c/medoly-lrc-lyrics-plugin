@@ -8,14 +8,9 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.service.EventProcessServi
 
 
 /**
- * メッセージプラグイン受信レシーバ。
+ * Plugin receiver.
  */
 public class PluginReceiver extends BroadcastReceiver {
-    /**
-     * メッセージ受信。
-     * @param context コンテキスト。
-     * @param intent インテント。
-     */
     @Override
     public void onReceive(Context context, Intent intent) {
         // 既存のサービス強制停止

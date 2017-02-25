@@ -11,6 +11,7 @@ import com.cybozu.labs.langdetect.DetectorFactory;
 import com.cybozu.labs.langdetect.LangDetectException;
 import com.google.gson.Gson;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
+import com.wa2c.android.medoly.plugin.action.lrclyrics.receiver.ToastReceiver;
 
 import java.lang.reflect.Type;
 import java.text.Normalizer;
@@ -22,7 +23,7 @@ import java.util.TreeMap;
 
 
 /**
- * アプリユーティリティ。
+ * App utilities.
  */
 public class AppUtils {
 
@@ -293,9 +294,9 @@ public class AppUtils {
         if (TextUtils.isEmpty(text))
             return "";
 
-        // 正規化
+        // normalize
         String output = trimLines(Normalizer.normalize(text, Normalizer.Form.NFKC)).toLowerCase();
-        // 特殊文字正規化
+        // change special characters
         return output
                 .replace("゠", "=")
                 .replace("(“|”)", "\"")
@@ -303,9 +304,9 @@ public class AppUtils {
     }
 
     /**
-     * 括弧で括られた文字等（補助文字）を取り除く
-     * @param text テキスト。
-     * @return 括弧を取り除いたテキスト。
+     * Remove parentheses.
+     * @param text text.
+     * @return removed text.
      */
     public static String removeParentheses(String text) {
         if (TextUtils.isEmpty(text))

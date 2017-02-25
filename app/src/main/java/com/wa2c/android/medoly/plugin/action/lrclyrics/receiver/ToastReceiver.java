@@ -1,4 +1,4 @@
-package com.wa2c.android.medoly.plugin.action.lrclyrics.util;
+package com.wa2c.android.medoly.plugin.action.lrclyrics.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 /**
- * Toast出力用Receiver。
+ * Toast receiver.
  */
 public class ToastReceiver extends BroadcastReceiver {
     public static final String MESSAGE_TOAST = "message";
