@@ -40,6 +40,7 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.DimensionPixelSizeRes;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -91,6 +92,11 @@ public class SearchActivity extends Activity {
     @ViewById
     View searchLyricsLoadingLayout;
 
+    @DimensionPixelSizeRes
+    int search_result_height;
+
+
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -116,6 +122,24 @@ public class SearchActivity extends Activity {
 
         searchTitleEditText.setText(intentSearchTitle);
         searchArtistEditText.setText(intentSearchArtist);
+
+        // adjust size
+        searchLyricsScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                // adjust height
+                int heightResult = searchResultListView.getMeasuredHeight();
+                int heightLyrics = searchLyricsScrollView.getMeasuredHeight();
+                int heightSum = heightResult + heightLyrics;
+                if (heightResult == 0)
+                    return;
+                if (heightSum < search_result_height * 2) {
+                    ViewGroup.LayoutParams params = searchResultListView.getLayoutParams();
+                    params.height = heightSum / 2;
+                    searchResultListView.setLayoutParams(params);
+                }
+            }
+        });
     }
 
     @OptionsItem(android.R.id.home)

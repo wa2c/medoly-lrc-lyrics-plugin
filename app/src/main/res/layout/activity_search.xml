@@ -102,7 +102,7 @@
     <LinearLayout
         android:id="@+id/searchResultLoadingLayout"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/search_result_height"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/searchInputLayout"
