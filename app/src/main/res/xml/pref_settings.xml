@@ -44,7 +44,7 @@
             android:summary="@string/pref_summary_search_non_preferred_language"
             android:title="@string/pref_title_search_non_preferred_language" />
 
-        <com.wa2c.android.medoly.plugin.action.viewlyrics.view.SeekBarPreference
+        <com.wa2c.android.medoly.plugin.action.lrclyrics.view.SeekBarPreference
             android:defaultValue="50"
             android:dialogMessage=""
             android:key="@string/pref_search_language_threshold"
@@ -67,7 +67,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/title_preference_category_other">
+    <PreferenceCategory android:title="@string/title_preference_category_info">
 
         <Preference
             android:key="@string/pref_application_details"

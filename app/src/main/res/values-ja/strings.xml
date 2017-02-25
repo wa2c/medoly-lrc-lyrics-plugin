@@ -95,7 +95,7 @@
 
     <!-- Preferences -->
     <string name="title_preference_category_event">イベント</string>
-    <string name="title_preference_category_other">その他</string>
+    <string name="title_preference_category_info">情報</string>
 
     <string name="pref_title_use_cache">キャッシュ検索</string>
     <string name="pref_summary_use_cache">イベント検索でキャッシュから歌詞を検索します。</string>

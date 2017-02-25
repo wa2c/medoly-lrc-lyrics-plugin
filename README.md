@@ -1,12 +1,12 @@
-Medoly Lyrics Scraper Plugin
+Medoly LRC Lyrics Plugin
 ============================
 
-Lyrics scraping plugin app for Medoly.
+LRC format lyrics plugin app for Medoly.
 
 ## Description
 
-Medoly Lyrics Scraper Plugin は、[Medoly](https://play.google.com/store/apps/details?id=com.wa2c.android.medoly) で再生しているメディアの歌詞を Web から取得する Android アプリです。
-[Google Play](https://play.google.com/store/apps/details?id=com.wa2c.android.medoly.plugin.action.lyricsscraper) で配信中。
+Medoly LRC Lyrics Plugin は、[Medoly](https://play.google.com/store/apps/details?id=com.wa2c.android.medoly) で再生しているメディアのLRC形式歌詞を取得する Android アプリです。
+[Google Play](https://play.google.com/store/apps/details?id=com.wa2c.android.medoly.plugin.action.lrclyrics) で配信しています。
 
 ## Requirement
 
@@ -22,11 +22,11 @@ Medoly Lyrics Scraper Plugin は、[Medoly](https://play.google.com/store/apps/d
 
 ## Usage
 
-* 使い方については、[Google Play](https://play.google.com/store/apps/details?id=com.wa2c.android.medoly.plugin.action.lyricsscraper) のページを参考にしてください。
+* 使い方については、[Google Play](https://play.google.com/store/apps/details?id=com.wa2c.android.medoly.plugin.action.lrclyrics) のページを参考にしてください。
 
 ## Licence
 
-[MIT](https://opensource.org/licenses/MIT)
+[MIT](https://bitbucket.org/wa2c/medoly-viewlyrics-plugin/raw/ae8523638c9e6ea3772a279f0287c9207577d870/LICENSE.txt)
 
 ## Author
 
