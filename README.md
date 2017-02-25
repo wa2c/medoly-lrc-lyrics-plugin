@@ -26,7 +26,7 @@ Medoly LRC Lyrics Plugin は、[Medoly](https://play.google.com/store/apps/detai
 
 ## Licence
 
-[MIT](https://bitbucket.org/wa2c/medoly-viewlyrics-plugin/raw/ae8523638c9e6ea3772a279f0287c9207577d870/LICENSE.txt)
+[MIT](https://bitbucket.org/wa2c/medoly-lrc-lyrics-plugin/raw/ae8523638c9e6ea3772a279f0287c9207577d870/LICENSE.txt)
 
 ## Author
 

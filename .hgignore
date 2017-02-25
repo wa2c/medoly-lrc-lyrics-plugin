@@ -34,7 +34,7 @@ proguard/
 # App
 syntax: glob
 *.iml
-.idea/libraries
+.idea/libraries/
 .idea/misc.xml
-.idea\modules.xml
+.idea/modules.xml
 captures/

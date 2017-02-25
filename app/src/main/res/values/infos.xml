@@ -10,7 +10,7 @@
     <string name="app_mail_domain">wa2c.com</string>
     <string name="app_author">wa2c</string>
     <string name="app_license">MIT License</string>
-    <string name="app_license_url">https://bitbucket.org/wa2c/medoly-viewlyrics-plugin/raw/ae8523638c9e6ea3772a279f0287c9207577d870/LICENSE.txt</string>
+    <string name="app_license_url">https://bitbucket.org/wa2c/medoly-lrc-lyrics-plugin/raw/ae8523638c9e6ea3772a279f0287c9207577d870/LICENSE.txt</string>
     <string name="app_privacy_policy_url">http://wa2c.com/documents/dokuwiki/doku.php?id=medoly_lrc_lyrics_plugin:privacy_policy</string>
     <string name="app_market">market://details?id=com.wa2c.android.medoly.plugin.action.lrclyrics</string>
     <string name="app_market_web">https://play.google.com/store/apps/details?id=com.wa2c.android.medoly.plugin.action.lrclyrics</string>

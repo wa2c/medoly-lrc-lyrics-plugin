@@ -53,7 +53,7 @@ public class EventProcessService extends IntentService {
 
     private static final String SHARED_DIR_NAME = "lyrics";
     private static final String SHARED_FILE_NAME = "lyrics.lrc";
-    private static final String PROVIDER_AUTHORITIES = "com.wa2c.android.medoly.plugin.action.viewlyrics.fileprovider";
+    private static final String PROVIDER_AUTHORITIES = "com.wa2c.android.medoly.plugin.action.lrclyrics.fileprovider";
 
     @Pref
     AppPrefs_ appPrefs;
