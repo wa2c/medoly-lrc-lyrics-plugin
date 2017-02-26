@@ -64,8 +64,8 @@
     <string name="settings_summary_current_value">[現在の設定: %1$s]</string>
     <string name="settings_not_set">設定しない</string>
 
-    <!-- Cache Dialog -->
-    <string name="message_dialog_confirm_save_cache">検索結果をキャッシュに保存します。</string>
+    <!-- Confirm Dialog -->
+    <string name="message_dialog_confirm_savSearche_cache">検索結果をキャッシュに保存します。</string>
     <string name="label_dialog_confirm_save_cache">保存</string>
 
     <!-- Normalize Dialog -->
@@ -79,6 +79,8 @@
     <string name="label_dialog_normalize_reset">リセット</string>
 
     <!-- Cache Dialog -->
+    <string name="label_dialog_cache_delete_lyrics">歌詞削除</string>
+    <string name="label_dialog_cache_delete_cache">キャッシュ削除</string>
     <string name="label_dialog_cache_research">再検索</string>
     <string name="label_dialog_cache_delete">削除</string>
     <string name="message_dialog_cache_none">歌詞がありません。</string>

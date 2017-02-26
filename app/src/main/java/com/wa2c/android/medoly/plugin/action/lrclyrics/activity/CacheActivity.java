@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -194,8 +195,12 @@ public class CacheActivity extends Activity {
                     Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
                     intent.setType("*/*");
-                    intent.putExtra(Intent.EXTRA_TITLE, item.getResultItem().getMusicTitle() + ".lrc");
+                    intent.putExtra(Intent.EXTRA_TITLE, item.makeResultItem().getMusicTitle() + ".lrc");
                     startActivityForResult(intent, REQUEST_CODE_SAVE_FILE);
+                } else if (which == CacheDialogFragment.DIALOG_RESULT_DELETE_LYRICS) {
+                    searchCache(null, null);
+                } else if (which == CacheDialogFragment.DIALOG_RESULT_DELETE_CACHE) {
+                    searchCache(null, null);
                 }
             }
         });
@@ -210,7 +215,7 @@ public class CacheActivity extends Activity {
                 Uri uri = resultData.getData();
                 try (OutputStream stream = getContentResolver().openOutputStream(uri);
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream,  "UTF-8"))) {
-                    writer.write(currentCacheItem.getResultItem().getLyrics());
+                    writer.write(currentCacheItem.makeResultItem().getLyrics());
                     writer.flush();
                     AppUtils.showToast(this, R.string.message_lyrics_save_succeeded);
                 } catch (IOException e) {
@@ -257,12 +262,13 @@ public class CacheActivity extends Activity {
             if (convertView == null) {
                 final View view = View.inflate(parent.getContext(), R.layout.layout_cache_item, null);
                 holder = new ListItemViewHolder();
-                holder.checkBox = (CheckBox)view.findViewById(R.id.cacheCheckBox);
+                holder.checkBox = (CheckBox)view.findViewById(R.id.cacheItemCheckBox);
                 holder.titleTextView  = (TextView)view.findViewById(R.id.cacheItemTitleTextView);
                 holder.artistTextView = (TextView)view.findViewById(R.id.cacheItemArtistTextView);
                 holder.fromTextView  = (TextView)view.findViewById(R.id.cacheItemFromTextView);
                 holder.fileTextView = (TextView)view.findViewById(R.id.cacheItemFileTextView);
                 holder.langTextView = (TextView)view.findViewById(R.id.cacheItemLangTextView);
+                holder.hasLyricsImageView = (ImageView)view.findViewById(R.id.cacheItemHasLyricsImageView);
                 view.setTag(holder);
                 convertView = view;
             } else {
@@ -277,6 +283,11 @@ public class CacheActivity extends Activity {
             holder.fromTextView.setText(getContext().getString(R.string.label_cache_item_from, AppUtils.coalesce(item.from)));
             holder.fileTextView.setText(getContext().getString(R.string.label_cache_item_file, AppUtils.coalesce(item.file_name)));
             holder.langTextView.setText(getContext().getString(R.string.label_cache_item_lang, AppUtils.coalesce(item.language)));
+            if (item.has_lyrics == null || !item.has_lyrics) {
+                holder.hasLyricsImageView.setVisibility(View.GONE);
+            } else {
+                holder.hasLyricsImageView.setVisibility(View.VISIBLE);
+            }
 
             // event
             holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -308,6 +319,7 @@ public class CacheActivity extends Activity {
         TextView fromTextView;
         TextView fileTextView;
         TextView langTextView;
+        ImageView hasLyricsImageView;
     }
 
 

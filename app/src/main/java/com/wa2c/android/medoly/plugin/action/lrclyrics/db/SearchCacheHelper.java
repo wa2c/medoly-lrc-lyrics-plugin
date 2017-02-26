@@ -95,11 +95,13 @@ public class SearchCacheHelper {
         String language = null;
         String from = null;
         String file_name = null;
+        Boolean has_lyrics = false;
         String result = gson.toJson(resultItem);
         if (resultItem != null) {
             language = resultItem.getLanguage();
             from = resultItem.getLyricUploader();
             file_name = resultItem.getLyricURL().substring(resultItem.getLyricURL().lastIndexOf("/") + 1).replace(".lrc", "");
+            has_lyrics = (resultItem.getLyrics() != null);
         }
 
         title = AppUtils.coalesce(title);
@@ -111,6 +113,7 @@ public class SearchCacheHelper {
                     .language(language)
                     .from(from)
                     .file_name(file_name)
+                    .has_lyrics(has_lyrics)
                     .result(result)
                     .execute();
             return (count > 0);
@@ -122,6 +125,7 @@ public class SearchCacheHelper {
             cache.language = language;
             cache.from = from;
             cache.file_name =  file_name;
+            cache.has_lyrics = has_lyrics;
             cache.result = result;
             long id = od.insertIntoSearchCache(cache);
             return (id >= 0);

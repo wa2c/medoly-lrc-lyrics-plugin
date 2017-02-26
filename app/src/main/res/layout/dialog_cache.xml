@@ -4,6 +4,27 @@
     android:layout_height="match_parent"
     >
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <Button
+            android:text="@string/label_dialog_cache_delete_lyrics"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialogCacheDeleteLyricsButton"
+            android:layout_weight="1"
+            android:layout_width="144dp" />
+
+        <Button
+            android:text="@string/label_dialog_cache_delete_cache"
+            android:layout_width="144dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialogCacheDeleteCacheButton"
+            android:layout_weight="1" />
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

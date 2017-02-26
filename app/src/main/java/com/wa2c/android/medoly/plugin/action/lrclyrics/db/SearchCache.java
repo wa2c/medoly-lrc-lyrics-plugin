@@ -37,14 +37,20 @@ public class SearchCache implements Serializable {
     @Column
     public String language;
 
+    /** Search result uploader. */
     @Nullable
     @Column
     public String from;
 
-
+    /** Search result file name. */
     @Nullable
     @Column
     public String file_name;
+
+    /** Search result has lyrics. */
+    @Nullable
+    @Column
+    public Boolean has_lyrics;
 
     /** Search result. (JSON)  */
     @Column
@@ -65,9 +71,9 @@ public class SearchCache implements Serializable {
 
     /**
      * Get ResultItem from result field.
-     * @return
+     * @return result item.
      */
-    public ResultItem getResultItem() {
+    public ResultItem makeResultItem() {
         if (TextUtils.isEmpty(result))
             return null;
         return (new Gson()).fromJson(result, ResultItem.class);
@@ -75,10 +81,9 @@ public class SearchCache implements Serializable {
 
     /**
      * Set ResultItem to result field.
-     * @param item
-     * @return
+     * @param item result item.
      */
-    public void setResultItem(ResultItem item) {
+    public void updateResultItem(ResultItem item) {
         if (item == null)
             return;
         result = (new Gson()).toJson(item);

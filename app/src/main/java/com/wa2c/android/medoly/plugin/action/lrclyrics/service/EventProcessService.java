@@ -160,7 +160,7 @@ public class EventProcessService extends IntentService {
             SearchCacheHelper cacheHelper = new SearchCacheHelper(this);
             SearchCache cache = cacheHelper.select(title, artist);
             if (cache != null) {
-                resultItem = cache.getResultItem();
+                resultItem = cache.makeResultItem();
                 if (resultItem == null && appPrefs.pref_cache_non_result().get()) {
                     return null; // returns even if it is null
                 }
