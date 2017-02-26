@@ -159,6 +159,8 @@ public class CacheActivity extends Activity {
         String title = cacheTitleEditText.getText().toString();
         String artist = cacheArtistEditText.getText().toString();
         searchCache(title, artist);
+        cacheTitleEditText.setTag(title);
+        cacheArtistEditText.setTag(artist);
     }
 
     // Search
@@ -198,9 +200,9 @@ public class CacheActivity extends Activity {
                     intent.putExtra(Intent.EXTRA_TITLE, item.makeResultItem().getMusicTitle() + ".lrc");
                     startActivityForResult(intent, REQUEST_CODE_SAVE_FILE);
                 } else if (which == CacheDialogFragment.DIALOG_RESULT_DELETE_LYRICS) {
-                    searchCache(null, null);
+                    searchCache((String)cacheTitleEditText.getTag(), (String)cacheArtistEditText.getTag());
                 } else if (which == CacheDialogFragment.DIALOG_RESULT_DELETE_CACHE) {
-                    searchCache(null, null);
+                    searchCache((String)cacheTitleEditText.getTag(), (String)cacheArtistEditText.getTag());
                 }
             }
         });
