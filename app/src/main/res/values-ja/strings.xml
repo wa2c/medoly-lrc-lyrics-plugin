@@ -65,7 +65,7 @@
     <string name="settings_not_set">設定しない</string>
 
     <!-- Confirm Dialog -->
-    <string name="message_dialog_confirm_savSearche_cache">検索結果をキャッシュに保存します。</string>
+    <string name="message_dialog_confirm_save_cache">検索結果をキャッシュに保存します。</string>
     <string name="label_dialog_confirm_save_cache">保存</string>
 
     <!-- Normalize Dialog -->
