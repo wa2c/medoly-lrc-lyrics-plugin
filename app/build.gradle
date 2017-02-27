@@ -8,7 +8,7 @@ android {
         applicationId "com.wa2c.android.medoly.plugin.action.lrclyrics"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 0
+        versionCode 1
         versionName "1.0.0"
     }
 
