@@ -106,7 +106,7 @@ public class CacheDialogFragment extends AbstractDialogFragment {
         builder.setTitle(R.string.title_activity_cache);
         builder.setView(content);
         builder.setNegativeButton(R.string.label_close, clickListener);
-        builder.setNeutralButton(R.string.label_dialog_cache_research, new DialogInterface.OnClickListener() {
+        builder. setPositiveButton(R.string.label_dialog_cache_research, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(getActivity(), SearchActivity_.class);
@@ -116,7 +116,7 @@ public class CacheDialogFragment extends AbstractDialogFragment {
             }
         });
         if (result != null) {
-            builder.setPositiveButton(R.string.menu_search_save_file, clickListener);
+            builder.setNeutralButton(R.string.menu_search_save_file, clickListener);
         }
         return  builder.create();
     }
