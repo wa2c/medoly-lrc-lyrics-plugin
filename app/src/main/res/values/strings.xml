@@ -3,7 +3,6 @@
 
     <!-- Package -->
     <string name="app_description">Get LRC format lyrics.</string>
-    <string name="label_class_receiver_">Lyrics Search Actions</string>
     <string name="label_execute_get_lyrics">Get Lyrics</string>
     <string name="label_execute_search_lyrics">Search Lyrics</string>
 
@@ -80,7 +79,7 @@
 
     <!-- Cache Dialog -->
     <string name="label_dialog_cache_delete_lyrics">Delete Lyrics</string>
-    <string name="label_dialog_cache_delete_cache">Delete Cahce</string>
+    <string name="label_dialog_cache_delete_cache">Delete Cache</string>
     <string name="label_dialog_cache_research">Research</string>
     <string name="label_dialog_cache_delete">Delete</string>
     <string name="message_dialog_cache_none">No lyrics.</string>

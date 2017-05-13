@@ -21,7 +21,7 @@ public class SearchCacheHelper {
     private static OrmaDatabase ormaDatabase = null;
 
     /**
-     * Povide OrmaDatabase.
+     * Provide OrmaDatabase.
      * @param context context.
      * @return OrmaDatabase object.
      */

@@ -35,7 +35,6 @@ android {
 }
 
 repositories {
-    //maven { url 'http://raw.github.com/wa2c/medoly-library/master/repository/' }
     maven { url 'https://api.bitbucket.org/1.0/repositories/wa2c/medoly-library/raw/master/repository/' }
 }
 
@@ -48,8 +47,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     androidTestCompile 'junit:junit:4.12'
     // Medoly
-    //compile project(':medolylibrary')
-    compile 'com.wa2c.android:medolylibrary:1.0.4'
+    compile 'com.wa2c.android:medolylibrary:1.0.4e'
     // AndroidAnnotations
     annotationProcessor 'org.androidannotations:androidannotations:4.2.0'
     compile 'org.androidannotations:androidannotations-api:4.2.0'

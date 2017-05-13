@@ -202,7 +202,7 @@ public class SettingsActivity extends PreferenceActivity {
             // get summary length
             CharSequence summary = p.getSummary();
             if (summary != null && summary.length() > 0) {
-                if (summary.toString().lastIndexOf("\n") != 0) p.setSummary(summary + "\n"); // 改行追加
+                if (summary.toString().lastIndexOf("\n") != 0) p.setSummary(summary + "\n"); // add break
                 summaryLengthMap.put(p, p.getSummary().length());
             } else {
                 summaryLengthMap.put(p, 0);
@@ -248,7 +248,7 @@ public class SettingsActivity extends PreferenceActivity {
                 Set<String> stringSet = pref.getSharedPreferences().getStringSet(pref.getKey(), null);
                 String text = "";
                 if (stringSet != null && stringSet.size() > 0) {
-                    pref.setValues(stringSet); // 一度値を更新
+                    pref.setValues(stringSet); // update value once
                     StringBuilder builder = new StringBuilder();
                     for (int i = 0; i < pref.getEntries().length; i++) {
                         if (stringSet.contains(pref.getEntryValues()[i])) {
@@ -256,14 +256,14 @@ public class SettingsActivity extends PreferenceActivity {
                         }
                     }
                     if (builder.length() > 0) {
-                        text = builder.substring(0, builder.length() - 1); // 末尾のカンマ削除
+                        text = builder.substring(0, builder.length() - 1); // remove end comma
                     }
                 }
                 p.setSummary(summary.subSequence(0, summaryLengthMap.get(p)) + getString(R.string.settings_summary_current_value, text));
             } else if (p instanceof EditTextPreference) {
                 // EditTextPreference
                 EditTextPreference pref = (EditTextPreference) p;
-                String text = p.getSharedPreferences().getString(pref.getKey(), ""); // 値が更新されない場合があるので、pref.getText() は使用しない
+                String text = p.getSharedPreferences().getString(pref.getKey(), "");
 
                 // adjust numeric values
                 int inputType = pref.getEditText().getInputType();

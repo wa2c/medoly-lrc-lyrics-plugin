@@ -3,7 +3,6 @@
 
     <!-- Package -->
     <string name="app_description">LRC形式の歌詞を取得します。</string>
-    <string name="label_class_receiver_">歌詞検索アクション</string>
     <string name="label_execute_get_lyrics">歌詞取得</string>
     <string name="label_execute_search_lyrics">歌詞検索</string>
 

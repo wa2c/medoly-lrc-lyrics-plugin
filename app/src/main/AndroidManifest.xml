@@ -40,8 +40,7 @@
             android:exported="false" />
 
         <receiver
-            android:name=".receiver.PluginReceiver"
-            android:label="@string/label_class_receiver_">
+            android:name=".receiver.PluginReceiver">
             <intent-filter>
                 <action android:name="com.wa2c.android.medoly.plugin.action.ACTION_MEDIA" />
 
@@ -80,7 +79,7 @@
 
         <receiver
             android:name=".receiver.ToastReceiver"
-            android:exported="false" />
+            android:exported="true" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

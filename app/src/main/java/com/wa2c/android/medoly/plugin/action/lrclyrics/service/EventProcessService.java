@@ -11,11 +11,9 @@ import com.cybozu.labs.langdetect.Detector;
 import com.cybozu.labs.langdetect.LangDetectException;
 import com.cybozu.labs.langdetect.Language;
 import com.wa2c.android.medoly.library.LyricsProperty;
+import com.wa2c.android.medoly.library.MediaPluginIntent;
 import com.wa2c.android.medoly.library.MediaProperty;
-import com.wa2c.android.medoly.library.MedolyEnvironment;
-import com.wa2c.android.medoly.library.MedolyIntentParam;
 import com.wa2c.android.medoly.library.PluginOperationCategory;
-import com.wa2c.android.medoly.library.PluginTypeCategory;
 import com.wa2c.android.medoly.library.PropertyData;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.activity.SearchActivity;
@@ -73,25 +71,25 @@ public class EventProcessService extends IntentService {
 
     @ServiceAction
     synchronized void search(Intent intent) {
-        MedolyIntentParam param = new MedolyIntentParam(intent);
+        MediaPluginIntent pluginIntent = new MediaPluginIntent(intent);
         try {
 
-            if ((param.hasCategories(PluginOperationCategory.OPERATION_MEDIA_OPEN) && appPrefs.pref_plugin_event().get() == 1) ||
-                (param.hasCategories(PluginOperationCategory.OPERATION_PLAY_START) && appPrefs.pref_plugin_event().get() == 2)) {
+            if ((pluginIntent.hasCategories(PluginOperationCategory.OPERATION_MEDIA_OPEN) && appPrefs.pref_plugin_event().get() == 1) ||
+                (pluginIntent.hasCategories(PluginOperationCategory.OPERATION_PLAY_START) && appPrefs.pref_plugin_event().get() == 2)) {
                 // MEDIA_OPEN / PLAY_START
-                executeSearch(param);
+                executeSearch(pluginIntent);
                 return;
-            } else if (param.hasCategories(PluginOperationCategory.OPERATION_EXECUTE)) {
+            } else if (pluginIntent.hasCategories(PluginOperationCategory.OPERATION_EXECUTE)) {
                 // Execute
-                if (param.hasExecuteId("execute_id_get_lyrics")) {
+                if (pluginIntent.hasExecuteId("execute_id_get_lyrics")) {
                     // Get Lyrics
-                    executeSearch(param);
+                    executeSearch(pluginIntent);
                     return;
-                } else if (param.hasExecuteId("execute_id_search_lyrics")) {
+                } else if (pluginIntent.hasExecuteId("execute_id_search_lyrics")) {
                     // Search lyrics
                     Intent searchIntent =  new Intent(this, SearchActivity_.class);
                     searchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    PropertyData propertyData = param.getPropertyData();
+                    PropertyData propertyData = pluginIntent.getPropertyData();
                     if (propertyData != null) {
                         searchIntent.putExtra(SearchActivity.INTENT_SEARCH_TITLE, propertyData.getFirst(MediaProperty.TITLE));
                         searchIntent.putExtra(SearchActivity.INTENT_SEARCH_ARTIST, propertyData.getFirst(MediaProperty.ARTIST));
@@ -100,23 +98,23 @@ public class EventProcessService extends IntentService {
                     return;
                 }
             }
-            sendLyricsResult(param, null);
+            sendLyricsResult(pluginIntent, null);
         } catch (Exception e) {
             Logger.e(e);
             AppUtils.showToast(this, R.string.error_app);
 
             // Error
             try {
-                sendLyricsResult(param, null);
+                sendLyricsResult(pluginIntent, null);
             } catch (Exception e1) {
                 Logger.e(e1);
             }
         }
     }
 
-    private boolean executeSearch(MedolyIntentParam param) throws SAXException, NoSuchAlgorithmException, ParserConfigurationException, IOException {
-        ResultItem resultItem = getLyrics(param);
-        sendLyricsResult(param, resultItem);
+    private boolean executeSearch(MediaPluginIntent pluginIntent) throws SAXException, NoSuchAlgorithmException, ParserConfigurationException, IOException {
+        ResultItem resultItem = getLyrics(pluginIntent);
+        sendLyricsResult(pluginIntent, resultItem);
         if (resultItem == null) {
             if (appPrefs.pref_failure_message_show().get()) {
                 AppUtils.showToast(this, R.string.message_lyrics_failure);
@@ -131,27 +129,33 @@ public class EventProcessService extends IntentService {
 
     /**
      * Get lyrics info.
-     * @param param parameters.
+     * @param pluginIntent Plugin intent.
      * @return lyrics info.
      * @throws SAXException
      * @throws NoSuchAlgorithmException
      * @throws ParserConfigurationException
      * @throws IOException
      */
-    private ResultItem getLyrics(MedolyIntentParam param) throws SAXException, NoSuchAlgorithmException, ParserConfigurationException, IOException {
-        // media info are not exists
-        if (param.getMediaUri() == null) {
+    private ResultItem getLyrics(MediaPluginIntent pluginIntent) throws SAXException, NoSuchAlgorithmException, ParserConfigurationException, IOException {
+        // media data is not exists
+        if (pluginIntent.getMediaUri() == null) {
             AppUtils.showToast(getApplicationContext(), R.string.message_no_media);
             return null;
         }
 
+        PropertyData propertyData = pluginIntent.getPropertyData();
+
         // indispensable info are not exists
-        if (param.getPropertyData() == null || TextUtils.isEmpty(param.getPropertyData().getFirst(MediaProperty.TITLE))) {
+        if (propertyData == null ||
+            propertyData.isEmpty(MediaProperty.TITLE)) {
             return null;
         }
 
-        String title = param.getPropertyData().getFirst(MediaProperty.TITLE);
-        String artist = param.getPropertyData().getFirst(MediaProperty.ARTIST);
+        String title = pluginIntent.getPropertyData().getFirst(MediaProperty.TITLE);
+        String artist = pluginIntent.getPropertyData().getFirst(MediaProperty.ARTIST);
+        if (TextUtils.isEmpty(title) && TextUtils.isEmpty(artist)) {
+            return null;
+        }
 
         ResultItem resultItem = null;
 
@@ -178,9 +182,9 @@ public class EventProcessService extends IntentService {
             // save to cache.
             if (appPrefs.pref_cache_result().get()) {
                 if (resultItem != null) {
-                    saveCache(param, resultItem);
+                    saveCache(pluginIntent, resultItem);
                 } else if (appPrefs.pref_cache_non_result().get()) {
-                    saveCache(param, null);
+                    saveCache(pluginIntent, null);
                 }
             }
         }
@@ -292,23 +296,20 @@ public class EventProcessService extends IntentService {
 
     /**
      * Send lyrics info.
-     * @param param parameters.
+     * @param pluginIntent parameters.
      * @param resultItem search result.
      */
-    private void sendLyricsResult(@NonNull MedolyIntentParam param, ResultItem resultItem) throws IOException {
+    private void sendLyricsResult(@NonNull MediaPluginIntent pluginIntent, ResultItem resultItem) throws IOException {
         PropertyData propertyData = new PropertyData();
-        Uri fileUri = null;
+        Uri fileUri;
         if (resultItem != null && resultItem.getLyricURL() != null) {
             fileUri = saveLyricsFile(resultItem); // save lyrics and get uri
             propertyData.put(LyricsProperty.DATA_URI, (fileUri == null) ? null : fileUri.toString());
             propertyData.put(LyricsProperty.SOURCE_TITLE, getString(R.string.lyrics_source_name));
             propertyData.put(LyricsProperty.SOURCE_URI, resultItem.getLyricURL());
-            getApplicationContext().grantUriPermission(param.getSrcPackage(), fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            getApplicationContext().grantUriPermission(pluginIntent.getSrcPackage(), fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
-        Intent returnIntent = param.createReturnIntent();
-        returnIntent.addCategory(PluginTypeCategory.TYPE_PUT_LYRICS.getCategoryValue()); // カテゴリ
-        returnIntent.putExtra(MedolyEnvironment.PLUGIN_VALUE_KEY, propertyData);
-        returnIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        MediaPluginIntent returnIntent = pluginIntent.createReturnIntent(propertyData);
         sendBroadcast(returnIntent);
     }
 
@@ -359,15 +360,18 @@ public class EventProcessService extends IntentService {
 
     /**
      * Save lyrics info to cache.
-     * @param param Parameter.
+     * @param pluginIntent Parameter.
      * @param resultItem Result item.
      */
-    private void saveCache(MedolyIntentParam param, ResultItem resultItem) {
-        if (param == null || param.getPropertyData() == null)
+    private void saveCache(MediaPluginIntent pluginIntent, ResultItem resultItem) {
+        if (pluginIntent == null)
+            return;
+        PropertyData propertyData = pluginIntent.getPropertyData();
+        if (propertyData == null)
             return;
 
-        String title = param.getPropertyData().getFirst(MediaProperty.TITLE);
-        String artist = param.getPropertyData().getFirst(MediaProperty.ARTIST);
+        String title = propertyData.getFirst(MediaProperty.TITLE);
+        String artist = propertyData.getFirst(MediaProperty.ARTIST);
         SearchCacheHelper searchCacheHelper = new SearchCacheHelper(this);
         searchCacheHelper.insertOrUpdate(title, artist, resultItem);
     }
