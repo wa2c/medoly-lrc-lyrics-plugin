@@ -74,12 +74,12 @@ public class EventProcessService extends IntentService {
         MediaPluginIntent pluginIntent = new MediaPluginIntent(intent);
         try {
 
-            if ((pluginIntent.hasCategories(PluginOperationCategory.OPERATION_MEDIA_OPEN) && appPrefs.pref_plugin_event().get() == 1) ||
-                (pluginIntent.hasCategories(PluginOperationCategory.OPERATION_PLAY_START) && appPrefs.pref_plugin_event().get() == 2)) {
+            if ((pluginIntent.hasCategory(PluginOperationCategory.OPERATION_MEDIA_OPEN) && appPrefs.pref_plugin_event().get() == 1) ||
+                (pluginIntent.hasCategory(PluginOperationCategory.OPERATION_PLAY_START) && appPrefs.pref_plugin_event().get() == 2)) {
                 // MEDIA_OPEN / PLAY_START
                 executeSearch(pluginIntent);
                 return;
-            } else if (pluginIntent.hasCategories(PluginOperationCategory.OPERATION_EXECUTE)) {
+            } else if (pluginIntent.hasCategory(PluginOperationCategory.OPERATION_EXECUTE)) {
                 // Execute
                 if (pluginIntent.hasExecuteId("execute_id_get_lyrics")) {
                     // Get Lyrics
@@ -137,32 +137,27 @@ public class EventProcessService extends IntentService {
      * @throws IOException
      */
     private ResultItem getLyrics(MediaPluginIntent pluginIntent) throws SAXException, NoSuchAlgorithmException, ParserConfigurationException, IOException {
-        // media data is not exists
-        if (pluginIntent.getMediaUri() == null) {
-            AppUtils.showToast(getApplicationContext(), R.string.message_no_media);
-            return null;
-        }
 
+        // No media data
         PropertyData propertyData = pluginIntent.getPropertyData();
-
-        // indispensable info are not exists
-        if (propertyData == null ||
-            propertyData.isEmpty(MediaProperty.TITLE)) {
+        if (propertyData == null || propertyData.isMediaEmpty()) {
             return null;
         }
 
-        String title = pluginIntent.getPropertyData().getFirst(MediaProperty.TITLE);
-        String artist = pluginIntent.getPropertyData().getFirst(MediaProperty.ARTIST);
-        if (TextUtils.isEmpty(title) && TextUtils.isEmpty(artist)) {
+        // No property info
+        String titleText = propertyData.getFirst(MediaProperty.TITLE);
+        String artistText = propertyData.getFirst(MediaProperty.ARTIST);
+        if (TextUtils.isEmpty(titleText) || TextUtils.isEmpty(artistText)) {
             return null;
         }
+
 
         ResultItem resultItem = null;
 
         // search cache
         if (appPrefs.pref_use_cache().get()) {
             SearchCacheHelper cacheHelper = new SearchCacheHelper(this);
-            SearchCache cache = cacheHelper.select(title, artist);
+            SearchCache cache = cacheHelper.select(titleText, artistText);
             if (cache != null) {
                 resultItem = cache.makeResultItem();
                 if (resultItem == null && appPrefs.pref_cache_non_result().get()) {
@@ -174,7 +169,7 @@ public class EventProcessService extends IntentService {
         // search lyrics
         if (resultItem == null) {
             // search
-            Result result = ViewLyricsSearcher.search(title, artist, 0);
+            Result result = ViewLyricsSearcher.search(titleText, artistText, 0);
 
             // detect result item
             resultItem = detectResultItem(result);
@@ -231,6 +226,8 @@ public class EventProcessService extends IntentService {
             if (TextUtils.isEmpty(appPrefs.pref_search_first_language().get())) {
                 // not exists preferred language
                 resultItem = itemList.get(0);
+                resultItem.setLanguage(null);
+                resultItem.setLyrics(ViewLyricsSearcher.downloadLyricsText(resultItem.getLyricURL()));
             } else {
                 // preferred language
                 int threshold = appPrefs.pref_search_language_threshold().get();
@@ -269,7 +266,6 @@ public class EventProcessService extends IntentService {
 
                         if (selectedResult[0] != null) {
                             resultItem = selectedResult[0];
-                            resultItem.setLanguage(appPrefs.pref_search_first_language().get());
                             break;
                         }
                     } catch (LangDetectException e) {
@@ -285,9 +281,11 @@ public class EventProcessService extends IntentService {
             Logger.d(e);
         }
 
-        // get non-preferred language
+        // no lyrics
         if (resultItem == null && appPrefs.pref_search_non_preferred_language().get()) {
             resultItem = itemList.get(0);
+            resultItem.setLanguage(null);
+            resultItem.setLyrics(null);
         }
 
         return resultItem;
@@ -309,7 +307,7 @@ public class EventProcessService extends IntentService {
             propertyData.put(LyricsProperty.SOURCE_URI, resultItem.getLyricURL());
             getApplicationContext().grantUriPermission(pluginIntent.getSrcPackage(), fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
-        MediaPluginIntent returnIntent = pluginIntent.createReturnIntent(propertyData);
+        MediaPluginIntent returnIntent = pluginIntent.createResultIntent(propertyData);
         sendBroadcast(returnIntent);
     }
 
