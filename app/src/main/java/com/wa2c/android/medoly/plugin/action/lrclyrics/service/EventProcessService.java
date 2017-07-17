@@ -131,10 +131,6 @@ public class EventProcessService extends IntentService {
      * Get lyrics info.
      * @param pluginIntent Plugin intent.
      * @return lyrics info.
-     * @throws SAXException
-     * @throws NoSuchAlgorithmException
-     * @throws ParserConfigurationException
-     * @throws IOException
      */
     private ResultItem getLyrics(MediaPluginIntent pluginIntent) throws SAXException, NoSuchAlgorithmException, ParserConfigurationException, IOException {
 

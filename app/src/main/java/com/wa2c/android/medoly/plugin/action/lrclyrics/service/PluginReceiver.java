@@ -1,4 +1,4 @@
-package com.wa2c.android.medoly.plugin.action.lrclyrics.receiver;
+package com.wa2c.android.medoly.plugin.action.lrclyrics.service;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,11 +13,11 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.service.EventProcessServi
 public class PluginReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        // 既存のサービス強制停止
+        // Stop exists service
         Intent stopIntent = new Intent(context, EventProcessService_.class);
         context.stopService(stopIntent);
 
-        // IntentService 起動
+        // Launch service
         EventProcessService_.intent(context)
                 .search(intent)
                 .start();

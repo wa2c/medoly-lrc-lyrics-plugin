@@ -1,4 +1,4 @@
-package com.wa2c.android.medoly.plugin.action.lrclyrics.receiver;
+package com.wa2c.android.medoly.plugin.action.lrclyrics.util;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

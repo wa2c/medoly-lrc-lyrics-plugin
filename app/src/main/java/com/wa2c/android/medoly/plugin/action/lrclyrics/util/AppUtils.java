@@ -11,7 +11,6 @@ import com.cybozu.labs.langdetect.DetectorFactory;
 import com.cybozu.labs.langdetect.LangDetectException;
 import com.google.gson.Gson;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
-import com.wa2c.android.medoly.plugin.action.lrclyrics.receiver.ToastReceiver;
 
 import java.lang.reflect.Type;
 import java.text.Normalizer;
