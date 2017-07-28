@@ -47,7 +47,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     androidTestCompile 'junit:junit:4.12'
     // Medoly library
-    compile 'com.wa2c.android:medolylibrary:1.0.4q'
+    compile 'com.wa2c.android:medolylibrary:1.0.4r'
     // AndroidAnnotations
     annotationProcessor 'org.androidannotations:androidannotations:4.2.0'
     compile 'org.androidannotations:androidannotations-api:4.2.0'

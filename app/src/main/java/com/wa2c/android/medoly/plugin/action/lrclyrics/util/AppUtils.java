@@ -1,6 +1,7 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -11,6 +12,8 @@ import com.cybozu.labs.langdetect.DetectorFactory;
 import com.cybozu.labs.langdetect.LangDetectException;
 import com.google.gson.Gson;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
+import com.wa2c.android.medoly.plugin.action.lrclyrics.service.EventProcessService;
+import com.wa2c.android.medoly.plugin.action.lrclyrics.service.EventProcessService_;
 
 import java.lang.reflect.Type;
 import java.text.Normalizer;
@@ -104,6 +107,23 @@ public class AppUtils {
             Logger.e(e);
             return null;
         }
+    }
+
+    /**
+     * Start service.
+     * @param context A context.
+     * @param intent A received intent.
+     */
+    public static void startService(Context context, Intent intent) {
+        // Stop exists service
+        Intent stopIntent = new Intent(context, EventProcessService_.class);
+        context.stopService(stopIntent);
+
+        // Launch service
+        Intent serviceIntent = new Intent(intent);
+        serviceIntent.putExtra(EventProcessService_.RECEIVED_CLASS_NAME, intent.getComponent().getClassName());
+        serviceIntent.setClass(context, EventProcessService_.class);
+        EventProcessService_.intent(context).search(serviceIntent).start();
     }
 
 
