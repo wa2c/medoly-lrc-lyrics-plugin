@@ -16,6 +16,7 @@ import com.wa2c.android.medoly.library.MediaProperty;
 import com.wa2c.android.medoly.library.PluginOperationCategory;
 import com.wa2c.android.medoly.library.PluginTypeCategory;
 import com.wa2c.android.medoly.library.PropertyData;
+import com.wa2c.android.medoly.plugin.action.lrclyrics.BuildConfig;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.activity.SearchActivity;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.activity.SearchActivity_;
@@ -48,14 +49,14 @@ import javax.xml.parsers.ParserConfigurationException;
  *  Download intent service.
  */
 @EIntentService
-public class EventProcessService extends IntentService {
+public class ProcessService extends IntentService {
 
     /** Received receiver class name. */
     public static String RECEIVED_CLASS_NAME = "RECEIVED_CLASS_NAME";
 
     private static final String SHARED_DIR_NAME = "lyrics";
     private static final String SHARED_FILE_NAME = "lyrics.lrc";
-    private static final String PROVIDER_AUTHORITIES = "com.wa2c.android.medoly.plugin.action.lrclyrics.fileprovider";
+    private static final String PROVIDER_AUTHORITIES = BuildConfig.APPLICATION_ID + ".fileprovider";;
 
     @Pref
     AppPrefs_ appPrefs;
@@ -63,8 +64,8 @@ public class EventProcessService extends IntentService {
     /**
      * Constructor.
      */
-    public EventProcessService() {
-        super(EventProcessService.class.getSimpleName());
+    public ProcessService() {
+        super(ProcessService.class.getSimpleName());
     }
 
     @Override
@@ -86,9 +87,9 @@ public class EventProcessService extends IntentService {
 
             if (pluginIntent.hasCategory(PluginOperationCategory.OPERATION_EXECUTE)) {
                 String receivedClassName = pluginIntent.getStringExtra(RECEIVED_CLASS_NAME);
-                if (receivedClassName.equals(ExecuteReceiver.ExecuteSearchLyricsReceiver.class.getName())) {
+                if (receivedClassName.equals(PluginReceiver.ExecuteSearchLyricsReceiver.class.getName())) {
                     openSearchScreen(pluginIntent);
-                } else if (receivedClassName.equals(ExecuteReceiver.ExecuteGetLyricsReceiver.class.getName())) {
+                } else if (receivedClassName.equals(PluginReceiver.ExecuteGetLyricsReceiver.class.getName())) {
                     getLyrics(pluginIntent);
                 }
                 return;
@@ -96,7 +97,6 @@ public class EventProcessService extends IntentService {
 
             // Event
 
-            // Get property
             if (pluginIntent.hasCategory(PluginTypeCategory.TYPE_GET_LYRICS)) {
                 if ((pluginIntent.hasCategory(PluginOperationCategory.OPERATION_MEDIA_OPEN) && appPrefs.pref_plugin_event().get() == 1) ||
                     (pluginIntent.hasCategory(PluginOperationCategory.OPERATION_PLAY_START) && appPrefs.pref_plugin_event().get() == 2)) {
@@ -111,7 +111,7 @@ public class EventProcessService extends IntentService {
 
             // Error
             try {
-                if (pluginIntent != null &&  pluginIntent.hasCategory(PluginTypeCategory.TYPE_GET_PROPERTY))
+                if (pluginIntent != null &&  pluginIntent.hasCategory(PluginTypeCategory.TYPE_GET_LYRICS))
                     sendLyricsResult(pluginIntent, null);
             } catch (Exception e1) {
                 Logger.e(e1);

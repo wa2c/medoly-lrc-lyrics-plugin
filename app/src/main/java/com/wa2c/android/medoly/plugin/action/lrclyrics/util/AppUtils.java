@@ -12,8 +12,7 @@ import com.cybozu.labs.langdetect.DetectorFactory;
 import com.cybozu.labs.langdetect.LangDetectException;
 import com.google.gson.Gson;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
-import com.wa2c.android.medoly.plugin.action.lrclyrics.service.EventProcessService;
-import com.wa2c.android.medoly.plugin.action.lrclyrics.service.EventProcessService_;
+import com.wa2c.android.medoly.plugin.action.lrclyrics.service.ProcessService_;
 
 import java.lang.reflect.Type;
 import java.text.Normalizer;
@@ -116,14 +115,14 @@ public class AppUtils {
      */
     public static void startService(Context context, Intent intent) {
         // Stop exists service
-        Intent stopIntent = new Intent(context, EventProcessService_.class);
+        Intent stopIntent = new Intent(context, ProcessService_.class);
         context.stopService(stopIntent);
 
         // Launch service
         Intent serviceIntent = new Intent(intent);
-        serviceIntent.putExtra(EventProcessService_.RECEIVED_CLASS_NAME, intent.getComponent().getClassName());
-        serviceIntent.setClass(context, EventProcessService_.class);
-        EventProcessService_.intent(context).search(serviceIntent).start();
+        serviceIntent.putExtra(ProcessService_.RECEIVED_CLASS_NAME, intent.getComponent().getClassName());
+        serviceIntent.setClass(context, ProcessService_.class);
+        ProcessService_.intent(context).search(serviceIntent).start();
     }
 
 

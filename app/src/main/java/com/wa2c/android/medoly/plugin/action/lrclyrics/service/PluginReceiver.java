@@ -9,7 +9,14 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils;
 /**
  * Execute receiver.
  */
-public class ExecuteReceiver {
+public class PluginReceiver {
+
+    public static class EventAllReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            AppUtils.startService(context, intent);
+        }
+    }
 
     public static class ExecuteGetLyricsReceiver extends BroadcastReceiver {
         @Override
