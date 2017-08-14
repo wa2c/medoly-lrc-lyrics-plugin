@@ -23,6 +23,7 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.CacheDialogFragment;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.ConfirmDialogFragment;
+import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger;
 
@@ -193,6 +194,12 @@ public class CacheActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == DialogInterface.BUTTON_POSITIVE) {
+                    currentCacheItem = item;
+                    Intent intent = new Intent(CacheActivity.this, SearchActivity_.class);
+                    intent.putExtra(SearchActivity.INTENT_SEARCH_TITLE, item.title);
+                    intent.putExtra(SearchActivity.INTENT_SEARCH_ARTIST, item.artist);
+                    startActivity(intent);
+                } else if (which == DialogInterface.BUTTON_NEUTRAL) {
                     currentCacheItem = item;
                     Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
