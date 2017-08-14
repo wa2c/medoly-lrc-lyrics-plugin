@@ -108,22 +108,6 @@ public class AppUtils {
         }
     }
 
-    /**
-     * Start service.
-     * @param context A context.
-     * @param intent A received intent.
-     */
-    public static void startService(Context context, Intent intent) {
-        // Stop exists service
-        Intent stopIntent = new Intent(context, ProcessService_.class);
-        context.stopService(stopIntent);
-
-        // Launch service
-        Intent serviceIntent = new Intent(intent);
-        serviceIntent.putExtra(ProcessService_.RECEIVED_CLASS_NAME, intent.getComponent().getClassName());
-        serviceIntent.setClass(context, ProcessService_.class);
-        ProcessService_.intent(context).search(serviceIntent).start();
-    }
 
 
     // Language
