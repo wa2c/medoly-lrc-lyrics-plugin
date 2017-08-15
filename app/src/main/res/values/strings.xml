@@ -31,8 +31,6 @@
     <string name="title_activity_settings">Setting</string>
 
     <!-- Main Activity -->
-    <string name="label_spinner_event">Event</string>
-    <string name="label_spinner_event_none">Invalidate event</string>
     <string name="label_button_search">Search</string>
     <string name="label_button_cache">Cache</string>
     <string name="label_button_settings">Settings</string>
@@ -98,6 +96,8 @@
     <string name="title_preference_category_event">Event</string>
     <string name="title_preference_category_info">Information</string>
 
+    <string name="pref_title_event_get_lyrics">Get Lyrics Event</string>
+    <string name="pref_summary_event_get_lyrics">Select the event to get lyrics.</string>
     <string name="pref_title_use_cache">Search Cache</string>
     <string name="pref_summary_use_cache">Search the lyrics in the cache.</string>
     <string name="pref_title_cache_result">Save Lyrics</string>
@@ -127,5 +127,15 @@
     <!-- System -->
     <string name="error_app">The operation failed due to an error.</string>
     <string name="error_dialog_dismissed">Open the dialog again.</string>
+
+
+    <!-- List -->
+
+    <!-- Plugin event -->
+    <string-array name="event_get_lyrics_entries">
+        <item>Invalid</item>
+        <item>@string/label_plugin_operation_media_open</item>
+        <item>@string/label_plugin_operation_play_start</item>
+    </string-array>
 
 </resources>

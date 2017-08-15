@@ -76,6 +76,8 @@ public class ProcessService extends IntentService {
 
     @ServiceAction
     synchronized void search(Intent intent) {
+        AppUtils.versionUp(this);
+
         if (intent == null)
             return;
 
@@ -98,8 +100,9 @@ public class ProcessService extends IntentService {
             // Event
 
             if (pluginIntent.hasCategory(PluginTypeCategory.TYPE_GET_LYRICS)) {
-                if ((pluginIntent.hasCategory(PluginOperationCategory.OPERATION_MEDIA_OPEN) && appPrefs.pref_plugin_event().get() == 1) ||
-                    (pluginIntent.hasCategory(PluginOperationCategory.OPERATION_PLAY_START) && appPrefs.pref_plugin_event().get() == 2)) {
+                String operation = appPrefs.pref_event_get_lyrics().get();
+                if ((pluginIntent.hasCategory(PluginOperationCategory.OPERATION_MEDIA_OPEN) && PluginOperationCategory.OPERATION_MEDIA_OPEN.name().equals(operation)) ||
+                    (pluginIntent.hasCategory(PluginOperationCategory.OPERATION_PLAY_START) && PluginOperationCategory.OPERATION_PLAY_START.name().equals(operation))) {
                     getLyrics(pluginIntent);
                 } else {
                     sendLyricsResult(pluginIntent, null);

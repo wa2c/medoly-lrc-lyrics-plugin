@@ -2,6 +2,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory android:title="@string/title_preference_category_event">
+
+        <ListPreference
+            android:defaultValue="@string/event_get_lyrics_values_default"
+            android:entries="@array/event_get_lyrics_entries"
+            android:entryValues="@array/event_get_lyrics_values"
+            android:key="@string/pref_event_get_lyrics"
+            android:summary="@string/pref_summary_event_get_lyrics"
+            android:title="@string/pref_title_event_get_lyrics" />
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="@string/pref_use_cache"

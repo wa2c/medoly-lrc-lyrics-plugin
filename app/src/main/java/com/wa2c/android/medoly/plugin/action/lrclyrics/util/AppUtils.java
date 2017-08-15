@@ -11,6 +11,7 @@ import com.cybozu.labs.langdetect.Detector;
 import com.cybozu.labs.langdetect.DetectorFactory;
 import com.cybozu.labs.langdetect.LangDetectException;
 import com.google.gson.Gson;
+import com.wa2c.android.medoly.library.PluginOperationCategory;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.service.ProcessService_;
 
@@ -106,6 +107,25 @@ public class AppUtils {
             Logger.e(e);
             return null;
         }
+    }
+
+    /**
+     * Version up.
+     * @param context Context.
+     */
+    public static void versionUp(Context context) {
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+
+        final String pref_plugin_event = "pref_plugin_event";
+        if (pref.contains(pref_plugin_event)) {
+            int val = pref.getInt(pref_plugin_event, 0);
+            if (val == 1)
+                pref.edit().putString(context.getString(R.string.pref_event_get_lyrics), PluginOperationCategory.OPERATION_MEDIA_OPEN.name()).apply();
+            else if (val == 2)
+                pref.edit().putString(context.getString(R.string.pref_event_get_lyrics), PluginOperationCategory.OPERATION_PLAY_START.name()).apply();
+            pref.edit().remove(pref_plugin_event).apply();
+        }
+
     }
 
 

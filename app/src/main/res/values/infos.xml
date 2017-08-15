@@ -41,6 +41,7 @@
     </string-array>
 
     <!-- Preferences -->
+    <string name="pref_event_get_lyrics">pref_event_get_lyrics</string>
     <string name="pref_use_cache">pref_use_cache</string>
     <string name="pref_cache_result">pref_cache_result</string>
     <string name="pref_cache_non_result">pref_cache_non_result</string>
@@ -54,5 +55,18 @@
 
     <string name="pref_application_details">pref_application_details</string>
     <string name="pref_about">pref_about</string>
+
+
+    <!-- List -->
+
+    <string name="empty_value" />
+
+    <!-- Plugin event -->
+    <string name="event_get_lyrics_values_default" />
+    <string-array name="event_get_lyrics_values">
+        <item />
+        <item>OPERATION_MEDIA_OPEN</item>
+        <item>OPERATION_PLAY_START</item>
+    </string-array>
 
 </resources>

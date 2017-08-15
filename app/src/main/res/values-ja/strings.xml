@@ -31,8 +31,6 @@
     <string name="title_activity_settings">設定</string>
 
     <!-- Main Activity -->
-    <string name="label_spinner_event">実行イベント</string>
-    <string name="label_spinner_event_none">イベント無効</string>
     <string name="label_button_search">検索</string>
     <string name="label_button_cache">キャッシュ</string>
     <string name="label_button_settings">設定</string>
@@ -98,6 +96,8 @@
     <string name="title_preference_category_event">イベント</string>
     <string name="title_preference_category_info">情報</string>
 
+    <string name="pref_title_event_get_lyrics">歌詞取得イベント</string>
+    <string name="pref_summary_event_get_lyrics">歌詞を取得するイベントを選択します。</string>
     <string name="pref_title_use_cache">キャッシュ検索</string>
     <string name="pref_summary_use_cache">イベント検索でキャッシュから歌詞を検索します。</string>
     <string name="pref_title_cache_result">キャッシュ保存</string>
@@ -128,4 +128,13 @@
     <string name="error_app">エラーが発生したため、操作に失敗しました。</string>
     <string name="error_dialog_dismissed">ダイアログ操作に失敗しました。再度ダイアログを開いてください。</string>
 
+
+    <!-- List -->
+
+    <!-- Plugin event -->
+    <string-array name="event_get_lyrics_entries">
+        <item>イベント無効</item>
+        <item>@string/label_plugin_operation_media_open</item>
+        <item>@string/label_plugin_operation_play_start</item>
+    </string-array>
 </resources>

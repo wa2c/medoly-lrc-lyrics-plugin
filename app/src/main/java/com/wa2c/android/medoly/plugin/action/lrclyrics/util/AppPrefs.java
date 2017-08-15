@@ -10,8 +10,11 @@ import org.androidannotations.annotations.sharedpreferences.SharedPref;
  */
 @SharedPref(value = SharedPref.Scope.APPLICATION_DEFAULT)
 public interface AppPrefs {
-    @DefaultInt(0)
-    int pref_plugin_event();
+//    @DefaultInt(0)
+//    int pref_plugin_event();
+
+    @DefaultString("")
+    String pref_event_get_lyrics();
 
     @DefaultBoolean(true)
     boolean pref_use_cache();
