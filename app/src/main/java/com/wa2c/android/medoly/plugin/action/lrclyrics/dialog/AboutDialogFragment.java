@@ -120,7 +120,7 @@ public class AboutDialogFragment extends AbstractDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.pref_title_about);
         builder.setView(layoutView);
-        builder.setPositiveButton(android.R.string.ok, null);
+        builder.setNeutralButton(android.R.string.ok, null);
         return  builder.create();
     }
 

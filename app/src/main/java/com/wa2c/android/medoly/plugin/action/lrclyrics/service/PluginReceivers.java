@@ -13,9 +13,18 @@ public class PluginReceivers {
         @Override
         public void onReceive(Context context, Intent intent) {
             Intent serviceIntent = new Intent(intent);
-            serviceIntent.putExtra(ProcessService_.RECEIVED_CLASS_NAME, intent.getComponent().getClassName());
-            serviceIntent.setClass(context, ProcessService_.class);
-            ProcessService_.intent(context).search(serviceIntent).start();
+            Class c = this.getClass();
+
+            if (c == EventGetLyricsReceiver.class ||
+                c == ExecuteGetLyricsReceiver.class ) {
+                serviceIntent.setClass(context, PluginGetLyricsService_.class);
+                PluginGetLyricsService_.intent(context).stop();
+                PluginGetLyricsService_.intent(context).process(serviceIntent).start();
+            } else if (c == ExecuteSearchLyricsReceiver.class) {
+                serviceIntent.setClass(context, PluginRunService_.class);
+                PluginRunService_.intent(context).stop();
+                PluginRunService_.intent(context).process(serviceIntent).start();
+            }
         }
     }
 

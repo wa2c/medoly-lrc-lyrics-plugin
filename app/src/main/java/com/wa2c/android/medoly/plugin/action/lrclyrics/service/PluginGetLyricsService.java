@@ -1,6 +1,5 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics.service;
 
-import android.app.IntentService;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -19,8 +18,6 @@ import com.wa2c.android.medoly.library.PluginTypeCategory;
 import com.wa2c.android.medoly.library.PropertyData;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.BuildConfig;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
-import com.wa2c.android.medoly.plugin.action.lrclyrics.activity.SearchActivity;
-import com.wa2c.android.medoly.plugin.action.lrclyrics.activity.SearchActivity_;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.Result;
@@ -50,98 +47,52 @@ import javax.xml.parsers.ParserConfigurationException;
  *  Download intent service.
  */
 @EIntentService
-public class ProcessService extends IntentService {
-
-    /** Received receiver class name. */
-    public static String RECEIVED_CLASS_NAME = "RECEIVED_CLASS_NAME";
+public class PluginGetLyricsService extends AbstractPluginService {
 
     private static final String SHARED_DIR_NAME = "lyrics";
     private static final String SHARED_FILE_NAME = "lyrics.lrc";
-    private static final String PROVIDER_AUTHORITIES = BuildConfig.APPLICATION_ID + ".fileprovider";;
+    private static final String PROVIDER_AUTHORITIES = BuildConfig.APPLICATION_ID + ".fileprovider";
 
     @Pref
-    AppPrefs_ appPrefs;
+    protected AppPrefs_ appPrefs;
+
 
     /**
      * Constructor.
      */
-    public ProcessService() {
-        super(ProcessService.class.getSimpleName());
+    public PluginGetLyricsService() {
+        super(PluginGetLyricsService.class.getSimpleName());
     }
 
-    @Override
-    protected void onHandleIntent(Intent intent) {
-        // Do nothing here
-
-    }
 
     @ServiceAction
-    synchronized void search(Intent intent) {
-        AppUtils.versionUp(this);
-
+    protected void process(Intent intent) {
+        super.process(intent);
         if (intent == null)
             return;
+        if (!pluginIntent.hasCategory(PluginTypeCategory.TYPE_GET_LYRICS)) {
+            sendResult(null);
+            return;
+        }
 
-        MediaPluginIntent pluginIntent = null;
         try {
-            pluginIntent = new MediaPluginIntent(intent);
-
-            // Execute
-
-            if (pluginIntent.hasCategory(PluginOperationCategory.OPERATION_EXECUTE)) {
-                String receivedClassName = pluginIntent.getStringExtra(RECEIVED_CLASS_NAME);
-                if (receivedClassName.equals(PluginReceivers.ExecuteSearchLyricsReceiver.class.getName())) {
-                    openSearchScreen(pluginIntent);
-                } else if (receivedClassName.equals(PluginReceivers.ExecuteGetLyricsReceiver.class.getName())) {
-                    getLyrics(pluginIntent);
-                }
-                return;
-            }
-
-            // Event
-
-            if (pluginIntent.hasCategory(PluginTypeCategory.TYPE_GET_LYRICS)) {
-                String operation = appPrefs.pref_event_get_lyrics().get();
-                if ((pluginIntent.hasCategory(PluginOperationCategory.OPERATION_MEDIA_OPEN) && PluginOperationCategory.OPERATION_MEDIA_OPEN.name().equals(operation)) ||
+            String operation = appPrefs.pref_event_get_lyrics().get();
+            if (    pluginIntent.hasCategory(PluginOperationCategory.OPERATION_EXECUTE) ||
+                    (pluginIntent.hasCategory(PluginOperationCategory.OPERATION_MEDIA_OPEN) && PluginOperationCategory.OPERATION_MEDIA_OPEN.name().equals(operation)) ||
                     (pluginIntent.hasCategory(PluginOperationCategory.OPERATION_PLAY_START) && PluginOperationCategory.OPERATION_PLAY_START.name().equals(operation))) {
-                    getLyrics(pluginIntent);
-                } else {
-                    sendLyricsResult(pluginIntent, null);
-                }
+                getLyrics(pluginIntent);
+            } else {
+                sendResult(null);
             }
-        } catch (Exception e) {
+       } catch (Exception e) {
             Logger.e(e);
             AppUtils.showToast(this, R.string.error_app);
-
-            // Error
-            try {
-                if (pluginIntent != null &&  pluginIntent.hasCategory(PluginTypeCategory.TYPE_GET_LYRICS))
-                    sendLyricsResult(pluginIntent, null);
-            } catch (Exception e1) {
-                Logger.e(e1);
-            }
         }
-    }
-
-    /**
-     * Open search lyrics screen.
-     * @param pluginIntent A plugin intent.
-     */
-    private void openSearchScreen(MediaPluginIntent pluginIntent) {
-        Intent searchIntent =  new Intent(this, SearchActivity_.class);
-        searchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PropertyData propertyData = pluginIntent.getPropertyData();
-        if (propertyData != null) {
-            searchIntent.putExtra(SearchActivity.INTENT_SEARCH_TITLE, propertyData.getFirst(MediaProperty.TITLE));
-            searchIntent.putExtra(SearchActivity.INTENT_SEARCH_ARTIST, propertyData.getFirst(MediaProperty.ARTIST));
-        }
-        startActivity(searchIntent);
     }
 
     /**
      * Get lyrics.
      * @param pluginIntent A plugin intent.
-     * @return
      */
     private void getLyrics(MediaPluginIntent pluginIntent) throws SAXException, NoSuchAlgorithmException, ParserConfigurationException, IOException {
         ResultItem resultItem = findLyrics(pluginIntent);
@@ -299,9 +250,9 @@ public class ProcessService extends IntentService {
                     }
                 }
                 if (resultItem == null)
-                    resultItem = selectedResult[2];
+                    resultItem = selectedResult[1];
                 if (resultItem == null)
-                    resultItem = selectedResult[3];
+                    resultItem = selectedResult[2];
             }
         } catch (Exception e) {
             Logger.d(e);
@@ -333,6 +284,7 @@ public class ProcessService extends IntentService {
             propertyData.put(LyricsProperty.SOURCE_URI, resultItem.getLyricURL());
             getApplicationContext().grantUriPermission(pluginIntent.getSrcPackage(), fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
+        sendResult(propertyData);
         MediaPluginIntent returnIntent = pluginIntent.createResultIntent(propertyData);
         sendBroadcast(returnIntent);
     }

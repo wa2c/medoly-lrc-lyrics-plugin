@@ -19,6 +19,7 @@ import android.text.TextUtils;
 import android.util.Pair;
 import android.view.MenuItem;
 
+import com.cybozu.labs.langdetect.DetectorFactoryUtil;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.AboutDialogFragment;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils;
@@ -89,7 +90,7 @@ public class SettingsActivity extends PreferenceActivity {
 
               // language priority
             {
-                String[] languages = AppUtils.getLanguageNames();
+                String[] languages = DetectorFactoryUtil.getLanguageNames();
                 List<Pair<String, String>> languageList = new ArrayList<>(languages.length);
                 for (int i = 0; i < languages.length; i++) {
                     String[] langs = languages[i].split("-");

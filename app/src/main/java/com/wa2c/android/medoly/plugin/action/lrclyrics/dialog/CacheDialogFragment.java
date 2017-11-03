@@ -2,16 +2,12 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
-import com.wa2c.android.medoly.plugin.action.lrclyrics.activity.SearchActivity;
-import com.wa2c.android.medoly.plugin.action.lrclyrics.activity.SearchActivity_;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem;
@@ -105,10 +101,10 @@ public class CacheDialogFragment extends AbstractDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.title_activity_cache);
         builder.setView(content);
-        builder.setNegativeButton(R.string.label_close, clickListener);
-        builder.setPositiveButton(R.string.label_dialog_cache_research, clickListener);
+        builder.setNeutralButton(R.string.label_close, null);
+        builder.setNegativeButton(R.string.label_dialog_cache_research, clickListener);
         if (result != null) {
-            builder.setNeutralButton(R.string.menu_search_save_file, clickListener);
+            builder.setPositiveButton(R.string.menu_search_save_file, clickListener);
         }
         return  builder.create();
     }

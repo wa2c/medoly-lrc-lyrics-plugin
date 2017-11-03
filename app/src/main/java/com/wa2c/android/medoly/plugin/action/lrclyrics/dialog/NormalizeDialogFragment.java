@@ -101,7 +101,7 @@ public class NormalizeDialogFragment extends AbstractDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(baseView);
         builder.setTitle(R.string.title_dialog_normalize);
-        builder.setNegativeButton(R.string.label_close, clickListener);
+        builder.setNeutralButton(R.string.label_close, null);
         builder.setPositiveButton(R.string.label_edit, clickListener);
         return  builder.create();
     }
@@ -131,18 +131,6 @@ public class NormalizeDialogFragment extends AbstractDialogFragment {
         }
         inputText =  AppUtils.trimLines(text);
         dialogNormalizeAfterTextView.setText(text);
-    }
-
-
-
-    void calledAfterViewInjection() {
-        dialogNormalizeBeforeTextView.setText(getArguments().getCharSequence(ARG_INPUT_TEXT));
-        dialogNormalizeAfterTextView.setText(getArguments().getCharSequence(ARG_INPUT_TEXT));
-    }
-
-
-    void launchSearchButtonClick() {
-        Logger.d("a");
     }
 
 }

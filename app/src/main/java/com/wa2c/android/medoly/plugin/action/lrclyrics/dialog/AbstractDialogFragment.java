@@ -16,7 +16,6 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Abstract dialog.
  */
