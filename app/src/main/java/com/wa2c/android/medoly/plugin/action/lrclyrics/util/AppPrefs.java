@@ -45,4 +45,6 @@ public interface AppPrefs {
 
     @DefaultBoolean(false)
     boolean pref_failure_message_show();
+
+
 }

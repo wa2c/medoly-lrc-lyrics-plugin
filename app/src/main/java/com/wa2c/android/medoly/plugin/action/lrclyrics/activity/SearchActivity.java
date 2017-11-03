@@ -54,7 +54,6 @@ import java.io.OutputStreamWriter;
 @OptionsMenu(R.menu.activity_search)
 public class SearchActivity extends Activity {
 
-    private static final int REQUEST_CODE_SAVE_FILE = 1;
     public static final String INTENT_SEARCH_TITLE = "INTENT_SEARCH_TITLE";
     public static final String INTENT_SEARCH_ARTIST = "INTENT_SEARCH_ARTIST";
 
@@ -154,13 +153,9 @@ public class SearchActivity extends Activity {
             return;
         }
 
-        String fileName = searchResultAdapter.getSelectedItem().getMusicTitle() + " - " + searchResultAdapter.getSelectedItem().getMusicArtist() + ".lrc";
-
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_TITLE, fileName);
-        startActivityForResult(intent, REQUEST_CODE_SAVE_FILE);
+        String title = searchTitleEditText.getText().toString();
+        String artist = searchArtistEditText.getText().toString();
+        AppUtils.saveFile(this, title, artist);
     }
 
     @OptionsItem(R.id.menu_search_save_cache)
@@ -334,7 +329,7 @@ public class SearchActivity extends Activity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
-        if (requestCode == REQUEST_CODE_SAVE_FILE) {
+        if (requestCode == AppUtils.REQUEST_CODE_SAVE_FILE) {
             // 歌詞のファイル保存
             if (resultCode == RESULT_OK) {
                 if (!existsLyrics()) {

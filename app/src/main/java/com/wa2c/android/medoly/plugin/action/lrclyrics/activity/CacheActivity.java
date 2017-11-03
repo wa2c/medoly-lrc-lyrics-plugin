@@ -5,8 +5,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -23,6 +26,7 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.CacheDialogFragment;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.ConfirmDialogFragment;
+import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppPrefs_;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger;
 
@@ -36,6 +40,7 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.sharedpreferences.Pref;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -50,7 +55,6 @@ import java.util.List;
 @OptionsMenu(R.menu.activity_cache)
 public class CacheActivity extends Activity {
 
-    private static final int REQUEST_CODE_SAVE_FILE = 1;
     public static final String INTENT_SEARCH_TITLE = "INTENT_SEARCH_TITLE";
     public static final String INTENT_SEARCH_ARTIST = "INTENT_SEARCH_ARTIST";
 
@@ -60,6 +64,9 @@ public class CacheActivity extends Activity {
     private SearchCacheHelper searchCacheHelper;
     /** SearchCache list. */
     private List<SearchCache> cacheList = new ArrayList<>();
+
+    @Pref
+    AppPrefs_ appPrefs;
 
     @Extra(INTENT_SEARCH_TITLE)
     String intentSearchTitle;
@@ -193,13 +200,17 @@ public class CacheActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == DialogInterface.BUTTON_POSITIVE) {
+
+                    SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(CacheActivity.this);
+                    String uriText = p.getString("pref_prev_file_uri", null);
+                    Uri uri = null;
+                    if (!TextUtils.isEmpty(uriText)) {
+                        try { uri = Uri.parse(uriText); } catch (Exception e) { Logger.d(e); }
+                    }
+
                     // Save
                     currentCacheItem = item;
-                    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-                    intent.putExtra(Intent.EXTRA_TITLE, item.makeResultItem().getMusicTitle() + ".lrc");
-                    startActivityForResult(intent, REQUEST_CODE_SAVE_FILE);
+                    AppUtils.saveFile(CacheActivity.this, item.title, item.artist);
                 } else if (which == DialogInterface.BUTTON_NEGATIVE) {
                     // Research
                     currentCacheItem = item;
@@ -219,7 +230,7 @@ public class CacheActivity extends Activity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
-        if (requestCode == REQUEST_CODE_SAVE_FILE) {
+        if (requestCode == AppUtils.REQUEST_CODE_SAVE_FILE) {
             // 歌詞のファイル保存
             if (resultCode == RESULT_OK) {
                 Uri uri = resultData.getData();
@@ -228,6 +239,11 @@ public class CacheActivity extends Activity {
                     writer.write(currentCacheItem.makeResultItem().getLyrics());
                     writer.flush();
                     AppUtils.showToast(this, R.string.message_lyrics_save_succeeded);
+
+
+
+                    SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
+                    p.edit().putString("pref_prev_file_uri", uri.toString()).apply();
                 } catch (IOException e) {
                     Logger.e(e);
                     AppUtils.showToast(this, R.string.message_lyrics_save_failed);

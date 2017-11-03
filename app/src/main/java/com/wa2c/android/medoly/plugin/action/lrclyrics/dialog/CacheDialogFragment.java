@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -103,7 +104,7 @@ public class CacheDialogFragment extends AbstractDialogFragment {
         builder.setView(content);
         builder.setNeutralButton(R.string.label_close, null);
         builder.setNegativeButton(R.string.label_dialog_cache_research, clickListener);
-        if (result != null) {
+        if (result != null && !TextUtils.isEmpty(result.getLyrics())) {
             builder.setPositiveButton(R.string.menu_search_save_file, clickListener);
         }
         return  builder.create();

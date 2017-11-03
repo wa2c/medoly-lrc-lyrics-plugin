@@ -114,6 +114,10 @@
     <string name="pref_summary_search_non_preferred_language">Get the other language lyrics if priority language can not found.</string>
     <string name="pref_title_search_language_threshold">Language Threshold</string>
     <string name="pref_summary_search_language_threshold">Set the threshold for language determination to between 0.0 – 1.0. (Default: 0.5)</string>
+    <string name="pref_title_file_name_default">Default File Name</string>
+    <string name="pref_summary_file_name_default">Select the default filename for saving.</string>
+    <string name="pref_title_file_name_separator">File Name Separator</string>
+    <string name="pref_summary_file_name_separator">Input a separator between the title and the artist for default file name.</string>
     <string name="pref_title_post_success_message_show">Show Success Message</string>
     <string name="pref_summary_post_success_message_show">Show message when lyrics acquisition succeeded.</string>
     <string name="pref_title_post_failure_message_show">Show Failure Message</string>
@@ -136,6 +140,13 @@
         <item>Invalid</item>
         <item>@string/label_plugin_operation_media_open</item>
         <item>@string/label_plugin_operation_play_start</item>
+    </string-array>
+
+    <!-- File name -->
+    <string-array name="file_name_default_entries">
+        <item>[Title]</item>
+        <item>[Title] [Artist]</item>
+        <item>[Artist] [Title]</item>
     </string-array>
 
 </resources>

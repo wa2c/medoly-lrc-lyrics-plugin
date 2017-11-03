@@ -114,6 +114,10 @@
     <string name="pref_summary_search_non_preferred_language">優先検索対象言語が取得できない場合、その他の言語を取得します。</string>
     <string name="pref_title_search_language_threshold">言語判定のしきい値</string>
     <string name="pref_summary_search_language_threshold">対象言語を判定するためのしきい値を、0 – 100の間で指定します。(初期値: 50)</string>
+    <string name="pref_title_file_name_default">初期ファイル名</string>
+    <string name="pref_summary_file_name_default">ファイル保存時の初期ファイル名を選択します。</string>
+    <string name="pref_title_file_name_separator">ファイル名区切り</string>
+    <string name="pref_summary_file_name_separator">初期ファイル名のタイトルとアーティストの間の区切り文字を入力します.</string>
     <string name="pref_title_post_success_message_show">成功メッセージ表示</string>
     <string name="pref_summary_post_success_message_show">歌詞の取得に成功した際にメッセージを表示します。</string>
     <string name="pref_title_post_failure_message_show">失敗メッセージ表示</string>
@@ -137,4 +141,12 @@
         <item>@string/label_plugin_operation_media_open</item>
         <item>@string/label_plugin_operation_play_start</item>
     </string-array>
+
+    <!-- File name -->
+    <string-array name="file_name_default_entries">
+        <item>[タイトル]</item>
+        <item>[タイトル] [アーティスト]</item>
+        <item>[アーティスト] [タイトル]</item>
+    </string-array>
+
 </resources>

@@ -62,6 +62,20 @@
             android:text=""
             android:title="@string/pref_title_search_language_threshold" />
 
+        <ListPreference
+            android:defaultValue="@string/file_name_default_default"
+            android:entries="@array/file_name_default_entries"
+            android:entryValues="@array/file_name_default_values"
+            android:key="@string/pref_file_name_default"
+            android:summary="@string/pref_summary_file_name_default"
+            android:title="@string/pref_title_file_name_default" />
+
+        <EditTextPreference
+            android:defaultValue="@string/file_name_separator_default"
+            android:key="@string/pref_file_name_separator"
+            android:summary="@string/pref_summary_file_name_separator"
+            android:title="@string/pref_title_file_name_separator" />
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="@string/pref_success_message_show"

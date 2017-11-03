@@ -1,6 +1,8 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics.util;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -12,6 +14,7 @@ import com.cybozu.labs.langdetect.LangDetectException;
 import com.google.gson.Gson;
 import com.wa2c.android.medoly.library.PluginOperationCategory;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
+import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem;
 
 import java.lang.reflect.Type;
 import java.text.Normalizer;
@@ -256,6 +259,55 @@ public class AppUtils {
                 .replaceAll("(?i)[\\(\\<\\[\\{\\s]?inst\\..*", "")
                 .replaceAll("(?i)[\\(\\<\\[\\{\\s]?インスト.*", "")
                 ;
+    }
+
+
+    /** Request code */
+    public static final int REQUEST_CODE_SAVE_FILE = 1;
+
+    /**
+     * Save file.
+     * @param activity A activity.
+     * @param title Title (searching text).
+     * @param artist Artist (searching text).
+     */
+    public static void saveFile(@NonNull Activity activity, String title, String artist) {
+        try {
+            if (title == null)
+                title = "";
+            if (artist == null)
+                artist = "";
+
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(activity);
+
+            String defaultNameKey = activity.getString(R.string.pref_file_name_default);
+            String defaultName = pref.getString(defaultNameKey, activity.getString(R.string.file_name_default_default));
+
+            String separatorKey = activity.getString(R.string.pref_file_name_separator);
+            String separator = pref.getString(separatorKey, activity.getString(R.string.file_name_separator_default));
+
+            String fileName;
+            switch (defaultName) {
+                case "TITLE_ARTIST":
+                    fileName = title + separator + artist;
+                    break;
+                case "ARTIST_TITLE":
+                    fileName = artist + separator + title;
+                    break;
+                default:
+                    fileName = title;
+                    break;
+            }
+
+            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            intent.putExtra(Intent.EXTRA_TITLE, fileName + ".lrc");
+            activity.startActivityForResult(intent, REQUEST_CODE_SAVE_FILE);
+        } catch (Exception e) {
+            Logger.e(e);
+            showToast(activity, R.string.error_app);
+        }
     }
 
 }
