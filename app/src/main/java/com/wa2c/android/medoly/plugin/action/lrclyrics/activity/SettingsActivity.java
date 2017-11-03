@@ -88,7 +88,7 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_settings);
 
-              // language priority
+             // language priority
             {
                 String[] languages = DetectorFactoryUtil.getLanguageNames();
                 List<Pair<String, String>> languageList = new ArrayList<>(languages.length);

@@ -200,14 +200,6 @@ public class CacheActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == DialogInterface.BUTTON_POSITIVE) {
-
-                    SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(CacheActivity.this);
-                    String uriText = p.getString("pref_prev_file_uri", null);
-                    Uri uri = null;
-                    if (!TextUtils.isEmpty(uriText)) {
-                        try { uri = Uri.parse(uriText); } catch (Exception e) { Logger.d(e); }
-                    }
-
                     // Save
                     currentCacheItem = item;
                     AppUtils.saveFile(CacheActivity.this, item.title, item.artist);
