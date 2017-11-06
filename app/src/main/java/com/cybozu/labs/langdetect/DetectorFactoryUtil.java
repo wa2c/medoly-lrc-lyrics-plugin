@@ -54,10 +54,15 @@ import com.cybozu.labs.langdetect.profiles.Profile_vi;
 import com.cybozu.labs.langdetect.profiles.Profile_zh_cn;
 import com.cybozu.labs.langdetect.profiles.Profile_zh_tw;
 import com.cybozu.labs.langdetect.util.LangProfile;
+import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 /**
@@ -68,73 +73,61 @@ public class DetectorFactoryUtil {
     /**
      * Language profiles map.
      */
-    private static Map<String, LangProfile> languageProfileMap;
-
-    private static Map<String, LangProfile> getLanguageProfileMap() {
-        if (languageProfileMap != null)
-            return languageProfileMap;
-
-        languageProfileMap = new TreeMap<String, LangProfile>() {{
-            put("af", new Profile_af());
-            put("ar", new Profile_ar());
-            put("bg", new Profile_bg());
-            put("bn", new Profile_bn());
-            put("cs", new Profile_cs());
-            put("da", new Profile_da());
-            put("de", new Profile_de());
-            put("el", new Profile_el());
-            put("en", new Profile_en());
-            put("es", new Profile_es());
-            put("et", new Profile_et());
-            put("fa", new Profile_fa());
-            put("fi", new Profile_fi());
-            put("fr", new Profile_fr());
-            put("gu", new Profile_gu());
-            put("he", new Profile_he());
-            put("hi", new Profile_hi());
-            put("hr", new Profile_hr());
-            put("hu", new Profile_hu());
-            put("id", new Profile_id());
-            put("it", new Profile_it());
-            put("ja", new Profile_ja());
-            put("kn", new Profile_kn());
-            put("ko", new Profile_ko());
-            put("lt", new Profile_lt());
-            put("lv", new Profile_lv());
-            put("mk", new Profile_mk());
-            put("ml", new Profile_ml());
-            put("mr", new Profile_mr());
-            put("ne", new Profile_ne());
-            put("nl", new Profile_nl());
-            put("no", new Profile_no());
-            put("pa", new Profile_pa());
-            put("pl", new Profile_pl());
-            put("pt", new Profile_pt());
-            put("ro", new Profile_ro());
-            put("ru", new Profile_ru());
-            put("sk", new Profile_sk());
-            put("sl", new Profile_sl());
-            put("so", new Profile_so());
-            put("sq", new Profile_sq());
-            put("sv", new Profile_sv());
-            put("sw", new Profile_sw());
-            put("ta", new Profile_ta());
-            put("te", new Profile_te());
-            put("th", new Profile_th());
-            put("tl", new Profile_tl());
-            put("tr", new Profile_tr());
-            put("uk", new Profile_uk());
-            put("ur", new Profile_ur());
-            put("vi", new Profile_vi());
-            put("zh-cn", new Profile_zh_cn());
-            put("zh-tw", new Profile_zh_tw());
-        }};
-
-        return languageProfileMap;
-    }
-
-
-    private static final String[] languageNames = {"af","ar","bg","bn","cs","da","de","el","en","es","et","fa","fi","fr","gu","he","hi","hr","hu","id","it","ja","kn","ko","lt","lv","mk","ml","mr","ne","nl","no","pa","pl","pt","ro","ru","sk","sl","so","sq","sv","sw","ta","te","th","tl","tr","uk","ur","vi","zh-cn","zh-tw"};
+    private static final TreeMap<String, Class<? extends LangProfile>> languageProfileMap = new TreeMap<String, Class<? extends LangProfile>>() {{
+        put("af", Profile_af.class);
+        put("ar", Profile_ar.class);
+        put("bg", Profile_bg.class);
+        put("bn", Profile_bn.class);
+        put("cs", Profile_cs.class);
+        put("da", Profile_da.class);
+        put("de", Profile_de.class);
+        put("el", Profile_el.class);
+        put("en", Profile_en.class);
+        put("es", Profile_es.class);
+        put("et", Profile_et.class);
+        put("fa", Profile_fa.class);
+        put("fi", Profile_fi.class);
+        put("fr", Profile_fr.class);
+        put("gu", Profile_gu.class);
+        put("he", Profile_he.class);
+        put("hi", Profile_hi.class);
+        put("hr", Profile_hr.class);
+        put("hu", Profile_hu.class);
+        put("id", Profile_id.class);
+        put("it", Profile_it.class);
+        put("ja", Profile_ja.class);
+        put("kn", Profile_kn.class);
+        put("ko", Profile_ko.class);
+        put("lt", Profile_lt.class);
+        put("lv", Profile_lv.class);
+        put("mk", Profile_mk.class);
+        put("ml", Profile_ml.class);
+        put("mr", Profile_mr.class);
+        put("ne", Profile_ne.class);
+        put("nl", Profile_nl.class);
+        put("no", Profile_no.class);
+        put("pa", Profile_pa.class);
+        put("pl", Profile_pl.class);
+        put("pt", Profile_pt.class);
+        put("ro", Profile_ro.class);
+        put("ru", Profile_ru.class);
+        put("sk", Profile_sk.class);
+        put("sl", Profile_sl.class);
+        put("so", Profile_so.class);
+        put("sq", Profile_sq.class);
+        put("sv", Profile_sv.class);
+        put("sw", Profile_sw.class);
+        put("ta", Profile_ta.class);
+        put("te", Profile_te.class);
+        put("th", Profile_th.class);
+        put("tl", Profile_tl.class);
+        put("tr", Profile_tr.class);
+        put("uk", Profile_uk.class);
+        put("ur", Profile_ur.class);
+        put("vi", Profile_vi.class);
+        put("zh-cn", Profile_zh_cn.class);
+        put("zh-tw", Profile_zh_tw.class);
+    }};
 
     /**
      * Get language names.
@@ -142,8 +135,7 @@ public class DetectorFactoryUtil {
      */
 
     public static String[] getLanguageNames() {
-        //return languageProfileMap.keySet().toArray(new String[languageProfileMap.size()]);
-        return languageNames;
+        return languageProfileMap.keySet().toArray(new String[languageProfileMap.size()]);
     }
 
     /**
@@ -152,14 +144,61 @@ public class DetectorFactoryUtil {
      */
     public static synchronized Detector createDetectorAll() throws LangDetectException {
         if (DetectorFactory.getLangList() == null || DetectorFactory.getLangList().size()  == 0) {
-            int index = 0;
-            Collection<LangProfile> collection = getLanguageProfileMap().values();
-            for (LangProfile p : collection) {
-                DetectorFactory.addProfile(p, index++, languageProfileMap.size());
+//            int index = 0;
+//            for (Class<? extends LangProfile> profileClass : languageProfileMap.values()) {
+//                try {
+//                    LangProfile p = profileClass.newInstance();
+//                    DetectorFactory.addProfile(p, index++, languageProfileMap.size());
+//                } catch (InstantiationException | IllegalAccessException e) {
+//                    Logger.e(e);
+//                }
+//            }
+
+            long startTime = System.currentTimeMillis();
+            int coreCount = Runtime.getRuntime().availableProcessors();
+            Logger.d("Detector creating begin. Core: " + coreCount);
+
+            ExecutorService executorService = Executors.newFixedThreadPool(coreCount + 1);
+            List<Future<LangProfile>> futures = new ArrayList<>(languageProfileMap.size());
+            for (final Class<? extends LangProfile> c : languageProfileMap.values()) {
+                futures.add(executorService.submit(new ProfileCreator(c)));
             }
+
+            Logger.d("Adding profiles.");
+            for (int i = 0; i < futures.size(); i++) {
+                try {
+                    DetectorFactory.addProfile(futures.get(i).get(), i, languageProfileMap.size());
+                } catch (Exception e) {
+                    Logger.e(e);
+                }
+            }
+
+            executorService.shutdown();
+            Logger.d("Detector creating end. Time: " + (System.currentTimeMillis() - startTime));
         }
 
         return DetectorFactory.create();
     }
+
+    /**
+     * Profile creator.
+     */
+    private static class ProfileCreator implements Callable<LangProfile> {
+
+        private Class<? extends LangProfile> profileClass;
+
+        ProfileCreator(Class<? extends LangProfile> profileClass) {
+            this.profileClass = profileClass;
+        }
+
+        @Override
+        public LangProfile call() throws Exception {
+            Logger.d("creating begin: " + profileClass.getName());
+            LangProfile p = profileClass.newInstance();
+            Logger.d("creating end: " + profileClass.getName());
+            return p;
+        }
+    }
+
 
 }

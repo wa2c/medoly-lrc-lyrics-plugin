@@ -37,9 +37,6 @@
             android:label="@string/title_activity_settings" />
 
         <service
-            android:name=".service.ProcessService_"
-            android:exported="false" />
-        <service
             android:name=".service.PluginRunService_"
             android:exported="false" />
         <service
