@@ -145,11 +145,9 @@ public class PluginGetLyricsService extends AbstractPluginService {
 
         // search lyrics
         if (resultItem == null) {
-            // search
-            Result result = ViewLyricsSearcher.search(titleText, artistText, 0);
 
             // detect result item
-            resultItem = detectResultItem(result);
+            resultItem = detectResultItem(titleText, artistText);
 
             // save to cache.
             if (appPrefs.pref_cache_result().get()) {
@@ -165,19 +163,30 @@ public class PluginGetLyricsService extends AbstractPluginService {
     }
 
 
+    private final Thread creatorThread = new Thread(new ProfileCreator());
+
     /**
      * Detect language.
-     * @param result result.
      * @return result item.
      */
-    private ResultItem detectResultItem(Result result) {
-        // sort
-        List<ResultItem> itemList = result.getInfoList();
-        if (itemList == null || itemList.size() == 0)
-            return null;
-
+    private ResultItem detectResultItem(String titleText, String artistText) {
         ResultItem resultItem = null;
+
         try {
+            // pre-creation profiles
+            if (!TextUtils.isEmpty(appPrefs.pref_search_first_language().get())) {
+                synchronized (creatorThread) {
+                    creatorThread.start(); // start profiles creating
+                }
+            }
+
+            // search
+            Result result = ViewLyricsSearcher.search(titleText, artistText, 0);
+
+            // sort
+            List<ResultItem> itemList = result.getInfoList();
+            if (itemList == null || itemList.size() == 0)
+                return null;
 
             Collections.sort(itemList, new Comparator<ResultItem>() {
                 @Override
@@ -212,6 +221,8 @@ public class PluginGetLyricsService extends AbstractPluginService {
                 for (ResultItem item : itemList) {
                     try {
                         String text = ViewLyricsSearcher.downloadLyricsText(item.getLyricURL());
+                        creatorThread.join(); // finish profiles creating
+
                         Detector detector = DetectorFactoryUtil.createDetectorAll();
                         detector.append(text);
                         List<Language> langList = detector.getProbabilities();
@@ -254,20 +265,33 @@ public class PluginGetLyricsService extends AbstractPluginService {
                 if (resultItem == null)
                     resultItem = selectedResult[2];
             }
+
+            // no lyrics
+            if (resultItem == null && appPrefs.pref_search_non_preferred_language().get()) {
+                resultItem = itemList.get(0);
+                resultItem.setLanguage(null);
+                resultItem.setLyrics(null);
+            }
+
         } catch (Exception e) {
             Logger.d(e);
         }
 
-        // no lyrics
-        if (resultItem == null && appPrefs.pref_search_non_preferred_language().get()) {
-            resultItem = itemList.get(0);
-            resultItem.setLanguage(null);
-            resultItem.setLyrics(null);
-        }
 
         return resultItem;
     }
 
+
+    public class ProfileCreator implements Runnable {
+        @Override
+        public void run() {
+            try {
+                DetectorFactoryUtil.createDetectorAll();
+            } catch (LangDetectException e) {
+                Logger.d(e);
+            }
+        }
+    }
 
     /**
      * Send lyrics info.
