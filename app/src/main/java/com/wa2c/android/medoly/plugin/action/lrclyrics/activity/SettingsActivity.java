@@ -137,7 +137,7 @@ public class SettingsActivity extends PreferenceActivity {
 
                 // initialize
                 findPreference(getString(R.string.pref_search_second_language)).setEnabled(!TextUtils.isEmpty(p1.getValue()));
-                findPreference(getString(R.string.pref_search_third_language)).setEnabled(!TextUtils.isEmpty(p1.getValue()) && !TextUtils.isEmpty(p2.getValue()));
+                findPreference(getString(R.string.pref_search_third_language)).setEnabled(p2.isEnabled() && !TextUtils.isEmpty(p2.getValue()));
             }
 
             // App info
