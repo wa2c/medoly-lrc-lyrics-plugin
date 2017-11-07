@@ -6,11 +6,11 @@ import java.util.HashMap;
 
 public class Profile_ko extends LangProfile {
 
-    private final HashMap<String, Integer> freq_s = new HashMap<>(23031);
-    private final int[] n_words_s = {4985886,5984351,3260836};
-    private final String name_s = "ko";
+    private static final HashMap<String, Integer> freq_s = new HashMap<>(23031);
+    private static final int[] n_words_s = {4985886,5984351,3260836};
+    private static final String name_s = "ko";
 
-    private void initialize1() {
+    private static void initialize1() {
         freq_s.put("정리이",69);
         freq_s.put("바뀌었",102);
         freq_s.put("²",131);
@@ -3913,7 +3913,7 @@ public class Profile_ko extends LangProfile {
         freq_s.put("바이트",101);
     }
 
-    private void initialize2() {
+    private static void initialize2() {
         freq_s.put("포함되",256);
         freq_s.put("자의 ",1228);
         freq_s.put("살고 ",126);
@@ -7816,7 +7816,7 @@ public class Profile_ko extends LangProfile {
         freq_s.put("리버",108);
     }
 
-    private void initialize3() {
+    private static void initialize3() {
         freq_s.put("률에",74);
         freq_s.put("리베",90);
         freq_s.put("세에 ",126);
@@ -11719,7 +11719,7 @@ public class Profile_ko extends LangProfile {
         freq_s.put(" 논의",77);
     }
 
-    private void initialize4() {
+    private static void initialize4() {
         freq_s.put("엘리자",71);
         freq_s.put(" 녹음",67);
         freq_s.put("등포",159);
@@ -15622,7 +15622,7 @@ public class Profile_ko extends LangProfile {
         freq_s.put("장을",941);
     }
 
-    private void initialize5() {
+    private static void initialize5() {
         freq_s.put("인체",87);
         freq_s.put("장은",773);
         freq_s.put("장으",586);
@@ -19525,7 +19525,7 @@ public class Profile_ko extends LangProfile {
         freq_s.put("학대",110);
     }
 
-    private void initialize6() {
+    private static void initialize6() {
         freq_s.put(" 타지",75);
         freq_s.put(" 탑재",107);
         freq_s.put("하던",522);
@@ -23059,14 +23059,16 @@ public class Profile_ko extends LangProfile {
         freq_s.put("향상시",75);
     }
 
-    public Profile_ko() {
+    static {
         initialize1();
         initialize2();
         initialize3();
         initialize4();
         initialize5();
         initialize6();
+    }
 
+    public Profile_ko() {
         this.freq = freq_s;
         this.n_words = n_words_s;
         this.name = name_s;

@@ -6,11 +6,11 @@ import java.util.HashMap;
 
 public class Profile_lv extends LangProfile {
 
-    private final HashMap<String, Integer> freq_s = new HashMap<>(7564);
-    private final int[] n_words_s = {2106271,2428959,2036825};
-    private final String name_s = "lv";
+    private static final HashMap<String, Integer> freq_s = new HashMap<>(7564);
+    private static final int[] n_words_s = {2106271,2428959,2036825};
+    private static final String name_s = "lv";
 
-    private void initialize1() {
+    private static void initialize1() {
         freq_s.put("ūci",182);
         freq_s.put("ūdu",26);
         freq_s.put("ūdr",44);
@@ -3914,7 +3914,7 @@ public class Profile_lv extends LangProfile {
         freq_s.put("ре",36);
     }
 
-    private void initialize2() {
+    private static void initialize2() {
         freq_s.put("htt",39);
         freq_s.put(" zā",53);
         freq_s.put("hst",50);
@@ -7579,10 +7579,12 @@ public class Profile_lv extends LangProfile {
         freq_s.put("uša",268);
     }
 
-    public Profile_lv() {
+    static {
         initialize1();
         initialize2();
+    }
 
+    public Profile_lv() {
         this.freq = freq_s;
         this.n_words = n_words_s;
         this.name = name_s;
