@@ -6,16 +6,11 @@ import java.util.HashMap;
 
 public class Profile_ro extends LangProfile {
 
-    private static final HashMap<String, Integer> freq_s = new HashMap<String, Integer>();
-    private static final int[] n_words_s = {8213281,9706468,7977386};
-    private static final String name_s = "ro";
+    private final HashMap<String, Integer> freq_s = new HashMap<>(6071);
+    private final int[] n_words_s = {8213281,9706468,7977386};
+    private final String name_s = "ro";
 
-    static {
-        initialize1();
-        initialize2();
-    }
-
-    private static final void initialize1() {
+    private void initialize1() {
         freq_s.put("D",14206);
         freq_s.put("E",15258);
         freq_s.put("F",12709);
@@ -3915,6 +3910,9 @@ public class Profile_ro extends LangProfile {
         freq_s.put("che",3039);
         freq_s.put("chl",127);
         freq_s.put("chi",6835);
+     }
+
+    private void initialize2() {
         freq_s.put("cho",240);
         freq_s.put("chn",170);
         freq_s.put("chs",144);
@@ -4016,9 +4014,6 @@ public class Profile_ro extends LangProfile {
         freq_s.put("dow",256);
         freq_s.put("dov",2135);
         freq_s.put("dou",2054);
-    }
-
-    private static final void initialize2() {
         freq_s.put("dos",139);
         freq_s.put("ds ",634);
         freq_s.put("diţ",1218);
@@ -6093,6 +6088,9 @@ public class Profile_ro extends LangProfile {
     }
 
     public Profile_ro() {
+        initialize1();
+        initialize2();
+
         this.freq = freq_s;
         this.n_words = n_words_s;
         this.name = name_s;

@@ -6,20 +6,11 @@ import java.util.HashMap;
 
 public class Profile_ko extends LangProfile {
 
-    private static final HashMap<String, Integer> freq_s = new HashMap<String, Integer>();
-    private static final int[] n_words_s = {4985886,5984351,3260836};
-    private static final String name_s = "ko";
+    private final HashMap<String, Integer> freq_s = new HashMap<>(23031);
+    private final int[] n_words_s = {4985886,5984351,3260836};
+    private final String name_s = "ko";
 
-    static {
-        initialize1();
-        initialize2();
-        initialize3();
-        initialize4();
-        initialize5();
-        initialize6();
-    }
-
-    private static void initialize1() {
+    private void initialize1() {
         freq_s.put("정리이",69);
         freq_s.put("바뀌었",102);
         freq_s.put("²",131);
@@ -3920,6 +3911,9 @@ public class Profile_ko extends LangProfile {
         freq_s.put("공립 ",63);
         freq_s.put("포함된",182);
         freq_s.put("바이트",101);
+    }
+
+    private void initialize2() {
         freq_s.put("포함되",256);
         freq_s.put("자의 ",1228);
         freq_s.put("살고 ",126);
@@ -4020,9 +4014,6 @@ public class Profile_ko extends LangProfile {
         freq_s.put("고등학",392);
         freq_s.put("자원 ",102);
         freq_s.put("인지 ",119);
-    }
-
-    private static final void initialize2() {
         freq_s.put("과로 ",135);
         freq_s.put("의인민",505);
         freq_s.put("작용 ",98);
@@ -7823,6 +7814,9 @@ public class Profile_ko extends LangProfile {
         freq_s.put("ああ",1092);
         freq_s.put("마루",87);
         freq_s.put("리버",108);
+    }
+
+    private void initialize3() {
         freq_s.put("률에",74);
         freq_s.put("리베",90);
         freq_s.put("세에 ",126);
@@ -8024,9 +8018,6 @@ public class Profile_ko extends LangProfile {
         freq_s.put("류로",226);
         freq_s.put(" 따서",167);
         freq_s.put("르디",177);
-    }
-
-    private static final void initialize3() {
         freq_s.put(" 들어",754);
         freq_s.put("론토",100);
         freq_s.put("로트",65);
@@ -11726,6 +11717,9 @@ public class Profile_ko extends LangProfile {
         freq_s.put(" 논쟁",99);
         freq_s.put("》를 ",132);
         freq_s.put(" 논의",77);
+    }
+
+    private void initialize4() {
         freq_s.put("엘리자",71);
         freq_s.put(" 녹음",67);
         freq_s.put("등포",159);
@@ -12028,9 +12022,6 @@ public class Profile_ko extends LangProfile {
         freq_s.put("시리즈",1281);
         freq_s.put("판 ",692);
         freq_s.put("천주",138);
-    }
-
-    private static final void initialize4() {
         freq_s.put(" 주석",95);
         freq_s.put("다를 ",70);
         freq_s.put("청원",71);
@@ -15629,6 +15620,9 @@ public class Profile_ko extends LangProfile {
         freq_s.put("中並",57);
         freq_s.put("中之",85);
         freq_s.put("장을",941);
+    }
+
+    private void initialize5() {
         freq_s.put("인체",87);
         freq_s.put("장은",773);
         freq_s.put("장으",586);
@@ -16032,9 +16026,6 @@ public class Profile_ko extends LangProfile {
         freq_s.put("음이",197);
         freq_s.put("인수",210);
         freq_s.put("원형",177);
-    }
-
-    private static final void initialize5() {
         freq_s.put("인쇄",185);
         freq_s.put("음으",564);
         freq_s.put("음은",101);
@@ -19532,6 +19523,9 @@ public class Profile_ko extends LangProfile {
         freq_s.put("행과",61);
         freq_s.put(" 터미",91);
         freq_s.put("학대",110);
+    }
+
+    private void initialize6() {
         freq_s.put(" 타지",75);
         freq_s.put(" 탑재",107);
         freq_s.put("하던",522);
@@ -20036,9 +20030,6 @@ public class Profile_ko extends LangProfile {
         freq_s.put(" 포로",65);
         freq_s.put("술이다",157);
         freq_s.put("흑인",107);
-    }
-
-    private static final void initialize6() {
         freq_s.put("질적 ",91);
         freq_s.put(" 폭발",156);
         freq_s.put(" 표기",452);
@@ -23069,6 +23060,13 @@ public class Profile_ko extends LangProfile {
     }
 
     public Profile_ko() {
+        initialize1();
+        initialize2();
+        initialize3();
+        initialize4();
+        initialize5();
+        initialize6();
+
         this.freq = freq_s;
         this.n_words = n_words_s;
         this.name = name_s;

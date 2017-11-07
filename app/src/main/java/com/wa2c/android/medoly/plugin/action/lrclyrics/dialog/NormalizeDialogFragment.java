@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils;
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger;
 
 
 /**

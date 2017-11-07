@@ -57,8 +57,9 @@ import com.cybozu.labs.langdetect.util.LangProfile;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.TreeMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -73,7 +74,17 @@ public class DetectorFactoryUtil {
     /**
      * Language profiles map.
      */
-    private static final TreeMap<String, Class<? extends LangProfile>> languageProfileMap = new TreeMap<String, Class<? extends LangProfile>>() {{
+    private static final Map<String, Class<? extends LangProfile>> languageProfileMap = new LinkedHashMap<String, Class<? extends LangProfile>>() {{
+        // large size profiles (first reading)
+        put("ko", Profile_ko.class);
+        put("lv", Profile_lv.class);
+        put("et", Profile_et.class);
+        put("lt", Profile_lt.class);
+        put("vi", Profile_vi.class);
+        put("sl", Profile_sl.class);
+        put("ro", Profile_ro.class);
+
+        // normal size profiles
         put("af", Profile_af.class);
         put("ar", Profile_ar.class);
         put("bg", Profile_bg.class);
@@ -84,7 +95,7 @@ public class DetectorFactoryUtil {
         put("el", Profile_el.class);
         put("en", Profile_en.class);
         put("es", Profile_es.class);
-        put("et", Profile_et.class);
+        //put("et", Profile_et.class);
         put("fa", Profile_fa.class);
         put("fi", Profile_fi.class);
         put("fr", Profile_fr.class);
@@ -97,9 +108,9 @@ public class DetectorFactoryUtil {
         put("it", Profile_it.class);
         put("ja", Profile_ja.class);
         put("kn", Profile_kn.class);
-        put("ko", Profile_ko.class);
-        put("lt", Profile_lt.class);
-        put("lv", Profile_lv.class);
+        //put("ko", Profile_ko.class);
+        //put("lt", Profile_lt.class);
+        //put("lv", Profile_lv.class);
         put("mk", Profile_mk.class);
         put("ml", Profile_ml.class);
         put("mr", Profile_mr.class);
@@ -109,10 +120,10 @@ public class DetectorFactoryUtil {
         put("pa", Profile_pa.class);
         put("pl", Profile_pl.class);
         put("pt", Profile_pt.class);
-        put("ro", Profile_ro.class);
+        //put("ro", Profile_ro.class);
         put("ru", Profile_ru.class);
         put("sk", Profile_sk.class);
-        put("sl", Profile_sl.class);
+        //put("sl", Profile_sl.class);
         put("so", Profile_so.class);
         put("sq", Profile_sq.class);
         put("sv", Profile_sv.class);
@@ -124,7 +135,7 @@ public class DetectorFactoryUtil {
         put("tr", Profile_tr.class);
         put("uk", Profile_uk.class);
         put("ur", Profile_ur.class);
-        put("vi", Profile_vi.class);
+        //put("vi", Profile_vi.class);
         put("zh-cn", Profile_zh_cn.class);
         put("zh-tw", Profile_zh_tw.class);
     }};
@@ -158,7 +169,7 @@ public class DetectorFactoryUtil {
             int coreCount = Runtime.getRuntime().availableProcessors();
             Logger.d("Detector creating begin. Core: " + coreCount);
 
-            ExecutorService executorService = Executors.newFixedThreadPool(coreCount + 1);
+            ExecutorService executorService = Executors.newFixedThreadPool(coreCount);
             List<Future<LangProfile>> futures = new ArrayList<>(languageProfileMap.size());
             for (final Class<? extends LangProfile> c : languageProfileMap.values()) {
                 futures.add(executorService.submit(new ProfileCreator(c)));

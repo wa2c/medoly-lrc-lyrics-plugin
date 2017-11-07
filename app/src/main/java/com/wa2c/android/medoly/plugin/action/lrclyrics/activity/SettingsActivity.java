@@ -22,7 +22,6 @@ import android.view.MenuItem;
 import com.cybozu.labs.langdetect.DetectorFactoryUtil;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.AboutDialogFragment;
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.view.SeekBarPreference;
 
 import java.util.ArrayList;

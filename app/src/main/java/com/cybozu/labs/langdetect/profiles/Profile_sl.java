@@ -6,16 +6,11 @@ import java.util.HashMap;
 
 public class Profile_sl extends LangProfile {
 
-    private static final HashMap<String, Integer> freq_s = new HashMap<String, Integer>();
-    private static final int[] n_words_s = {5788075,6773679,5606921};
-    private static final String name_s = "sl";
+    private final HashMap<String, Integer> freq_s = new HashMap<>(6415);
+    private final int[] n_words_s = {5788075,6773679,5606921};
+    private final String name_s = "sl";
 
-    static {
-        initialize1();
-        initialize2();
-    }
-
-    private static final void initialize1() {
+    private void initialize1() {
         freq_s.put("D",7697);
         freq_s.put("E",4326);
         freq_s.put("F",7483);
@@ -3915,6 +3910,9 @@ public class Profile_sl extends LangProfile {
         freq_s.put("ači",1402);
         freq_s.put("fsk",383);
         freq_s.put("fro",120);
+    }
+
+    private void initialize2() {
         freq_s.put("ačn",463);
         freq_s.put("ačr",174);
         freq_s.put("aču",1108);
@@ -4016,9 +4014,6 @@ public class Profile_sl extends LangProfile {
         freq_s.put("cij",6609);
         freq_s.put("cik",850);
         freq_s.put("cil",290);
-    }
-
-    private static final void initialize2() {
         freq_s.put("cim",128);
         freq_s.put("cif",150);
         freq_s.put("cih",145);
@@ -6437,6 +6432,9 @@ public class Profile_sl extends LangProfile {
     }
 
     public Profile_sl() {
+        initialize1();
+        initialize2();
+
         this.freq = freq_s;
         this.n_words = n_words_s;
         this.name = name_s;
