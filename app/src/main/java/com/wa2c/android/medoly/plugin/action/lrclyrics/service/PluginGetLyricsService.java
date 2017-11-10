@@ -223,7 +223,7 @@ public class PluginGetLyricsService extends AbstractPluginService {
                         String text = ViewLyricsSearcher.downloadLyricsText(item.getLyricURL());
                         creatorThread.join(); // finish profiles creating
 
-                        Detector detector = DetectorFactoryUtil.createDetectorAll();
+                        Detector detector = DetectorFactoryUtil.createDetectorAll(this);
                         detector.append(text);
                         List<Language> langList = detector.getProbabilities();
                         for (Language l : langList) {
@@ -286,7 +286,7 @@ public class PluginGetLyricsService extends AbstractPluginService {
         @Override
         public void run() {
             try {
-                DetectorFactoryUtil.createDetectorAll();
+                DetectorFactoryUtil.createDetectorAll(getApplicationContext());
             } catch (LangDetectException e) {
                 Logger.d(e);
             }
