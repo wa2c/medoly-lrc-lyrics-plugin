@@ -96,6 +96,8 @@ public class SearchActivity extends Activity {
 
 
 
+
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -195,7 +197,7 @@ public class SearchActivity extends Activity {
 
     @Background
     void saveBackground(String title, String artist, ResultItem item) {
-        if (searchCacheHelper.insertOrUpdate(title, artist, item))
+            if (searchCacheHelper.insertOrUpdate(title, artist, item))
             AppUtils.showToast(this, R.string.message_save_cache);
     }
 

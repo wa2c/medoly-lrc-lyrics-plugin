@@ -138,20 +138,19 @@ public abstract class AbstractDialogFragment extends DialogFragment {
 
     /**
      * Execute button click event.
-     * @param dialog Dialog.
      * @param which Clicked button.
      */
-    protected void onClickButton(DialogInterface dialog, int which) {
-        onClickButton(dialog, which, true);
+    protected void onClickButton(int which) {
+        onClickButton(which, true);
     }
 
     /**
      * Execute button click event.
-     * @param dialog Dialog.
      * @param which Clicked button.
      * @param close true if closing dialog.
      */
-    protected void onClickButton(DialogInterface dialog, int which, boolean close) {
+    protected void onClickButton(int which, boolean close) {
+        Dialog dialog = this.getDialog();
         if (dialog != null && clickListener != null) {
             clickListener.onClick(dialog, which);
             if (close) dialog.dismiss();

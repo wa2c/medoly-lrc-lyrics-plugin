@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -13,7 +14,8 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem;
 
-import java.util.Arrays;
+import java.lang.ref.WeakReference;
+import java.util.Collections;
 
 
 /**
@@ -65,36 +67,15 @@ public class CacheDialogFragment extends AbstractDialogFragment {
         content.findViewById(R.id.dialogCacheDeleteLyricsButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                (new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        SearchCacheHelper searchCacheHelper = new SearchCacheHelper(getActivity());
-                        searchCacheHelper.insertOrUpdate(cache.title, cache.artist, null);
-                        return null;
-                    }
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        onClickButton(getDialog(), DIALOG_RESULT_DELETE_LYRICS);
-                    }
-                }).execute();
-             }
+                new LyricsDeleteAsyncTask(CacheDialogFragment.this, cache).execute();
+            }
         });
+
         // delete cache button
         content.findViewById(R.id.dialogCacheDeleteCacheButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                (new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        SearchCacheHelper searchCacheHelper = new SearchCacheHelper(getActivity());
-                        searchCacheHelper.delete(Arrays.asList(cache));
-                        return null;
-                    }
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        onClickButton(getDialog(), DIALOG_RESULT_DELETE_CACHE);
-                    }
-                }).execute();
+                new CacheDeleteAsyncTask(CacheDialogFragment.this, cache).execute();
             }
         });
 
@@ -110,4 +91,53 @@ public class CacheDialogFragment extends AbstractDialogFragment {
         return  builder.create();
     }
 
+    /**
+     * Delete lyrics task
+     */
+    private static class LyricsDeleteAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private WeakReference<AbstractDialogFragment> dialogReference;
+        private SearchCache cache;
+
+        LyricsDeleteAsyncTask(@NonNull AbstractDialogFragment dialog, SearchCache cache) {
+            this.dialogReference = new WeakReference<>(dialog);
+            this.cache = cache;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            SearchCacheHelper searchCacheHelper = new SearchCacheHelper(dialogReference.get().getActivity());
+            searchCacheHelper.insertOrUpdate(cache.title, cache.artist, null);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            dialogReference.get().onClickButton(DIALOG_RESULT_DELETE_LYRICS);
+        }
+    }
+
+    /**
+     * Delete lyrics task
+     */
+    private static class CacheDeleteAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private WeakReference<AbstractDialogFragment> dialogReference;
+        private SearchCache cache;
+
+        CacheDeleteAsyncTask(@NonNull AbstractDialogFragment dialog, SearchCache cache) {
+            this.dialogReference = new WeakReference<>(dialog);
+            this.cache = cache;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            SearchCacheHelper searchCacheHelper = new SearchCacheHelper(dialogReference.get().getActivity());
+            searchCacheHelper.delete(Collections.singletonList(cache));
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            dialogReference.get().onClickButton(DIALOG_RESULT_DELETE_CACHE);
+        }
+    }
 }

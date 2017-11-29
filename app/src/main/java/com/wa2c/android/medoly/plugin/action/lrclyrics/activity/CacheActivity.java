@@ -230,9 +230,6 @@ public class CacheActivity extends Activity {
                     writer.write(currentCacheItem.makeResultItem().getLyrics());
                     writer.flush();
                     AppUtils.showToast(this, R.string.message_lyrics_save_succeeded);
-
-
-
                     SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
                     p.edit().putString("pref_prev_file_uri", uri.toString()).apply();
                 } catch (IOException e) {

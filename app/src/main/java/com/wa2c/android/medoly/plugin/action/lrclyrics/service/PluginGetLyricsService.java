@@ -70,22 +70,12 @@ public class PluginGetLyricsService extends AbstractPluginService {
         super.process(intent);
         if (intent == null)
             return;
-        if (!pluginIntent.hasCategory(PluginTypeCategory.TYPE_GET_LYRICS)) {
-            sendResult(null);
-            return;
-        }
 
         try {
-            String operation = appPrefs.pref_event_get_lyrics().get();
-            if (    pluginIntent.hasCategory(PluginOperationCategory.OPERATION_EXECUTE) ||
-                    (pluginIntent.hasCategory(PluginOperationCategory.OPERATION_MEDIA_OPEN) && PluginOperationCategory.OPERATION_MEDIA_OPEN.name().equals(operation)) ||
-                    (pluginIntent.hasCategory(PluginOperationCategory.OPERATION_PLAY_START) && PluginOperationCategory.OPERATION_PLAY_START.name().equals(operation))) {
-                getLyrics(pluginIntent);
-            } else {
-                sendResult(null);
-            }
+            getLyrics(pluginIntent);
        } catch (Exception e) {
             Logger.e(e);
+            sendResult(null);
             AppUtils.showToast(this, R.string.error_app);
         }
     }
@@ -195,16 +185,16 @@ public class PluginGetLyricsService extends AbstractPluginService {
                     double o1Rating = o1.getLyricRate();
                     double o2Rating = o2.getLyricRate();
                     if (o1Rating != o2Rating)
-                        return Double.compare(o1Rating, o2Rating);
+                        return -Double.compare(o1Rating, o2Rating);
                     // order by rating count
                     int o1RatingCount = o1.getLyricRatesCount();
                     int o2RatingCount = o2.getLyricRatesCount();
                     if (o1RatingCount != o2RatingCount)
-                        return Integer.compare(o1RatingCount, o2RatingCount);
+                        return -Integer.compare(o1RatingCount, o2RatingCount);
                     // order by download count
                     int o1Download = o1.getLyricDownloadsCount();
                     int o2Download = o2.getLyricDownloadsCount();
-                    return Integer.compare(o1Download, o2Download);
+                    return -Integer.compare(o1Download, o2Download);
                 }
             });
 

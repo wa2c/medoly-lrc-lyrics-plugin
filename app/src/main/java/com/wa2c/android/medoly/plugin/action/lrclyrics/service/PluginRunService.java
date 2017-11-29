@@ -30,12 +30,6 @@ public class PluginRunService extends AbstractPluginService {
     @ServiceAction
     protected void process(Intent intent) {
         super.process(intent);
-        if (intent == null)
-
-            return;
-        if (!pluginIntent.hasCategory(PluginTypeCategory.TYPE_RUN)) {
-            return;
-        }
 
         try {
             openSearchScreen();

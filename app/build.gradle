@@ -57,8 +57,8 @@ dependencies {
     annotationProcessor 'org.androidannotations:androidannotations:4.4.0'
     compile 'org.androidannotations:androidannotations-api:4.4.0'
     // Orma
-    annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.1.1'
-    compile 'com.github.gfx.android.orma:orma:4.1.1'
+    annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.5'
+    compile 'com.github.gfx.android.orma:orma:4.2.5'
     // Gson
     compile 'com.google.code.gson:gson:2.8.1'
     // https://mvnrepository.com/artifact/com.norconex.language/langdetect
