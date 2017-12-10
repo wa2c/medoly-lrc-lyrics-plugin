@@ -13,8 +13,6 @@ import com.cybozu.labs.langdetect.Language;
 import com.wa2c.android.medoly.library.LyricsProperty;
 import com.wa2c.android.medoly.library.MediaPluginIntent;
 import com.wa2c.android.medoly.library.MediaProperty;
-import com.wa2c.android.medoly.library.PluginOperationCategory;
-import com.wa2c.android.medoly.library.PluginTypeCategory;
 import com.wa2c.android.medoly.library.PropertyData;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.BuildConfig;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;

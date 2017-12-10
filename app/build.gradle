@@ -10,10 +10,6 @@ android {
         targetSdkVersion 26
         versionCode 6
         versionName "1.5.3"
-        multiDexEnabled true
-    }
-    dexOptions {
-        javaMaxHeapSize "4g"
     }
 
     buildTypes {

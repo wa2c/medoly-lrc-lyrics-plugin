@@ -3,7 +3,6 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.service;
 import android.content.Intent;
 
 import com.wa2c.android.medoly.library.MediaProperty;
-import com.wa2c.android.medoly.library.PluginTypeCategory;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.activity.SearchActivity;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.activity.SearchActivity_;

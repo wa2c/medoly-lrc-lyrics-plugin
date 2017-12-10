@@ -15,9 +15,8 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger;
 
 
 /**
- *  Download intent service.
+ *  Plugin service base.
  */
-
 public abstract class AbstractPluginService extends IntentService {
 
     /** Received receiver class name. */
