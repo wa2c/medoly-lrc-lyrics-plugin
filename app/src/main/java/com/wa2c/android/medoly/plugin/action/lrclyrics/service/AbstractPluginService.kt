@@ -76,32 +76,6 @@ abstract class AbstractPluginService(name: String) : IntentService(name) {
             }
         }
     }
-//    override fun onHandleIntent(intent: Intent?) {
-//        Logger.d("onHandleIntent: " + this.javaClass.simpleName)
-//
-//        // create notification
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val name = getString(R.string.app_name)// The user-visible name of the channel.
-//            val channel = NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_MIN)
-//            channel.enableLights(false)
-//            channel.enableVibration(false)
-//            channel.setBypassDnd(false)
-//            channel.setShowBadge(false)
-//            channel.setSound(null, null)
-//            channel.lockscreenVisibility = Notification.VISIBILITY_SECRET
-//
-//            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//            notificationManager.createNotificationChannel(channel)
-//
-//            val notification = Notification.Builder(this, CHANNEL_ID)
-//                    .setSmallIcon(R.drawable.ic_launcher)
-//                    .setCategory(Notification.CATEGORY_PROGRESS)
-//                    .setChannelId(CHANNEL_ID)
-//                    .build()
-//            notificationManager.notify(SERVICE_ID, notification)
-//            startForeground(SERVICE_ID, notification)
-//        }
-//    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -109,14 +83,6 @@ abstract class AbstractPluginService(name: String) : IntentService(name) {
         stopForeground(true)
         sendResult(null)
     }
-
-
-//    protected open fun process(intent: Intent) {
-//        pluginIntent = MediaPluginIntent(intent)
-//        propertyData = pluginIntent.propertyData
-//        receivedClassName = pluginIntent.getStringExtra(RECEIVED_CLASS_NAME)
-//        resultSent = false
-//    }
 
     /**
      * Send result

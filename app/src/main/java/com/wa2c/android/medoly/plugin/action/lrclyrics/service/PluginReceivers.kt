@@ -51,10 +51,6 @@ class PluginReceivers {
                     return
                 }
 
-//                PluginGetLyricsService_.intent(context).stop()
-//                pluginIntent.setClass(context, PluginGetLyricsService_::class.java!!)
-//                builder = PluginGetLyricsService_.intent(context).process(pluginIntent)
-
                 // service
                 pluginIntent.setClass(context, PluginGetLyricsService::class.java)
             } else if (this is ExecuteSearchLyricsReceiver) {
@@ -65,27 +61,7 @@ class PluginReceivers {
 
                 // service
                 pluginIntent.setClass(context, PluginRunService::class.java)
-
-//                pluginIntent.putExtra(AbstractPluginService.RECEIVED_CLASS_NAME, this.javaClass.name)
-//                context.stopService(pluginIntent)
-//                builder = PluginRunService_.intent(context).process(pluginIntent)
-
-
-//                if (serviceIntent.hasCategory(PluginTypeCategory.TYPE_RUN)) {
-//                    serviceIntent.setClass(context, PluginRunService_::class.java!!)
-//                    PluginRunService_.intent(context).stop()
-//                    //PluginRunService_.intent(context).process(serviceIntent).start();
-//                    builder = PluginRunService_.intent(context).process(serviceIntent)
-//                }
             }
-
-//            if (builder != null) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                    context.startForegroundService(builder.get())
-//                } else {
-//                    context.startService(builder.get())
-//                }
-//            }
 
             pluginIntent.putExtra(AbstractPluginService.RECEIVED_CLASS_NAME, this.javaClass.name)
             context.stopService(pluginIntent)

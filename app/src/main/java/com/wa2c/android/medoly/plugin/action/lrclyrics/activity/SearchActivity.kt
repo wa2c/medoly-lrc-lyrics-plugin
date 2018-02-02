@@ -36,48 +36,12 @@ import java.io.OutputStreamWriter
 /**
  * Search Activity.
  */
-//@EActivity(R.layout.activity_search)
-//@OptionsMenu(R.menu.activity_search)
 open class SearchActivity : Activity() {
 
     /** Search list adapter.  */
     private lateinit var searchResultAdapter: SearchResultAdapter
     /** Search cache helper.  */
     private lateinit var searchCacheHelper: SearchCacheHelper
-
-//    @Extra(INTENT_SEARCH_TITLE)
-//    internal var intentSearchTitle: String? = null
-//    @Extra(INTENT_SEARCH_ARTIST)
-//    internal var intentSearchArtist: String? = null
-
-//    @ViewById
-//    internal var searchTitleButton: Button? = null
-//    @ViewById
-//    internal var searchTitleEditText: EditText? = null
-//    @ViewById
-//    internal var searchArtistButton: Button? = null
-//    @ViewById
-//    internal var searchArtistEditText: EditText? = null
-//    @ViewById
-//    internal var searchClearButton: ImageButton? = null
-//    @ViewById
-//    internal var searchStartButton: ImageButton? = null
-//    @ViewById
-//    internal var searchResultListView: ListView? = null
-//    @ViewById
-//    internal var searchLyricsScrollView: ScrollView? = null
-//    @ViewById
-//    internal var searchLyricsTextView: TextView? = null
-//
-//    @ViewById
-//    internal var searchResultLoadingLayout: View? = null
-//    @ViewById
-//    internal var searchLyricsLoadingLayout: View? = null
-
-//    @DimensionPixelSizeRes
-//    internal var search_result_height: Int = 0
-
-    //private var searchResultHeight: Int
 
     /** Preferences.  */
     private lateinit var prefs: Prefs
@@ -154,7 +118,7 @@ open class SearchActivity : Activity() {
 
             val title = searchTitleEditText.text.toString()
             val artist = searchArtistEditText.text.toString()
-            if (TextUtils.isEmpty(title) && TextUtils.isEmpty(artist)) {
+            if (title.isEmpty() && artist.isEmpty()) {
                 AppUtils.showToast(this, R.string.error_input_condition)
                 return@setOnClickListener
             }
@@ -185,7 +149,6 @@ open class SearchActivity : Activity() {
 
             searchLyricsScrollView.visibility = View.INVISIBLE
             searchLyricsLoadingLayout.visibility = View.VISIBLE
-            //downloadLyrics(searchResultAdapter.getItem(position))
 
             launch(UI) {
                 val item = searchResultAdapter.getItem(position)
@@ -194,25 +157,7 @@ open class SearchActivity : Activity() {
                 }.await()
                 showLyrics(item)
             }
-
-
-
-//            internal open fun downloadLyrics(item: ResultItem?) {
-//                try {
-//                    if (item != null) {
-//                        val lyrics = ViewLyricsSearcher.downloadLyricsText(item.lyricURL)
-//                        item.lyrics = lyrics
-//                    }
-//                } catch (e: Exception) {
-//                    Logger.e(e)
-//                } finally {
-//                    showLyrics(item)
-//                }
-//            }
-//
-
         }
-
     }
 
 
@@ -220,10 +165,6 @@ open class SearchActivity : Activity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-
-//        searchResultListView.adapter = searchResultAdapter
-//        searchTitleEditText.setText(intent.getStringExtra(INTENT_SEARCH_TITLE))
-//        searchArtistEditText.setText(intent.getStringExtra(INTENT_SEARCH_ARTIST))
     }
 
     /**
@@ -279,7 +220,6 @@ open class SearchActivity : Activity() {
                             if (result.await())
                                 AppUtils.showToast(this@SearchActivity, R.string.message_save_cache)
                         }
-                        //saveBackground(title, artist, searchResultAdapter.selectedItem)
                     }
                 }
                 dialog.show(this)
@@ -296,247 +236,9 @@ open class SearchActivity : Activity() {
         return super.onOptionsItemSelected(item)
     }
 
-
-
-
-//    @AfterViews
-//    internal fun afterViews() {
-//
-//        actionBar.setDisplayShowHomeEnabled(true)
-//        actionBar.setDisplayHomeAsUpEnabled(true)
-//        actionBar.setDisplayShowTitleEnabled(true)
-//
-//        searchCacheHelper = SearchCacheHelper(this)
-//        searchResultAdapter = SearchResultAdapter(this)
-//        searchResultListView!!.adapter = searchResultAdapter
-//
-//        searchTitleEditText!!.setText(intentSearchTitle)
-//        searchArtistEditText!!.setText(intentSearchArtist)
-//
-//        // adjust size
-//        searchLyricsScrollView!!.post(Runnable {
-//            // adjust height
-//            val heightResult = searchResultListView!!.measuredHeight
-//            val heightLyrics = searchLyricsScrollView!!.measuredHeight
-//            val heightSum = heightResult + heightLyrics
-//            if (heightResult == 0)
-//                return@Runnable
-//            if (heightSum < search_result_height * 2) {
-//                val params = searchResultListView!!.layoutParams
-//                params.height = heightSum / 2
-//                searchResultListView!!.layoutParams = params
-//            }
-//        })
-//    }
-
-//    @OptionsItem(android.R.id.home)
-//    internal fun menuHomeClick() {
-//        startActivity(Intent(this, MainActivity_::class.java))
-//    }
-//
-//    @OptionsItem(R.id.menu_search_save_file)
-//    internal fun menuSaveFileClick() {
-//        if (!existsLyrics()) {
-//            AppUtils.showToast(this, R.string.error_exists_lyrics)
-//            return
-//        }
-//
-//        val title = searchTitleEditText!!.text.toString()
-//        val artist = searchArtistEditText!!.text.toString()
-//        AppUtils.saveFile(this, title, artist)
-//    }
-//
-//    @OptionsItem(R.id.menu_search_save_cache)
-//    internal fun menuSaveCacheClick() {
-//        if (!existsLyrics()) {
-//            AppUtils.showToast(this, R.string.error_exists_lyrics)
-//            return
-//        }
-//
-//        val dialog = ConfirmDialogFragment.newInstance(
-//                getString(R.string.message_dialog_confirm_save_cache),
-//                getString(R.string.label_confirmation),
-//                getString(R.string.label_dialog_confirm_save_cache),
-//                null!!,
-//                getString(android.R.string.cancel)
-//        )
-//        dialog.clickListener = DialogInterface.OnClickListener { dialog, which ->
-//            if (which == DialogInterface.BUTTON_POSITIVE) {
-//                val title = searchTitleEditText!!.text.toString()
-//                val artist = searchArtistEditText!!.text.toString()
-//                saveBackground(title, artist, searchResultAdapter!!.selectedItem)
-//            }
-//        }
-//        dialog.show(this)
-//    }
-//
-//    @OptionsItem(R.id.menu_search_open_cache)
-//    internal fun menuOpenCacheClick() {
-//        val intent = Intent(this, CacheActivity_::class.java)
-//        intent.putExtra(CacheActivity.INTENT_SEARCH_TITLE, searchTitleEditText!!.text.toString())
-//        intent.putExtra(CacheActivity.getINTENT_SEARCH_ARTIST(), searchArtistEditText!!.text.toString())
-//        startActivity(intent)
-//    }
-
-//    @Background
-    private fun saveBackground(title: String, artist: String, item: ResultItem?) {
-        if (searchCacheHelper.insertOrUpdate(title, artist, item))
-            AppUtils.showToast(this, R.string.message_save_cache)
-    }
-//
-//    @Click(R.id.searchTitleButton)
-//    internal fun searchTitleButtonClick() {
-//        val dialogFragment = NormalizeDialogFragment.newInstance(searchTitleEditText!!.text.toString(), intentSearchTitle!!)
-//        dialogFragment.clickListener = DialogInterface.OnClickListener { dialog, which ->
-//            if (which == DialogInterface.BUTTON_POSITIVE) {
-//                searchTitleEditText!!.setText(dialogFragment.inputText)
-//            }
-//        }
-//        dialogFragment.show(this)
-//    }
-//
-//    @Click(R.id.searchArtistButton)
-//    internal fun searchArtistButtonClick() {
-//        val dialogFragment = NormalizeDialogFragment.newInstance(searchArtistEditText!!.text.toString(), intentSearchArtist!!)
-//        dialogFragment.clickListener = DialogInterface.OnClickListener { dialog, which ->
-//            if (which == DialogInterface.BUTTON_POSITIVE) {
-//                searchArtistEditText!!.setText(dialogFragment.inputText)
-//            }
-//        }
-//        dialogFragment.show(this)
-//    }
-//
-//    @Click(R.id.searchClearButton)
-//    internal fun searchClearButtonClick() {
-//        searchTitleEditText!!.setText(null)
-//        searchArtistEditText!!.setText(null)
-//    }
-//
-//    @Click(R.id.searchStartButton)
-//    internal fun searchStartButtonClick(view: View) {
-//        // Hide keyboard
-//        val inputMethodMgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//        inputMethodMgr.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-//
-//        val title = searchTitleEditText!!.text.toString()
-//        val artist = searchArtistEditText!!.text.toString()
-//        if (TextUtils.isEmpty(title) && TextUtils.isEmpty(artist)) {
-//            AppUtils.showToast(this, R.string.error_input_condition)
-//            return
-//        }
-//
-//        // Clear view
-//        showSearchResult(null)
-//        showLyrics(null)
-//        searchResultAdapter!!.selectedItem = null
-//
-//        searchResultListView!!.visibility = View.INVISIBLE
-//        searchResultLoadingLayout!!.visibility = View.VISIBLE
-//        searchLyrics(title, artist)
-//    }
-
-    // Search
-
-//    @Background
-    private fun searchLyrics(title: String, artist: String) {
-        var result: Result? = null
-        try {
-            launch {
-                result = ViewLyricsSearcher.search(title, artist, 0)
-            }
-        } catch (e: Exception) {
-            Logger.e(e)
-        } finally {
-            showSearchResult(result)
-        }
-    }
-
-    suspend fun searchLyricsAwait(title: String, artist: String) {
-        val result = async {
-            return@async ViewLyricsSearcher.search(title, artist, 0)
-        }
-        showSearchResult(result.await())
-    }
-
-
-//    fun search(title: String, artist: String) = launch(UI) {
-//        //updateU
-//    }
-
-// てすと
-//    fun delete() = launch(UI) {
-//        val aa = deleteCacheAsync().await();
-//        if (aa) {
-//            cacheList.removeAll(caches)
-//            AppUtils.showToast(parent, R.string.message_delete_cache)
-//            showCacheList()
-//        }
-//    }
-//
-//    private fun deleteCacheAsync() = async {
-//        return@async searchCacheHelper.delete(cacheAdapter.checkedSet)
-//    }
-
-
-
-
-//    @UiThread
-    private fun showSearchResult(result: Result?) {
-        try {
-            searchResultAdapter.clear()
-            if (result != null)
-                searchResultAdapter.addAll(result.infoList)
-            searchResultAdapter.notifyDataSetChanged()
-        } finally {
-            searchResultListView.visibility = View.VISIBLE
-            searchResultLoadingLayout.visibility = View.INVISIBLE
-        }
-    }
-
-    // Download
-
-//    @ItemClick(R.id.searchResultListView)
-//    internal fun searchResultListViewItemClick(item: ResultItem) {
-//        // Hide keyboard
-//        val inputMethodMgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//        inputMethodMgr.hideSoftInputFromWindow(searchResultListView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-//
-//        // Clear view
-//        showLyrics(null)
-//
-//        searchLyricsScrollView.visibility = View.INVISIBLE
-//        searchLyricsLoadingLayout.visibility = View.VISIBLE
-//        downloadLyrics(item)
-//    }
-
-//    @Background
-    internal open fun downloadLyrics(item: ResultItem?) {
-        try {
-            if (item != null) {
-                val lyrics = ViewLyricsSearcher.downloadLyricsText(item.lyricURL)
-                item.lyrics = lyrics
-            }
-        } catch (e: Exception) {
-            Logger.e(e)
-        } finally {
-            showLyrics(item)
-        }
-    }
-
-//    @UiThread
-    private fun showLyrics(item: ResultItem?) {
-        if (item == null) {
-            searchLyricsTextView.text = null
-        } else {
-            searchLyricsTextView.text = item.lyrics
-        }
-        searchResultAdapter.selectedItem = item
-        searchResultAdapter.notifyDataSetChanged()
-        searchLyricsScrollView.visibility = View.VISIBLE
-        searchLyricsLoadingLayout.visibility = View.INVISIBLE
-    }
-
-
+    /**
+     * On activity result
+     */
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent) {
         if (requestCode == AppUtils.REQUEST_CODE_SAVE_FILE) {
             // 歌詞のファイル保存
@@ -570,13 +272,36 @@ open class SearchActivity : Activity() {
         }
     }
 
+    private fun showSearchResult(result: Result?) {
+        try {
+            searchResultAdapter.clear()
+            if (result != null)
+                searchResultAdapter.addAll(result.infoList)
+            searchResultAdapter.notifyDataSetChanged()
+        } finally {
+            searchResultListView.visibility = View.VISIBLE
+            searchResultLoadingLayout.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun showLyrics(item: ResultItem?) {
+        if (item == null) {
+            searchLyricsTextView.text = null
+        } else {
+            searchLyricsTextView.text = item.lyrics
+        }
+        searchResultAdapter.selectedItem = item
+        searchResultAdapter.notifyDataSetChanged()
+        searchLyricsScrollView.visibility = View.VISIBLE
+        searchLyricsLoadingLayout.visibility = View.INVISIBLE
+    }
+
     /**
      * Check existence of lyrics
      * @return true if exists lyrics.
      */
-    @Synchronized
     private fun existsLyrics(): Boolean {
-        return searchResultAdapter.selectedItem != null && !TextUtils.isEmpty(searchResultAdapter.selectedItem?.lyricURL)
+        return !searchResultAdapter.selectedItem?.lyricURL.isNullOrEmpty()
     }
 
     /**

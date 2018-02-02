@@ -101,8 +101,8 @@ class SettingsFragment : PreferenceFragment() {
             // NOTE: set default value on xml file.
 
             // initialize
-            findPreference(getString(R.string.pref_search_second_language)).isEnabled = !TextUtils.isEmpty(p1.value)
-            findPreference(getString(R.string.pref_search_third_language)).isEnabled = p2.isEnabled && !TextUtils.isEmpty(p2.value)
+            findPreference(getString(R.string.pref_search_second_language)).isEnabled = !p1.value.isNullOrEmpty()
+            findPreference(getString(R.string.pref_search_third_language)).isEnabled = p2.isEnabled && !p2.value.isNullOrEmpty()
         }
 
         // App info
@@ -241,10 +241,10 @@ class SettingsFragment : PreferenceFragment() {
             // second language
             val p2 = findPreference(getString(R.string.pref_search_second_language))
             val lang2 = p.sharedPreferences.getString(p2.key, "")
-            p2.isEnabled = !TextUtils.isEmpty(lang1)
+            p2.isEnabled = !lang1.isNullOrEmpty()
             // third language
             val p3 = findPreference(getString(R.string.pref_search_third_language))
-            p3.isEnabled = !TextUtils.isEmpty(lang2)
+            p3.isEnabled = !lang2.isNullOrEmpty()
         }
     }
 

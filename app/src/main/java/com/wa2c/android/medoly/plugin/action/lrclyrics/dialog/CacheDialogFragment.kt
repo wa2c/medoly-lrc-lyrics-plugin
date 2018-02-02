@@ -46,7 +46,7 @@ class CacheDialogFragment : AbstractDialogFragment() {
         builder.setView(contentView)
         builder.setNeutralButton(R.string.label_close, null)
         builder.setNegativeButton(R.string.label_dialog_cache_research, clickListener)
-        if (result != null && !TextUtils.isEmpty(result.lyrics)) {
+        if (result != null && !result.lyrics.isNullOrEmpty()) {
             builder.setPositiveButton(R.string.menu_search_save_file, clickListener)
         }
         return builder.create()

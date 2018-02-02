@@ -72,10 +72,10 @@ public class SearchCacheHelper {
         OrmaDatabase od = provideOrmaDatabase(context);
         SearchCache_Selector selector = od.selectFromSearchCache();
         // title
-        if (!TextUtils.isEmpty(title))
+        if (title != null && !title.isEmpty())
             selector.where("title like ?", "%" + title + "%");
         // artist
-        if (!TextUtils.isEmpty(artist))
+        if (artist != null && !artist.isEmpty())
             selector.where("artist like ?", "%" + artist + "%");
 
         return selector.orderBytitleAndArtistAsc()

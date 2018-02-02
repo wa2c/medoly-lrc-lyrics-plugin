@@ -32,8 +32,9 @@ import java.io.IOException
 import java.io.OutputStreamWriter
 import java.util.*
 
-//@EActivity(R.layout.activity_cache)
-//@OptionsMenu(R.menu.activity_cache)
+/**
+ * Cache activity
+ */
 open class CacheActivity : Activity() {
 
     /** Search list adapter.  */
@@ -179,129 +180,9 @@ open class CacheActivity : Activity() {
         return super.onOptionsItemSelected(item)
     }
 
-
-//
-//    @OptionsItem(android.R.id.home)
-//    internal fun menuHomeClick() {
-//        startActivity(Intent(this, MainActivity_::class.java))
-//    }
-//
-//    @OptionsItem(R.id.menu_cache_delete)
-//    internal fun menuDeleteClick() {
-//        if (cacheAdapter!!.checkedSet.size == 0) {
-//            AppUtils.showToast(this, R.string.error_delete_cache_check)
-//            return
-//        }
-//
-//        val dialog = ConfirmDialogFragment.newInstance(
-//                getString(R.string.message_dialog_cache_delete),
-//                getString(R.string.label_confirmation),
-//                getString(R.string.label_dialog_cache_delete),
-//                null!!,
-//                getString(android.R.string.cancel)
-//        )
-//        dialog.clickListener = DialogInterface.OnClickListener { dialog, which ->
-//            if (which == DialogInterface.BUTTON_POSITIVE) {
-//                deleteCache(cacheAdapter!!.checkedSet)
-//            }
-//        }
-//        dialog.show(this)
-//    }
-//
-//    @OptionsItem(R.id.menu_cache_open_search)
-//    internal fun menuOpenCacheClick() {
-//        val intent = Intent(this, SearchActivity_::class.java)
-//        intent.putExtra(SearchActivity.INTENT_SEARCH_TITLE, cacheTitleEditText!!.text.toString())
-//        intent.putExtra(SearchActivity.INTENT_SEARCH_ARTIST, cacheArtistEditText!!.text.toString())
-//        startActivity(intent)
-//    }
-
-//    @Background
-    private fun deleteCache(caches: Collection<SearchCache>) {
-        if (searchCacheHelper.delete(cacheAdapter.checkedSet)) {
-            cacheList.removeAll(caches)
-            AppUtils.showToast(this, R.string.message_delete_cache)
-            showCacheList()
-        }
-    }
-
-
-
-
-
-
-//    @Click(R.id.cacheInputClearButton)
-//    internal fun cacheInputClearButtonClick() {
-//        cacheTitleEditText!!.setText(null)
-//        cacheArtistEditText!!.setText(null)
-//    }
-//
-//    @Click(R.id.cacheInputSearchButton)
-//    internal fun cacheInputSearchButtonClick(view: View) {
-//        // Hide keyboard
-//        val inputMethodMgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//        inputMethodMgr.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-//
-//        val title = cacheTitleEditText!!.text.toString()
-//        val artist = cacheArtistEditText!!.text.toString()
-//        searchCache(title, artist)
-//        cacheTitleEditText!!.tag = title
-//        cacheArtistEditText!!.tag = artist
-//    }
-
-    // Search
-
-
-
-
-//    @Background
-    private fun searchCache(title: String, artist: String) {
-        launch(UI) {
-            val result = async {
-                return@async searchCacheHelper.search(title, artist)
-            }
-            cacheList = result.await().toMutableList()
-            showCacheList()
-        }
-//        try {
-//            cacheList = searchCacheHelper.search(title, artist)
-//            showCacheList()
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
-    }
-
-//    @UiThread
-    private fun showCacheList() {
-        cacheAdapter.clear()
-        cacheAdapter.addAll(cacheList)
-        cacheAdapter.notifyDataSetChanged()
-    }
-
-//    @ItemClick(R.id.cacheListView)
-//    internal fun cacheListViewItemClick(item: SearchCache) {
-//        val dialog = CacheDialogFragment.newInstance(item)
-//        dialog.clickListener = DialogInterface.OnClickListener { _, which ->
-//            if (which == DialogInterface.BUTTON_POSITIVE) {
-//                // Save
-//                currentCacheItem = item
-//                AppUtils.saveFile(this@CacheActivity, item.title, item.artist)
-//            } else if (which == DialogInterface.BUTTON_NEGATIVE) {
-//                // Research
-//                currentCacheItem = item
-//                val intent = Intent(this@CacheActivity, SearchActivity_::class.java)
-//                intent.putExtra(SearchActivity.INTENT_SEARCH_TITLE, item.title)
-//                intent.putExtra(SearchActivity.INTENT_SEARCH_ARTIST, item.artist)
-//                startActivity(intent)
-//            } else if (which == CacheDialogFragment.DIALOG_RESULT_DELETE_LYRICS) {
-//                searchCache(cacheTitleEditText!!.tag as String, cacheArtistEditText!!.tag as String)
-//            } else if (which == CacheDialogFragment.DIALOG_RESULT_DELETE_CACHE) {
-//                searchCache(cacheTitleEditText!!.tag as String, cacheArtistEditText!!.tag as String)
-//            }
-//        }
-//        dialog.show(this)
-//    }
-
+    /**
+     * On activity result
+     */
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent) {
         if (requestCode == AppUtils.REQUEST_CODE_SAVE_FILE) {
             // 歌詞のファイル保存
@@ -334,6 +215,21 @@ open class CacheActivity : Activity() {
         }
     }
 
+    private fun searchCache(title: String, artist: String) {
+        launch(UI) {
+            val result = async {
+                return@async searchCacheHelper.search(title, artist)
+            }
+            cacheList = result.await().toMutableList()
+            showCacheList()
+        }
+    }
+
+    private fun showCacheList() {
+        cacheAdapter.clear()
+        cacheAdapter.addAll(cacheList)
+        cacheAdapter.notifyDataSetChanged()
+    }
 
     /**
      * Search result adapter.

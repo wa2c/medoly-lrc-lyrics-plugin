@@ -137,13 +137,6 @@ object ViewLyricsSearcher {
 
         // Get full result
         BufferedReader(InputStreamReader(con.inputStream, "ISO_8859_1")).use { rd ->
-//            val builder = StringBuilder()
-//            val buffer = CharArray(8192)
-//            var read: Int
-//            while ((read = rd.read(buffer, 0, buffer.size)) > 0) {
-//                builder.append(buffer, 0, read)
-//            }
-//            val full = builder.toString()
             val full = rd.readText()
 
             // Decrypt, parse, store, and return the result list
@@ -226,7 +219,7 @@ object ViewLyricsSearcher {
     private fun readIntFromAttr(elem: Element, attr: String, def: Int): Int {
         val data = elem.getAttribute(attr)
         try {
-            if (!TextUtils.isEmpty(data))
+            if (!data.isNullOrEmpty())
                 return Integer.valueOf(data)!!
         } catch (e: NumberFormatException) {
             Logger.d(e)
@@ -238,7 +231,7 @@ object ViewLyricsSearcher {
     private fun readFloatFromAttr(elem: Element, attr: String, def: Float): Double {
         val data = elem.getAttribute(attr)
         try {
-            if (!TextUtils.isEmpty(data))
+            if (!data.isNullOrEmpty())
                 return java.lang.Double.valueOf(data)!!
         } catch (e: NumberFormatException) {
             Logger.d(e)
@@ -250,7 +243,7 @@ object ViewLyricsSearcher {
     private fun readStrFromAttr(elem: Element, attr: String, def: String): String {
         val data = elem.getAttribute(attr)
         try {
-            if (!TextUtils.isEmpty(data))
+            if (!data.isNullOrEmpty())
                 return data
         } catch (e: NumberFormatException) {
             Logger.d(e)

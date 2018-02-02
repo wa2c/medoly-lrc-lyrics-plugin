@@ -22,18 +22,6 @@ class PluginRunService : AbstractPluginService(PluginRunService::class.java.simp
             //AppUtils.showToast(this, R.string.error_app);
         }
     }
-//    @ServiceAction
-//    override fun process(intent: Intent) {
-//        super.process(intent)
-//
-//        try {
-//            openSearchScreen()
-//        } catch (e: Exception) {
-//            Logger.e(e)
-//            AppUtils.showToast(this, R.string.error_app)
-//        }
-//
-//    }
 
     /**
      * Open search lyrics screen.
@@ -45,4 +33,5 @@ class PluginRunService : AbstractPluginService(PluginRunService::class.java.simp
         searchIntent.putExtra(SearchActivity.INTENT_SEARCH_ARTIST, propertyData.getFirst(MediaProperty.ARTIST))
         startActivity(searchIntent)
     }
+
 }
