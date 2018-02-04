@@ -25,7 +25,8 @@
         android:layout_below="@+id/cacheInputLayout"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:fastScrollEnabled="true"/>
 
     <TableLayout
         android:layout_width="match_parent"
@@ -95,6 +96,5 @@
         </TableRow>
 
     </TableLayout>
-
 
 </RelativeLayout>

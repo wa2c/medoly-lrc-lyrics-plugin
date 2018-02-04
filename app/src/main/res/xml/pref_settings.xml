@@ -30,19 +30,19 @@
             android:title="@string/pref_title_cache_non_result" />
 
         <ListPreference
-            android:defaultValue=""
+            android:defaultValue="@string/empty_value"
             android:key="@string/pref_search_first_language"
             android:summary="@string/pref_summary_search_first_language"
             android:title="@string/pref_title_search_first_language" />
 
         <ListPreference
-            android:defaultValue=""
+            android:defaultValue="@string/empty_value"
             android:key="@string/pref_search_second_language"
             android:summary="@string/pref_summary_search_second_language"
             android:title="@string/pref_title_search_second_language" />
 
         <ListPreference
-            android:defaultValue=""
+            android:defaultValue="@string/empty_value"
             android:key="@string/pref_search_third_language"
             android:summary="@string/pref_summary_search_third_language"
             android:title="@string/pref_title_search_third_language" />

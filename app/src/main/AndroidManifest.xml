@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.MainActivity_">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,12 +23,12 @@
         </activity>
 
         <activity
-            android:name=".activity.SearchActivity_"
+            android:name=".activity.SearchActivity"
             android:exported="true"
             android:label="@string/title_activity_search" />
 
         <activity
-            android:name=".activity.CacheActivity_"
+            android:name=".activity.CacheActivity"
             android:exported="true"
             android:label="@string/title_activity_cache" />
 
@@ -38,10 +38,10 @@
             android:label="@string/title_activity_settings" />
 
         <service
-            android:name=".service.PluginRunService_"
+            android:name=".service.PluginRunService"
             android:exported="false" />
         <service
-            android:name=".service.PluginGetLyricsService_"
+            android:name=".service.PluginGetLyricsService"
             android:exported="false" />
 
 

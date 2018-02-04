@@ -74,7 +74,7 @@ public class SearchCache implements Serializable {
      * @return result item.
      */
     public ResultItem makeResultItem() {
-        if (TextUtils.isEmpty(result))
+        if (result == null || result.isEmpty())
             return null;
         return (new Gson()).fromJson(result, ResultItem.class);
     }

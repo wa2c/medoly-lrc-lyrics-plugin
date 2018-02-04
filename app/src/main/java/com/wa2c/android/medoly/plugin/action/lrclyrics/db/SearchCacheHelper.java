@@ -58,7 +58,7 @@ public class SearchCacheHelper {
     public SearchCache select(String title, String artist) {
         OrmaDatabase od = provideOrmaDatabase(context);
         return od.selectFromSearchCache()
-                .titleAndArtistEq(AppUtils.coalesce(title), AppUtils.coalesce(artist))
+                .titleAndArtistEq(AppUtils.INSTANCE.coalesce(title), AppUtils.INSTANCE.coalesce(artist))
                 .valueOrNull();
     }
 
@@ -72,10 +72,10 @@ public class SearchCacheHelper {
         OrmaDatabase od = provideOrmaDatabase(context);
         SearchCache_Selector selector = od.selectFromSearchCache();
         // title
-        if (!TextUtils.isEmpty(title))
+        if (title != null && !title.isEmpty())
             selector.where("title like ?", "%" + title + "%");
         // artist
-        if (!TextUtils.isEmpty(artist))
+        if (artist != null && !artist.isEmpty())
             selector.where("artist like ?", "%" + artist + "%");
 
         return selector.orderBytitleAndArtistAsc()
@@ -104,8 +104,8 @@ public class SearchCacheHelper {
             has_lyrics = (resultItem.getLyrics() != null);
         }
 
-        title = AppUtils.coalesce(title);
-        artist = AppUtils.coalesce(artist);
+        title = AppUtils.INSTANCE.coalesce(title);
+        artist = AppUtils.INSTANCE.coalesce(artist);
 
         SearchCache cache = select(title, artist);
         if (cache != null) {
@@ -156,10 +156,5 @@ public class SearchCacheHelper {
 
         return true;
     }
-
-
-
-
-
 
 }
