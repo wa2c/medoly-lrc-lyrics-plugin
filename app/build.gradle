@@ -51,9 +51,6 @@ dependencies {
     androidTestCompile 'junit:junit:4.12'
     // Medoly library
     compile 'com.wa2c.android:medolylibrary:1.2.2'
-//    // AndroidAnnotations
-//    annotationProcessor 'org.androidannotations:androidannotations:4.4.0'
-//    compile 'org.androidannotations:androidannotations-api:4.4.0'
     // Orma
     annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.5'
     compile 'com.github.gfx.android.orma:orma:4.2.5'
