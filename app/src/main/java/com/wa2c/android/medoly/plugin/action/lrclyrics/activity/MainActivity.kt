@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 /**
  * Main activity.
  */
-open class MainActivity : Activity() {
+class MainActivity : Activity() {
 
     /** Preferences.  */
     private lateinit var prefs: Prefs

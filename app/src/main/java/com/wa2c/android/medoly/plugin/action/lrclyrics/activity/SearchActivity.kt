@@ -36,7 +36,7 @@ import java.io.OutputStreamWriter
 /**
  * Search Activity.
  */
-open class SearchActivity : Activity() {
+class SearchActivity : Activity() {
 
     /** Search list adapter.  */
     private lateinit var searchResultAdapter: SearchResultAdapter

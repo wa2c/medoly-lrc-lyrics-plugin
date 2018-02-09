@@ -35,7 +35,7 @@ import java.util.*
 /**
  * Cache activity
  */
-open class CacheActivity : Activity() {
+class CacheActivity : Activity() {
 
     /** Search list adapter.  */
     private lateinit var cacheAdapter: CacheAdapter
