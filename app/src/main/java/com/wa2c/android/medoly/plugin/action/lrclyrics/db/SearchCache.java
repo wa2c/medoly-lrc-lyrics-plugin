@@ -1,7 +1,6 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics.db;
 
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import com.github.gfx.android.orma.annotation.Column;
 import com.github.gfx.android.orma.annotation.Index;

@@ -2,7 +2,6 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.db;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem;

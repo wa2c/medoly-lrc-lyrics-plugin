@@ -14,7 +14,6 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.search
  * 2018-01-28: changed to kotlin.
  */
 
-import android.text.TextUtils
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger
 import org.w3c.dom.Element
 import org.xml.sax.SAXException

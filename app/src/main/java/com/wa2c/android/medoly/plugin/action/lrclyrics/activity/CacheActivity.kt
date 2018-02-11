@@ -269,10 +269,10 @@ class CacheActivity : Activity() {
             holder.fromTextView!!.text = context.getString(R.string.label_cache_item_from, AppUtils.coalesce(item.from))
             holder.fileTextView!!.text = context.getString(R.string.label_cache_item_file, AppUtils.coalesce(item.file_name))
             holder.langTextView!!.text = context.getString(R.string.label_cache_item_lang, AppUtils.coalesce(item.language))
-            if (item.has_lyrics == null || !(item.has_lyrics!!)) {
-                holder.hasLyricsImageView!!.visibility = View.GONE
-            } else {
+            if (item.has_lyrics == true) {
                 holder.hasLyricsImageView!!.visibility = View.VISIBLE
+            } else {
+                holder.hasLyricsImageView!!.visibility = View.GONE
             }
 
             // event

@@ -22,7 +22,7 @@ object Logger {
      * @param msg message.
      */
     @JvmStatic
-    fun d(msg: Any) {
+    fun d(msg: Any?) {
         if (!BuildConfig.DEBUG) return
 
         Log.d(TAG, msg.toString())
@@ -33,7 +33,7 @@ object Logger {
      *
      * @param msg message.
      */
-    fun e(msg: Any) {
+    fun e(msg: Any?) {
         var message = msg
         if (!BuildConfig.DEBUG) return
 
@@ -53,7 +53,7 @@ object Logger {
      *
      * @param msg message.
      */
-    fun i(msg: Any) {
+    fun i(msg: Any?) {
         if (!BuildConfig.DEBUG) return
 
         Log.i(TAG, msg.toString())
@@ -64,7 +64,7 @@ object Logger {
      *
      * @param msg message.
      */
-    fun v(msg: Any) {
+    fun v(msg: Any?) {
         if (!BuildConfig.DEBUG) return
 
         Log.v(TAG, msg.toString())
@@ -75,7 +75,7 @@ object Logger {
      *
      * @param msg message.
      */
-    fun w(msg: Any) {
+    fun w(msg: Any?) {
         if (!BuildConfig.DEBUG) return
 
         Log.w(TAG, msg.toString())

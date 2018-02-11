@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.AsyncTask
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache

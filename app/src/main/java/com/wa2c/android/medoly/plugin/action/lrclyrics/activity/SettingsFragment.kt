@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.preference.*
 import android.provider.Settings
 import android.text.InputType
-import android.text.TextUtils
 import android.util.Pair
 import com.cybozu.labs.langdetect.DetectorFactoryUtil
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R

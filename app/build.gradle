@@ -37,8 +37,8 @@ android {
 }
 
 repositories {
-    maven { url 'https://api.bitbucket.org/1.0/repositories/wa2c/medoly-library/raw/master/repository/' }
     google()
+    maven { url 'https://api.bitbucket.org/1.0/repositories/wa2c/medoly-library/raw/master/repository/' }
 }
 
 dependencies {

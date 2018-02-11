@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
-import android.text.TextUtils
 import com.wa2c.android.medoly.library.ExtraData
 import com.wa2c.android.medoly.library.MediaPluginIntent
 import com.wa2c.android.medoly.library.PropertyData
@@ -16,7 +15,6 @@ import java.text.Normalizer
  * App utilities.
  */
 object AppUtils {
-
 
     /** Request code  */
     const val REQUEST_CODE_SAVE_FILE = 1
@@ -38,69 +36,6 @@ object AppUtils {
     fun showToast(context: Context, stringId: Int) {
         ToastReceiver.showToast(context, stringId)
     }
-
-    //    /**
-    //     * Save object to shared preference.
-    //     * @param context context
-    //     * @param prefKey preference key.
-    //     * @param saveObject save object.
-    //     * @return succeeded / failed
-    //     */
-    //    public static boolean saveObject(Context context, String prefKey,  Object saveObject) {
-    //        try {
-    //            Gson gson = new Gson();
-    //            String json = gson.toJson(saveObject);
-    //
-    //            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-    //            pref.edit().putString(prefKey, json).apply();
-    //            return true;
-    //        } catch (Exception e) {
-    //            Logger.e(e);
-    //            return false;
-    //        }
-    //    }
-    //
-    //    /**
-    //     * Load object from shared preference.
-    //     * @param context Context.
-    //     * @param prefKey Preference key.
-    //     * @param clazz Object class.
-    //     * @return Loaded object. null as failed.
-    //     */
-    //    public static <T> T loadObject(Context context, String prefKey, Class<T> clazz) {
-    //        try {
-    //            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-    //            String json = pref.getString(prefKey, "");
-    //
-    //            Gson gson = new Gson();
-    //            return gson.fromJson(json, clazz);
-    //        } catch (Exception e) {
-    //            Logger.e(e);
-    //            return null;
-    //        }
-    //    }
-    //
-    //    /**
-    //     * Load object from shared preference.
-    //     * @param context Context.
-    //     * @param prefKey Preference key.
-    //     * @param type Object type.
-    //     * @return Loaded object. null as failed.
-    //     */
-    //    public static <T> T loadObject(Context context, String prefKey, Type type) {
-    //        try {
-    //            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-    //            String json = pref.getString(prefKey, "");
-    //
-    //            Gson gson = new Gson();
-    //
-    //            return gson.fromJson(json, type);
-    //        } catch (Exception e) {
-    //            Logger.e(e);
-    //            return null;
-    //        }
-    //    }
-
 
 
 
