@@ -12,8 +12,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import android.widget.RadioButton
-import android.widget.TextView
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.ConfirmDialogFragment
@@ -25,6 +23,7 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Prefs
 import kotlinx.android.synthetic.main.activity_search.*
+import kotlinx.android.synthetic.main.layout_search_item.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
@@ -133,9 +132,16 @@ class SearchActivity : Activity() {
             //searchLyrics(title, artist)
             launch(UI) {
                 val result = async {
-                    return@async ViewLyricsSearcher.search(title, artist, 0)
+                    try {
+                        return@async ViewLyricsSearcher.search(title, artist, 0)
+                    } catch (e: Exception) {
+                        return@async null
+                    }
                 }
-                showSearchResult(result.await())
+                val r = result.await()
+                if (r == null)
+                    AppUtils.showToast(applicationContext, R.string.message_lyrics_failure)
+                showSearchResult(r)
             }
         }
 
@@ -312,52 +318,44 @@ class SearchActivity : Activity() {
         internal var selectedItem: ResultItem? = null
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            var itemView = convertView
-            // view
             val listView = parent as ListView
+            var itemView = convertView
             val holder: ListItemViewHolder
             if (itemView == null) {
-                val view = View.inflate(parent.getContext(), R.layout.layout_search_item, null)
-                holder = ListItemViewHolder()
-                holder.searchItemRadioButton = view.findViewById<View>(R.id.searchItemRadioButton) as RadioButton
-                holder.searchItemTitleTextView = view.findViewById<View>(R.id.searchItemTitleTextView) as TextView
-                holder.searchItemArtistTextView = view.findViewById<View>(R.id.searchItemArtistTextView) as TextView
-                holder.searchItemAlbumTextView = view.findViewById<View>(R.id.searchItemAlbumTextView) as TextView
-                holder.searchItemDownloadTextView = view.findViewById<View>(R.id.searchItemDownloadTextView) as TextView
-                holder.searchItemRatingTextView = view.findViewById<View>(R.id.searchItemRatingTextView) as TextView
-                holder.searchItemFromTextView = view.findViewById<View>(R.id.searchItemFromTextView) as TextView
-                view.tag = holder
-                itemView = view
+                holder =ListItemViewHolder(parent.context)
+                itemView = holder.itemView
             } else {
                 holder = itemView.tag as ListItemViewHolder
             }
 
-            // data
             val item = getItem(position)
-            holder.searchItemRadioButton!!.isChecked = item === selectedItem
-            holder.searchItemTitleTextView!!.text = item.musicTitle
-            holder.searchItemArtistTextView!!.text = AppUtils.coalesce(item.musicArtist, "-")
-            holder.searchItemAlbumTextView!!.text = AppUtils.coalesce(item.musicAlbum, "-")
-            holder.searchItemDownloadTextView!!.text = context.getString(R.string.label_search_item_download, item.lyricDownloadsCount)
-            holder.searchItemRatingTextView!!.text = context.getString(R.string.label_search_item_rating, item.lyricRate, item.lyricRatesCount)
-            holder.searchItemFromTextView!!.text = context.getString(R.string.label_search_item_from, item.lyricUploader)
+            val listener : (View) -> Unit = {
+                listView.performItemClick(it, position, getItemId(position))
+            }
+            holder.bind(item, (item == selectedItem), listener)
 
-            holder.searchItemRadioButton!!.setOnClickListener { v -> listView.performItemClick(v, position, getItemId(position)) }
-
-            return itemView!!
+            return itemView
         }
 
-    }
+        /** List item view holder.  */
+        private class ListItemViewHolder(val context: Context) {
+            val itemView = View.inflate(context, R.layout.layout_search_item, null)!!
+            init {
+                itemView.tag = this
+            }
 
-    /** List item view holder.  */
-    private class ListItemViewHolder {
-        internal var searchItemRadioButton: RadioButton? = null
-        internal var searchItemTitleTextView: TextView? = null
-        internal var searchItemArtistTextView: TextView? = null
-        internal var searchItemAlbumTextView: TextView? = null
-        internal var searchItemDownloadTextView: TextView? = null
-        internal var searchItemRatingTextView: TextView? = null
-        internal var searchItemFromTextView: TextView? = null
+            fun bind(item: ResultItem, selected: Boolean, listener: (View) -> Unit) {
+                itemView.searchItemRadioButton.isChecked = selected
+                itemView.searchItemTitleTextView.text = item.musicTitle
+                itemView.searchItemArtistTextView.text = AppUtils.coalesce(item.musicArtist, "-")
+                itemView.searchItemAlbumTextView.text = AppUtils.coalesce(item.musicAlbum, "-")
+                itemView.searchItemDownloadTextView.text = context.getString(R.string.label_search_item_download, item.lyricDownloadsCount)
+                itemView.searchItemRatingTextView.text = context.getString(R.string.label_search_item_rating, item.lyricRate, item.lyricRatesCount)
+                itemView.searchItemFromTextView.text = context.getString(R.string.label_search_item_from, item.lyricUploader)
+                itemView.searchItemRadioButton.setOnClickListener(listener)
+            }
+        }
+
     }
 
     companion object {

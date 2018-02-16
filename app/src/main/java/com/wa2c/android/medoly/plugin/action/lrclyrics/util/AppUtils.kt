@@ -3,7 +3,9 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
 import android.preference.PreferenceManager
+import android.widget.Toast
 import com.wa2c.android.medoly.library.ExtraData
 import com.wa2c.android.medoly.library.MediaPluginIntent
 import com.wa2c.android.medoly.library.PropertyData
@@ -19,13 +21,18 @@ object AppUtils {
     /** Request code  */
     const val REQUEST_CODE_SAVE_FILE = 1
 
+    private val handler = Handler()
+
     /**
      * Show message.
      * @param context context.
      * @param text message.
      */
     fun showToast(context: Context, text: String) {
-        ToastReceiver.showToast(context, text)
+        handler.post { Toast.makeText(context, text, Toast.LENGTH_SHORT).show() }
+
+
+        //ToastReceiver.showToast(context, text)
     }
 
     /**
@@ -34,6 +41,7 @@ object AppUtils {
      * @param stringId resource id.
      */
     fun showToast(context: Context, stringId: Int) {
+        //handler.post { Toast.makeText(context, stringId, Toast.LENGTH_SHORT).show() }
         ToastReceiver.showToast(context, stringId)
     }
 
