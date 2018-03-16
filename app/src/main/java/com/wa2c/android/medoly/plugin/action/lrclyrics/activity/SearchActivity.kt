@@ -170,6 +170,11 @@ class SearchActivity : Activity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+
+        searchResultListView.adapter = searchResultAdapter
+
+        searchTitleEditText.setText(intent.getStringExtra(INTENT_SEARCH_TITLE))
+        searchArtistEditText.setText(intent.getStringExtra(INTENT_SEARCH_ARTIST))
     }
 
     /**

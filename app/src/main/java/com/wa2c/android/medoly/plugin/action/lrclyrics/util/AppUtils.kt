@@ -105,21 +105,21 @@ object AppUtils {
      */
     fun removeParentheses(text: String): String {
         return if (text.isNullOrEmpty()) "" else text
-                .replace("(^[^\\(]+)\\(.*?\\)".toRegex(), "$1")
-                .replace("(^[^\\[]+)\\[.*?\\]".toRegex(), "$1")
-                .replace("(^[^\\{]+)\\{.*?\\}".toRegex(), "$1")
-                .replace("(^[^\\<]+)\\<.*?\\>".toRegex(), "$1")
-                .replace("(^[^\\（]+)\\（.*?\\）".toRegex(), "$1")
-                .replace("(^[^\\［]+)\\［.*?\\］".toRegex(), "$1")
-                .replace("(^[^\\｛]+)\\｛.*?\\｝".toRegex(), "$1")
-                .replace("(^[^\\＜]+)\\＜.*?\\＞".toRegex(), "$1")
-                .replace("(^[^\\【]+)\\【.*?\\】".toRegex(), "$1")
-                .replace("(^[^\\〔]+)\\〔.*?\\〕".toRegex(), "$1")
-                .replace("(^[^\\〈]+)\\〈.*?\\〉".toRegex(), "$1")
-                .replace("(^[^\\《]+)\\《.*?\\》".toRegex(), "$1")
-                .replace("(^[^\\「]+)\\「.*?\\」".toRegex(), "$1")
-                .replace("(^[^\\『]+)\\『.*?\\』".toRegex(), "$1")
-                .replace("(^[^\\〖]+)\\〖.*?\\〗".toRegex(), "$1")
+                .replace("([^\\(]+)\\(.*?\\)".toRegex(), "$1")
+                .replace("([^\\[]+)\\[.*?\\]".toRegex(), "$1")
+                .replace("([^\\{]+)\\{.*?\\}".toRegex(), "$1")
+                .replace("([^\\<]+)\\<.*?\\>".toRegex(), "$1")
+                .replace("([^\\（]+)\\（.*?\\）".toRegex(), "$1")
+                .replace("([^\\［]+)\\［.*?\\］".toRegex(), "$1")
+                .replace("([^\\｛]+)\\｛.*?\\｝".toRegex(), "$1")
+                .replace("([^\\＜]+)\\＜.*?\\＞".toRegex(), "$1")
+                .replace("([^\\【]+)\\【.*?\\】".toRegex(), "$1")
+                .replace("([^\\〔]+)\\〔.*?\\〕".toRegex(), "$1")
+                .replace("([^\\〈]+)\\〈.*?\\〉".toRegex(), "$1")
+                .replace("([^\\《]+)\\《.*?\\》".toRegex(), "$1")
+                .replace("([^\\「]+)\\「.*?\\」".toRegex(), "$1")
+                .replace("([^\\『]+)\\『.*?\\』".toRegex(), "$1")
+                .replace("([^\\〖]+)\\〖.*?\\〗".toRegex(), "$1")
 
     }
 
