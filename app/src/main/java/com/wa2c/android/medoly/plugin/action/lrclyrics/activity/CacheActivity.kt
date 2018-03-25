@@ -83,21 +83,22 @@ class CacheActivity : Activity() {
             val item  = cacheAdapter.getItem(position)
             val dialog = CacheDialogFragment.newInstance(item)
             dialog.clickListener = DialogInterface.OnClickListener { _, which ->
-                if (which == DialogInterface.BUTTON_POSITIVE) {
-                    // Save
-                    currentCacheItem = item
-                    AppUtils.saveFile(this@CacheActivity, item.title, item.artist)
-                } else if (which == DialogInterface.BUTTON_NEGATIVE) {
-                    // Research
-                    currentCacheItem = item
-                    val intent = Intent(this@CacheActivity, SearchActivity::class.java)
-                    intent.putExtra(SearchActivity.INTENT_SEARCH_TITLE, item.title)
-                    intent.putExtra(SearchActivity.INTENT_SEARCH_ARTIST, item.artist)
-                    startActivity(intent)
-                } else if (which == CacheDialogFragment.DIALOG_RESULT_DELETE_LYRICS) {
-                    searchCache(cacheTitleEditText.tag as String, cacheArtistEditText.tag as String)
-                } else if (which == CacheDialogFragment.DIALOG_RESULT_DELETE_CACHE) {
-                    searchCache(cacheTitleEditText.tag as String, cacheArtistEditText.tag as String)
+                when (which) {
+                    DialogInterface.BUTTON_POSITIVE -> {
+                        // Save
+                        currentCacheItem = item
+                        AppUtils.saveFile(this@CacheActivity, item.title, item.artist)
+                    }
+                    DialogInterface.BUTTON_NEGATIVE -> {
+                        // Research
+                        currentCacheItem = item
+                        val intent = Intent(this@CacheActivity, SearchActivity::class.java)
+                        intent.putExtra(SearchActivity.INTENT_SEARCH_TITLE, item.title)
+                        intent.putExtra(SearchActivity.INTENT_SEARCH_ARTIST, item.artist)
+                        startActivity(intent)
+                    }
+                    CacheDialogFragment.DIALOG_RESULT_DELETE_LYRICS -> searchCache(cacheTitleEditText.tag as String, cacheArtistEditText.tag as String)
+                    CacheDialogFragment.DIALOG_RESULT_DELETE_CACHE -> searchCache(cacheTitleEditText.tag as String, cacheArtistEditText.tag as String)
                 }
             }
             dialog.show(this)

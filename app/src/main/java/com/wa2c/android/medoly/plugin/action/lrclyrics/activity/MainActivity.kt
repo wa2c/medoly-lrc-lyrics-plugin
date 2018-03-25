@@ -6,7 +6,6 @@ import android.os.Bundle
 import com.wa2c.android.medoly.library.MedolyEnvironment
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Prefs
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -14,13 +13,9 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class MainActivity : Activity() {
 
-    /** Preferences.  */
-    private lateinit var prefs: Prefs
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        prefs = Prefs(this)
 
         actionBar.setDisplayShowHomeEnabled(true)
         actionBar.setDisplayShowTitleEnabled(true)

@@ -26,7 +26,6 @@ class PluginReceivers {
             val propertyData = pluginIntent.propertyData ?: return
             val prefs = Prefs(context)
 
-            //var builder: ServiceIntentBuilder<*>? = null
             if (this is EventGetLyricsReceiver ||
                 this is ExecuteGetLyricsReceiver) {
                 // checks
