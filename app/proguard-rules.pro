@@ -17,3 +17,9 @@
 #}
 
 -keepattributes *Annotation*
+-keep class net.arnx.jsonic.** { *; }
+-keep class com.cybozu.labs.langdetect.** { *; }
+-keep class com.github.gfx.android.orma.** { *; }
+-dontwarn net.arnx.jsonic.**
+-dontwarn com.cybozu.labs.langdetect.**
+-dontwarn com.github.gfx.android.orma.**
