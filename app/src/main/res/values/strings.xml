@@ -56,6 +56,7 @@
     <string name="error_delete_cache_check">Check the deletion items.</string>
     <string name="message_delete_cache">Deleted the checked caches.</string>
     <string name="message_dialog_cache_delete">Delete checked caches.</string>
+    <string name="message_dialog_cache_delete_error">An error occurred during deletion.</string>
 
     <!-- Settings Activity -->
     <string name="settings_summary_current_value">[Current Value: %1$s]</string>

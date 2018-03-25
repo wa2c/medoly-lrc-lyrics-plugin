@@ -24,7 +24,7 @@ public class SearchCacheHelper {
      * @param context context.
      * @return OrmaDatabase object.
      */
-    public static synchronized OrmaDatabase provideOrmaDatabase(Context context) {
+    private static synchronized OrmaDatabase provideOrmaDatabase(Context context) {
         if (ormaDatabase == null) {
             ormaDatabase = OrmaDatabase.builder(context).build();
         }
@@ -96,7 +96,7 @@ public class SearchCacheHelper {
         String file_name = null;
         Boolean has_lyrics = false;
         String result = gson.toJson(resultItem);
-        if (resultItem != null) {
+        if (resultItem != null && resultItem.getLyricURL() != null) {
             language = resultItem.getLanguage();
             from = resultItem.getLyricUploader();
             file_name = resultItem.getLyricURL().substring(resultItem.getLyricURL().lastIndexOf("/") + 1).replace(".lrc", "");
