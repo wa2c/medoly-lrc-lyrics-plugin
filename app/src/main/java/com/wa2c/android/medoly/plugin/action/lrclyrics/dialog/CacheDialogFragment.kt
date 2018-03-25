@@ -2,20 +2,16 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper
-import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ViewLyricsSearcher
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import kotlinx.android.synthetic.main.dialog_cache.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
-import java.lang.ref.WeakReference
-
 
 
 /**

@@ -3,9 +3,6 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Handler
-import android.preference.PreferenceManager
-import android.widget.Toast
 import com.wa2c.android.medoly.library.ExtraData
 import com.wa2c.android.medoly.library.MediaPluginIntent
 import com.wa2c.android.medoly.library.PropertyData
@@ -21,18 +18,13 @@ object AppUtils {
     /** Request code  */
     const val REQUEST_CODE_SAVE_FILE = 1
 
-    private val handler = Handler()
-
     /**
      * Show message.
      * @param context context.
      * @param text message.
      */
     fun showToast(context: Context, text: String) {
-        handler.post { Toast.makeText(context, text, Toast.LENGTH_SHORT).show() }
-
-
-        //ToastReceiver.showToast(context, text)
+        ToastReceiver.showToast(context, text)
     }
 
     /**
@@ -41,7 +33,6 @@ object AppUtils {
      * @param stringId resource id.
      */
     fun showToast(context: Context, stringId: Int) {
-        //handler.post { Toast.makeText(context, stringId, Toast.LENGTH_SHORT).show() }
         ToastReceiver.showToast(context, stringId)
     }
 
@@ -76,8 +67,7 @@ object AppUtils {
      * @return Trimmed text.
      */
     fun trimLines(text: String): String {
-        return if (text.isNullOrEmpty()) "" else text.replace("(?m)^[\\t 　]*".toRegex(), "").replace("(?m)[\\t 　]*$".toRegex(), "").trim { it <= ' ' }
-
+        return if (text.isEmpty()) "" else text.replace("(?m)^[\\t 　]*".toRegex(), "").replace("(?m)[\\t 　]*$".toRegex(), "").trim { it <= ' ' }
     }
 
     /**
@@ -86,7 +76,7 @@ object AppUtils {
      * @return Normalized text.
      */
     fun normalizeText(text: String): String {
-        if (text.isNullOrEmpty())
+        if (text.isEmpty())
             return ""
 
         // normalize
@@ -104,7 +94,7 @@ object AppUtils {
      * @return removed text.
      */
     fun removeParentheses(text: String): String {
-        return if (text.isNullOrEmpty()) "" else text
+        return if (text.isEmpty()) "" else text
                 .replace("([^\\(]+)\\(.*?\\)".toRegex(), "$1")
                 .replace("([^\\[]+)\\[.*?\\]".toRegex(), "$1")
                 .replace("([^\\{]+)\\{.*?\\}".toRegex(), "$1")
@@ -174,13 +164,9 @@ object AppUtils {
             if (artist == null)
                 artist = ""
 
-            val pref = PreferenceManager.getDefaultSharedPreferences(activity)
-
-            val defaultNameKey = activity.getString(R.string.pref_file_name_default)
-            val defaultName = pref.getString(defaultNameKey, activity.getString(R.string.file_name_default_default))
-
-            val separatorKey = activity.getString(R.string.pref_file_name_separator)
-            val separator = pref.getString(separatorKey, activity.getString(R.string.file_name_separator_default))
+            val prefs = Prefs(activity)
+            val defaultName = prefs.getString(R.string.pref_file_name_default, defRes = R.string.file_name_default_default)
+            val separator = prefs.getString(R.string.pref_file_name_separator, defRes = R.string.file_name_separator_default)
 
             val fileName  = when (defaultName) {
                 "TITLE_ARTIST" -> title + separator + artist
@@ -191,7 +177,7 @@ object AppUtils {
             val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
             intent.addCategory(Intent.CATEGORY_OPENABLE)
             intent.type = "*/*"
-            intent.putExtra(Intent.EXTRA_TITLE, fileName + ".lrc")
+            intent.putExtra(Intent.EXTRA_TITLE, "$fileName.lrc")
             activity.startActivityForResult(intent, REQUEST_CODE_SAVE_FILE)
         } catch (e: Exception) {
             Logger.e(e)

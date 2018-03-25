@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -186,8 +185,6 @@ class CacheActivity : Activity() {
                             writer.write(currentCacheItem!!.makeResultItem()!!.lyrics)
                             writer.flush()
                             AppUtils.showToast(this, R.string.message_lyrics_save_succeeded)
-                            val p = PreferenceManager.getDefaultSharedPreferences(this)
-                            p.edit().putString("pref_prev_file_uri", uri.toString()).apply()
                         }
                     }
                 } catch (e: IOException) {
