@@ -22,7 +22,7 @@ import java.util.*
 
 
 /**
- * Download intent service.
+ * Get lyrics plugin service.
  */
 class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::class.java.simpleName) {
 
@@ -30,23 +30,22 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
 
     override fun onHandleIntent(intent: Intent?) {
         super.onHandleIntent(intent)
+        Logger.d("onStartCommand")
 
         try {
-            getLyrics(pluginIntent)
+            getLyrics()
         } catch (e: Exception) {
             Logger.e(e)
             //AppUtils.showToast(this, R.string.error_app);
         }
     }
 
-
     /**
      * Get lyrics.
-     * @param pluginIntent A plugin intent.
      */
-    private fun getLyrics(pluginIntent: MediaPluginIntent) {
+    private fun getLyrics() {
         val resultItem = findLyrics(pluginIntent)
-        sendLyricsResult(pluginIntent, resultItem)
+        sendLyricsResult(resultItem)
         if (resultItem == null) {
             if (prefs.getBoolean(R.string.pref_failure_message_show)) {
                 AppUtils.showToast(this, R.string.message_lyrics_failure)
@@ -227,22 +226,18 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
 
     /**
      * Send lyrics info.
-     * @param pluginIntent parameters.
      * @param resultItem search result.
      */
-    private fun sendLyricsResult(pluginIntent: MediaPluginIntent, resultItem: ResultItem?) {
+    private fun sendLyricsResult(resultItem: ResultItem?) {
         val propertyData = PropertyData()
-        val fileUri: Uri?
         if (resultItem?.lyricURL != null) {
-            fileUri = saveLyricsFile(resultItem) // save lyrics and get uri
+            val fileUri = saveLyricsFile(resultItem) // save lyrics and get uri
             propertyData[LyricsProperty.DATA_URI] = fileUri?.toString()
             propertyData[LyricsProperty.SOURCE_TITLE] = getString(R.string.lyrics_source_name)
             propertyData[LyricsProperty.SOURCE_URI] = resultItem.lyricURL
             applicationContext.grantUriPermission(pluginIntent.srcPackage, fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
         sendResult(propertyData)
-        val returnIntent = pluginIntent.createResultIntent(propertyData)
-        sendBroadcast(returnIntent)
     }
 
     /**
@@ -259,7 +254,6 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
         // Create folder
         val sharedLyricsDir = File(this.filesDir, SHARED_DIR_NAME)
         if (!sharedLyricsDir.exists()) {
-
             sharedLyricsDir.mkdir()
         }
         val sharedLyricsFile = File(sharedLyricsDir, SHARED_FILE_NAME)
@@ -307,7 +301,6 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
 
 
     companion object {
-
         private const val SHARED_DIR_NAME = "lyrics"
         private const val SHARED_FILE_NAME = "lyrics.lrc"
         private const val PROVIDER_AUTHORITIES = BuildConfig.APPLICATION_ID + ".fileprovider"

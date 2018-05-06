@@ -48,7 +48,7 @@ object AppUtils {
     }
 
     /**
-     * Get first non-null text.
+     * Get first non-empty text.
      * @param texts Texts.
      * @return First non-null object. empty text as all null.
      */
@@ -66,8 +66,11 @@ object AppUtils {
      * @param text Text.
      * @return Trimmed text.
      */
-    fun trimLines(text: String): String {
-        return if (text.isEmpty()) "" else text.replace("(?m)^[\\t 　]*".toRegex(), "").replace("(?m)[\\t 　]*$".toRegex(), "").trim { it <= ' ' }
+    fun trimLines(text: String?): String {
+        return if (text.isNullOrEmpty()) "" else text!!
+                .replace("(?m)^[\\t 　]*".toRegex(), "")
+                .replace("(?m)[\\t 　]*$".toRegex(), "")
+                .trim { it <= ' ' }
     }
 
     /**
@@ -75,8 +78,8 @@ object AppUtils {
      * @param text text.
      * @return Normalized text.
      */
-    fun normalizeText(text: String): String {
-        if (text.isEmpty())
+    fun normalizeText(text: String?): String {
+        if (text.isNullOrEmpty())
             return ""
 
         // normalize
@@ -93,8 +96,8 @@ object AppUtils {
      * @param text text.
      * @return removed text.
      */
-    fun removeParentheses(text: String): String {
-        return if (text.isEmpty()) "" else text
+    fun removeParentheses(text: String?): String {
+        return if (text.isNullOrEmpty()) "" else text!!
                 .replace("([^\\(]+)\\(.*?\\)".toRegex(), "$1")
                 .replace("([^\\[]+)\\[.*?\\]".toRegex(), "$1")
                 .replace("([^\\{]+)\\{.*?\\}".toRegex(), "$1")
@@ -110,7 +113,6 @@ object AppUtils {
                 .replace("([^\\「]+)\\「.*?\\」".toRegex(), "$1")
                 .replace("([^\\『]+)\\『.*?\\』".toRegex(), "$1")
                 .replace("([^\\〖]+)\\〖.*?\\〗".toRegex(), "$1")
-
     }
 
     /**
@@ -118,10 +120,9 @@ object AppUtils {
      * @param text text.
      * @return removed text.
      */
-    fun removeDash(text: String): String {
-        return if (text.isNullOrEmpty()) "" else text
+    fun removeDash(text: String?): String {
+        return if (text.isNullOrEmpty()) "" else text!!
                 .replace("\\s+(-|－|―|ー|ｰ|~|～|〜|〰|=|＝).*".toRegex(), "")
-
     }
 
     /**
@@ -129,8 +130,8 @@ object AppUtils {
      * @param text text.
      * @return removed text.
      */
-    fun removeTextInfo(text: String): String {
-        return if (text.isNullOrEmpty()) "" else text
+    fun removeTextInfo(text: String?): String {
+        return if (text.isNullOrEmpty()) "" else text!!
                 .replace("(?i)[\\(\\<\\[\\{\\s]?off vocal.*".toRegex(), "")
                 .replace("(?i)[\\(\\<\\[\\{\\s]?no vocal.*".toRegex(), "")
                 .replace("(?i)[\\(\\<\\[\\{\\s]?less vocal.*".toRegex(), "")
@@ -146,7 +147,6 @@ object AppUtils {
                 .replace("(?i)[\\(\\<\\[\\{\\s]?instrumental.*".toRegex(), "")
                 .replace("(?i)[\\(\\<\\[\\{\\s]?inst\\..*".toRegex(), "")
                 .replace("(?i)[\\(\\<\\[\\{\\s]?インスト.*".toRegex(), "")
-
     }
 
     /**

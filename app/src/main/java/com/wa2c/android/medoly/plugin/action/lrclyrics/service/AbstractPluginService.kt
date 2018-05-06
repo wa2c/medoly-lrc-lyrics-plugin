@@ -34,21 +34,20 @@ abstract class AbstractPluginService(name: String) : IntentService(name) {
     /** Received class name.  */
     protected lateinit var receivedClassName: String
     /** True if result sent.  */
-    private var resultSent: Boolean = false
+    protected var resultSent: Boolean = false
 
+    private var notificationManager : NotificationManager? = null
 
 
     @SuppressLint("NewApi")
     override fun onHandleIntent(intent: Intent?) {
         Logger.d("onHandleIntent")
 
-        var notificationManager : NotificationManager? = null
         try {
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW)
-                notificationManager.createNotificationChannel(channel)
+                notificationManager?.createNotificationChannel(channel)
                 val builder = Notification.Builder(this, NOTIFICATION_CHANNEL_ID)
                         .setContentTitle(getString(R.string.app_name))
                         .setContentText("")
@@ -68,19 +67,19 @@ abstract class AbstractPluginService(name: String) : IntentService(name) {
 
         } catch (e: Exception) {
             Logger.e(e)
-        } finally {
-            if (notificationManager != null) {
-                notificationManager.deleteNotificationChannel(NOTIFICATION_CHANNEL_ID)
-                notificationManager.cancel(NOTIFICATION_ID)
-                stopForeground(true)
-            }
         }
     }
 
+    @SuppressLint("NewApi")
     override fun onDestroy() {
         super.onDestroy()
         Logger.d("onDestroy" + this.javaClass.simpleName)
-        stopForeground(true)
+
+        if (notificationManager != null) {
+            notificationManager?.deleteNotificationChannel(NOTIFICATION_CHANNEL_ID)
+            notificationManager?.cancel(NOTIFICATION_ID)
+            stopForeground(true)
+        }
         sendResult(null)
     }
 

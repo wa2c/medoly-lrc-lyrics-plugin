@@ -18,7 +18,6 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.CacheDialogFragmen
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.ConfirmDialogFragment
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Prefs
 import kotlinx.android.synthetic.main.activity_cache.*
 import kotlinx.android.synthetic.main.layout_cache_item.view.*
 import kotlinx.coroutines.experimental.android.UI
@@ -38,15 +37,12 @@ class CacheActivity : Activity() {
     private lateinit var cacheAdapter: CacheAdapter
     /** Search cache helper.  */
     private lateinit var searchCacheHelper: SearchCacheHelper
-    /** Preferences.  */
-    private lateinit var prefs: Prefs
     /** Current cache item. */
     private var currentCacheItem: SearchCache? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cache)
-        prefs = Prefs(this)
 
         // Action Bar
         actionBar.setDisplayShowHomeEnabled(true)
@@ -84,20 +80,22 @@ class CacheActivity : Activity() {
             val dialog = CacheDialogFragment.newInstance(item)
             dialog.clickListener = DialogInterface.OnClickListener { _, which ->
                 when (which) {
+                    // Save
                     DialogInterface.BUTTON_POSITIVE -> {
-                        // Save
                         currentCacheItem = item
                         AppUtils.saveFile(this@CacheActivity, item.title, item.artist)
                     }
+                    // Re-search
                     DialogInterface.BUTTON_NEGATIVE -> {
-                        // Research
                         currentCacheItem = item
                         val intent = Intent(this@CacheActivity, SearchActivity::class.java)
                         intent.putExtra(SearchActivity.INTENT_SEARCH_TITLE, item.title)
                         intent.putExtra(SearchActivity.INTENT_SEARCH_ARTIST, item.artist)
                         startActivity(intent)
                     }
+                    // Delete lyrics
                     CacheDialogFragment.DIALOG_RESULT_DELETE_LYRICS -> searchCache(cacheTitleEditText.tag as String, cacheArtistEditText.tag as String)
+                    // Delete cache
                     CacheDialogFragment.DIALOG_RESULT_DELETE_CACHE -> searchCache(cacheTitleEditText.tag as String, cacheArtistEditText.tag as String)
                 }
             }
@@ -177,7 +175,7 @@ class CacheActivity : Activity() {
      */
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent) {
         if (requestCode == AppUtils.REQUEST_CODE_SAVE_FILE) {
-            // 歌詞のファイル保存
+            // Save lyrics file
             if (resultCode == Activity.RESULT_OK) {
                 val uri = resultData.data
                 try {
@@ -192,7 +190,6 @@ class CacheActivity : Activity() {
                     Logger.e(e)
                     AppUtils.showToast(this, R.string.message_lyrics_save_failed)
                 }
-
             }
         }
 

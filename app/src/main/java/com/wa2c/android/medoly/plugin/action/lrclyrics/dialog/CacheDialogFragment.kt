@@ -15,10 +15,9 @@ import kotlinx.coroutines.experimental.launch
 
 
 /**
- * Confirm dialog.
+ * Cache dialog.
  */
 class CacheDialogFragment : AbstractDialogFragment() {
-
 
     /**
      * onCreateDialog
