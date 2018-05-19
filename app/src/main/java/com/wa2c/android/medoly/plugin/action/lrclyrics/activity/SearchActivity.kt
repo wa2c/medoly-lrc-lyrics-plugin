@@ -82,7 +82,7 @@ class SearchActivity : Activity() {
             }
         })
 
-
+        // Title button
         searchTitleButton.setOnClickListener {
             val dialogFragment = NormalizeDialogFragment.newInstance(searchTitleEditText.text.toString(), intentSearchTitle)
             dialogFragment.clickListener = DialogInterface.OnClickListener { _, which ->
@@ -93,6 +93,7 @@ class SearchActivity : Activity() {
             dialogFragment.show(this)
         }
 
+        // Artist button
         searchArtistButton.setOnClickListener {
             val dialogFragment = NormalizeDialogFragment.newInstance(searchArtistEditText.text.toString(), intentSearchArtist)
             dialogFragment.clickListener = DialogInterface.OnClickListener { _, which ->
@@ -104,11 +105,13 @@ class SearchActivity : Activity() {
 
         }
 
+        // Clear[x] button
         searchClearButton.setOnClickListener {
             searchTitleEditText.text = null
             searchArtistEditText.text = null
         }
 
+        // Search button
         searchStartButton.setOnClickListener { view ->
             // Hide keyboard
             val inputMethodMgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -145,6 +148,7 @@ class SearchActivity : Activity() {
             }
         }
 
+        // List item
         searchResultListView.setOnItemClickListener { _, _, position, _ ->
             val inputMethodMgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodMgr.hideSoftInputFromWindow(searchResultListView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
@@ -250,28 +254,22 @@ class SearchActivity : Activity() {
      * On activity result
      */
     public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent) {
-        if (requestCode == AppUtils.REQUEST_CODE_SAVE_FILE) {
-            // 歌詞のファイル保存
-            if (resultCode == Activity.RESULT_OK) {
-                if (!existsLyrics()) {
-                    AppUtils.showToast(this, R.string.error_exists_lyrics)
-                    return
-                }
+        if (requestCode == AppUtils.REQUEST_CODE_SAVE_FILE && resultCode == Activity.RESULT_OK) {
+            // Save to lyrics file
+            if (!existsLyrics()) {
+                AppUtils.showToast(this, R.string.error_exists_lyrics)
+                return
+            }
 
-                val uri = resultData.data
-                try {
-                    contentResolver.openOutputStream(uri).use { stream ->
-                        BufferedWriter(OutputStreamWriter(stream, "UTF-8")).use { writer ->
-                            writer.write(searchResultAdapter.selectedItem?.lyrics)
-                            writer.flush()
-                            AppUtils.showToast(this, R.string.message_lyrics_save_succeeded)
-                        }
-                    }
-                } catch (e: IOException) {
-                    Logger.e(e)
-                    AppUtils.showToast(this, R.string.message_lyrics_save_failed)
+            val uri = resultData.data
+            try {
+                contentResolver.openOutputStream(uri).bufferedWriter(Charsets.UTF_8).use {
+                    it.write(searchResultAdapter.selectedItem?.lyrics)
                 }
-
+                AppUtils.showToast(this, R.string.message_lyrics_save_succeeded)
+            } catch (e: Exception) {
+                Logger.e(e)
+                AppUtils.showToast(this, R.string.message_lyrics_save_failed)
             }
         }
 
@@ -282,6 +280,9 @@ class SearchActivity : Activity() {
         }
     }
 
+    /**
+     * Show search result list.
+     */
     private fun showSearchResult(result: Result?) {
         try {
             searchResultAdapter.clear()
@@ -294,6 +295,9 @@ class SearchActivity : Activity() {
         }
     }
 
+    /**
+     * Show lyrics.
+     */
     private fun showLyrics(item: ResultItem?) {
         if (item == null) {
             searchLyricsTextView.text = null
@@ -314,57 +318,60 @@ class SearchActivity : Activity() {
         return !searchResultAdapter.selectedItem?.lyricURL.isNullOrEmpty()
     }
 
+
+
     companion object {
         const val INTENT_SEARCH_TITLE = "INTENT_SEARCH_TITLE"
         const val INTENT_SEARCH_ARTIST = "INTENT_SEARCH_ARTIST"
+
+        /**
+         * Search result adapter.
+         */
+        private class SearchResultAdapter internal constructor(context: Context) : ArrayAdapter<ResultItem>(context, R.layout.layout_search_item) {
+
+            /** Selected item.  */
+            internal var selectedItem: ResultItem? = null
+
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val listView = parent as ListView
+                var itemView = convertView
+                val holder: ListItemViewHolder
+                if (itemView == null) {
+                    holder = ListItemViewHolder(parent.context)
+                    itemView = holder.itemView
+                } else {
+                    holder = itemView.tag as ListItemViewHolder
+                }
+
+                val item = getItem(position)
+                val listener : (View) -> Unit = {
+                    listView.performItemClick(it, position, getItemId(position))
+                }
+                holder.bind(item, (item == selectedItem), listener)
+
+                return itemView
+            }
+
+            /** List item view holder.  */
+            private class ListItemViewHolder(val context: Context) {
+                val itemView = View.inflate(context, R.layout.layout_search_item, null)!!
+                init {
+                    itemView.tag = this
+                }
+
+                fun bind(item: ResultItem, selected: Boolean, listener: (View) -> Unit) {
+                    itemView.searchItemRadioButton.isChecked = selected
+                    itemView.searchItemTitleTextView.text = item.musicTitle
+                    itemView.searchItemArtistTextView.text = AppUtils.coalesce(item.musicArtist, "-")
+                    itemView.searchItemAlbumTextView.text = AppUtils.coalesce(item.musicAlbum, "-")
+                    itemView.searchItemDownloadTextView.text = context.getString(R.string.label_search_item_download, item.lyricDownloadsCount)
+                    itemView.searchItemRatingTextView.text = context.getString(R.string.label_search_item_rating, item.lyricRate, item.lyricRatesCount)
+                    itemView.searchItemFromTextView.text = context.getString(R.string.label_search_item_from, item.lyricUploader)
+                    itemView.searchItemRadioButton.setOnClickListener(listener)
+                }
+            }
+        }
     }
 
 }
 
-/**
- * Search result adapter.
- */
-private class SearchResultAdapter internal constructor(context: Context) : ArrayAdapter<ResultItem>(context, R.layout.layout_search_item) {
-
-    /** Selected item.  */
-    internal var selectedItem: ResultItem? = null
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val listView = parent as ListView
-        var itemView = convertView
-        val holder: ListItemViewHolder
-        if (itemView == null) {
-            holder = ListItemViewHolder(parent.context)
-            itemView = holder.itemView
-        } else {
-            holder = itemView.tag as ListItemViewHolder
-        }
-
-        val item = getItem(position)
-        val listener : (View) -> Unit = {
-            listView.performItemClick(it, position, getItemId(position))
-        }
-        holder.bind(item, (item == selectedItem), listener)
-
-        return itemView
-    }
-
-    /** List item view holder.  */
-    private class ListItemViewHolder(val context: Context) {
-        val itemView = View.inflate(context, R.layout.layout_search_item, null)!!
-        init {
-            itemView.tag = this
-        }
-
-        fun bind(item: ResultItem, selected: Boolean, listener: (View) -> Unit) {
-            itemView.searchItemRadioButton.isChecked = selected
-            itemView.searchItemTitleTextView.text = item.musicTitle
-            itemView.searchItemArtistTextView.text = AppUtils.coalesce(item.musicArtist, "-")
-            itemView.searchItemAlbumTextView.text = AppUtils.coalesce(item.musicAlbum, "-")
-            itemView.searchItemDownloadTextView.text = context.getString(R.string.label_search_item_download, item.lyricDownloadsCount)
-            itemView.searchItemRatingTextView.text = context.getString(R.string.label_search_item_rating, item.lyricRate, item.lyricRatesCount)
-            itemView.searchItemFromTextView.text = context.getString(R.string.label_search_item_from, item.lyricUploader)
-            itemView.searchItemRadioButton.setOnClickListener(listener)
-        }
-    }
-}

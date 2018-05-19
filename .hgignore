@@ -39,3 +39,4 @@ syntax: glob
 .idea/modules.xml
 captures/
 *.hprof
+.idea/caches/
