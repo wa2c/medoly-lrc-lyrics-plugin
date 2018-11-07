@@ -21,15 +21,12 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ViewLyricsSearcher
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Prefs
+import com.wa2c.android.prefs.Prefs
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.layout_search_item.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
-import java.io.BufferedWriter
-import java.io.IOException
-import java.io.OutputStreamWriter
 
 /**
  * Search Activity.

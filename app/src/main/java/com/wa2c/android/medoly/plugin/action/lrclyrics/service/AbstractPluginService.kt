@@ -15,7 +15,7 @@ import com.wa2c.android.medoly.library.PropertyData
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Prefs
+import com.wa2c.android.prefs.Prefs
 
 
 /**

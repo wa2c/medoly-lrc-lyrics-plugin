@@ -3,8 +3,7 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics
 import android.app.Application
 import android.content.Context
 import com.wa2c.android.medoly.library.PluginOperationCategory
-
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Prefs
+import com.wa2c.android.prefs.Prefs
 
 
 /**
@@ -28,9 +27,9 @@ class App : Application() {
         if (pref.contains(pref_plugin_event)) {
             val `val` = pref.getInt(pref_plugin_event)
             if (`val` == 1)
-                pref.putValue(context.getString(R.string.pref_event_get_lyrics), PluginOperationCategory.OPERATION_MEDIA_OPEN.name)
+                pref.putString(context.getString(R.string.pref_event_get_lyrics), PluginOperationCategory.OPERATION_MEDIA_OPEN.name)
             else if (`val` == 2)
-                pref.putValue(context.getString(R.string.pref_event_get_lyrics), PluginOperationCategory.OPERATION_PLAY_START.name)
+                pref.putString(context.getString(R.string.pref_event_get_lyrics), PluginOperationCategory.OPERATION_PLAY_START.name)
             pref.remove(pref_plugin_event)
         }
     }

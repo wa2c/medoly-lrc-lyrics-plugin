@@ -23,9 +23,6 @@ import kotlinx.android.synthetic.main.layout_cache_item.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
-import java.io.BufferedWriter
-import java.io.IOException
-import java.io.OutputStreamWriter
 import java.util.*
 
 /**

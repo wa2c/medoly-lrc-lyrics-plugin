@@ -7,7 +7,7 @@ import android.app.Fragment
 import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Prefs
+import com.wa2c.android.prefs.Prefs
 import java.util.*
 
 /**
@@ -36,7 +36,7 @@ abstract class AbstractDialogFragment : DialogFragment() {
         shownDialogMap[key]?.dismiss()
 
         super.show(activity.fragmentManager, key)
-        shownDialogMap.put(key, this)
+        shownDialogMap[key] = this
     }
 
     /**
@@ -48,7 +48,7 @@ abstract class AbstractDialogFragment : DialogFragment() {
         shownDialogMap[key]?.dismiss()
 
         super.show(fragment.fragmentManager, key)
-        shownDialogMap.put(key, this)
+        shownDialogMap[key] = this
     }
 
 
