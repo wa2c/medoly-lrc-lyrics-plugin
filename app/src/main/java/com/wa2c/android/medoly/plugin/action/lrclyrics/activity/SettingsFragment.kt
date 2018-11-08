@@ -72,7 +72,7 @@ class SettingsFragment : PreferenceFragment() {
             }
 
             // sort
-            Collections.sort(languageList) { o1, o2 -> o1.second.compareTo(o2.second) }
+            languageList.sortWith(Comparator { o1, o2 -> o1.second.compareTo(o2.second) })
 
             val sortedLanguageList = ArrayList<String>(languageList.size)
             val sortedLanguageLabelList = ArrayList<String>(languageList.size)

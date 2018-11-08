@@ -24,9 +24,10 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger
 import com.wa2c.android.prefs.Prefs
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.layout_search_item.view.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 /**
  * Search Activity.
@@ -130,8 +131,8 @@ class SearchActivity : Activity() {
             searchResultLoadingLayout.visibility = View.VISIBLE
 
             //searchLyrics(title, artist)
-            launch(UI) {
-                val result = async {
+            GlobalScope.launch(Dispatchers.Main) {
+                val result = async(Dispatchers.Default) {
                     try {
                         return@async ViewLyricsSearcher.search(title, artist, 0)
                     } catch (e: Exception) {
@@ -156,9 +157,9 @@ class SearchActivity : Activity() {
             searchLyricsScrollView.visibility = View.INVISIBLE
             searchLyricsLoadingLayout.visibility = View.VISIBLE
 
-            launch(UI) {
+            GlobalScope.launch(Dispatchers.Main) {
                 val item = searchResultAdapter.getItem(position)
-                item.lyrics = async {
+                item.lyrics = async(Dispatchers.Default) {
                     return@async ViewLyricsSearcher.downloadLyricsText(item.lyricURL)
                 }.await()
                 showLyrics(item)
@@ -224,8 +225,8 @@ class SearchActivity : Activity() {
                         val title = searchTitleEditText.text.toString()
                         val artist = searchArtistEditText.text.toString()
 
-                        launch(UI) {
-                            val result = async {
+                        GlobalScope.launch(Dispatchers.Main) {
+                            val result = async(Dispatchers.Default) {
                                 return@async searchCacheHelper.insertOrUpdate(title, artist, searchResultAdapter.selectedItem)
                             }
                             if (result.await())

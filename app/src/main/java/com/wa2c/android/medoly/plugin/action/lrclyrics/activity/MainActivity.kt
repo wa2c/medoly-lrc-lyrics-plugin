@@ -21,19 +21,19 @@ class MainActivity : Activity() {
         actionBar.setDisplayShowTitleEnabled(true)
 
         // Search
-        launchSearchButton.setOnClickListener({
+        launchSearchButton.setOnClickListener {
             startActivity(Intent(this, SearchActivity::class.java))
-        })
+        }
 
         // Cache
-        launchCacheButton.setOnClickListener({
+        launchCacheButton.setOnClickListener {
             startActivity(Intent(this, CacheActivity::class.java))
-        })
+        }
 
         // Settings
-        launchSettingsButton.setOnClickListener({
+        launchSettingsButton.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
-        })
+        }
 
         // Launch Medoly
         launchMedolyButton.setOnClickListener {
