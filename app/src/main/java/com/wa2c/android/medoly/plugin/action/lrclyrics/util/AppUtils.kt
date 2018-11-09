@@ -8,6 +8,7 @@ import com.wa2c.android.medoly.library.MediaPluginIntent
 import com.wa2c.android.medoly.library.PropertyData
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.prefs.Prefs
+import timber.log.Timber
 import java.text.Normalizer
 
 
@@ -181,7 +182,7 @@ object AppUtils {
             intent.putExtra(Intent.EXTRA_TITLE, "$fileName.lrc")
             activity.startActivityForResult(intent, REQUEST_CODE_SAVE_FILE)
         } catch (e: Exception) {
-            Logger.e(e)
+            Timber.e(e)
             showToast(activity, R.string.error_app)
         }
 

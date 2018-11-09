@@ -3,7 +3,7 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.service
 import android.content.Intent
 import com.wa2c.android.medoly.library.MediaProperty
 import com.wa2c.android.medoly.plugin.action.lrclyrics.activity.SearchActivity
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger
+import timber.log.Timber
 
 
 /**
@@ -18,7 +18,7 @@ class PluginRunService : AbstractPluginService(PluginRunService::class.java.simp
                 openSearchScreen()
             }
         } catch (e: Exception) {
-            Logger.e(e)
+            Timber.e(e)
             //AppUtils.showToast(this, R.string.error_app);
         }
     }

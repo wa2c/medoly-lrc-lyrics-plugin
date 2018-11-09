@@ -51,6 +51,8 @@ dependencies {
     // Prefs
     implementation 'com.wa2c.android:prefs:0.1.0'
 
+    // https://mvnrepository.com/artifact/com.jakewharton.timber/timber
+    implementation group: 'com.jakewharton.timber', name: 'timber', version: '4.7.1'
     // Orma
     annotationProcessor 'com.github.gfx.android.orma:orma-processor:4.2.5'
     implementation 'com.github.gfx.android.orma:orma:4.2.5'

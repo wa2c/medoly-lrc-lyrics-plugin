@@ -20,7 +20,6 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.search.Result
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ViewLyricsSearcher
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger
 import com.wa2c.android.prefs.Prefs
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.layout_search_item.view.*
@@ -28,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Search Activity.
@@ -266,7 +266,7 @@ class SearchActivity : Activity() {
                 }
                 AppUtils.showToast(this, R.string.message_lyrics_save_succeeded)
             } catch (e: Exception) {
-                Logger.e(e)
+                Timber.e(e)
                 AppUtils.showToast(this, R.string.message_lyrics_save_failed)
             }
         }

@@ -4,7 +4,7 @@ import android.content.Context
 import com.cybozu.labs.langdetect.util.LangProfile
 import com.google.gson.Gson
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger
+import timber.log.Timber
 import java.util.*
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
@@ -102,7 +102,7 @@ object DetectorFactoryUtil {
         if (DetectorFactory.getLangList() == null || DetectorFactory.getLangList().size == 0) {
             val startTime = System.currentTimeMillis()
             val coreCount = Runtime.getRuntime().availableProcessors()
-            Logger.d("Detector creating begin. Core: " + coreCount)
+            Timber.d("Detector creating begin. Core: " + coreCount)
 
             val executorService = Executors.newFixedThreadPool(coreCount)
             val futures = ArrayList<Future<LangProfile>>(languageProfileMap.size)
@@ -110,18 +110,18 @@ object DetectorFactoryUtil {
                 futures.add(executorService.submit(ProfileCreator(context, item.key, item.value)))
             }
 
-            Logger.d("Adding profiles.")
+            Timber.d("Adding profiles.")
             for (i in futures.indices) {
                 try {
                     DetectorFactory.addProfile(futures[i].get(), i, languageProfileMap.size)
                 } catch (e: Exception) {
-                    Logger.e(e)
+                    Timber.e(e)
                 }
 
             }
 
             executorService.shutdown()
-            Logger.d("Detector creating end. Time: " + (System.currentTimeMillis() - startTime))
+            Timber.d("Detector creating end. Time: " + (System.currentTimeMillis() - startTime))
         }
 
         return DetectorFactory.create()
@@ -134,9 +134,9 @@ object DetectorFactoryUtil {
 
         @Throws(Exception::class)
         override fun call(): LangProfile {
-            Logger.d("creating begin: " + key)
+            Timber.d("creating begin: " + key)
             val profile = gson.fromJson(context.getString(stringId), LangProfile::class.java)
-            Logger.d("creating end: " + key)
+            Timber.d("creating end: " + key)
             return profile
         }
 

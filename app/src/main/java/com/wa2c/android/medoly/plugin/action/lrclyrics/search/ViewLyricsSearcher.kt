@@ -14,9 +14,9 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.search
  * 2018-01-28: changed to kotlin.
  */
 
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger
 import org.w3c.dom.Element
 import org.xml.sax.SAXException
+import timber.log.Timber
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -141,7 +141,7 @@ object ViewLyricsSearcher {
             // Decrypt, parse, store, and return the result list
             val r = parseResultXML(decryptResultXML(full))
             val inf = r.infoList
-            Logger.d(inf!!)
+            Timber.d(inf?.toString())
             return r
         }
     }
@@ -221,7 +221,7 @@ object ViewLyricsSearcher {
             if (!data.isNullOrEmpty())
                 return Integer.valueOf(data)!!
         } catch (e: NumberFormatException) {
-            Logger.d(e)
+            Timber.d(e)
         }
 
         return def
@@ -233,7 +233,7 @@ object ViewLyricsSearcher {
             if (!data.isNullOrEmpty())
                 return java.lang.Double.valueOf(data)!!
         } catch (e: NumberFormatException) {
-            Logger.d(e)
+            Timber.d(e)
         }
 
         return def.toDouble()
@@ -245,7 +245,7 @@ object ViewLyricsSearcher {
             if (!data.isNullOrEmpty())
                 return data
         } catch (e: NumberFormatException) {
-            Logger.d(e)
+            Timber.d(e)
         }
 
         return def

@@ -15,7 +15,7 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ViewLyricsSearcher
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.Logger
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -30,12 +30,12 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
 
     override fun onHandleIntent(intent: Intent?) {
         super.onHandleIntent(intent)
-        Logger.d("onStartCommand")
+        Timber.d("onStartCommand")
 
         try {
             getLyrics()
         } catch (e: Exception) {
-            Logger.e(e)
+            Timber.e(e)
             //AppUtils.showToast(this, R.string.error_app);
         }
     }
@@ -188,7 +188,7 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
                             break
                         }
                     } catch (e: LangDetectException) {
-                        Logger.e(e)
+                        Timber.e(e)
                     }
 
                 }
@@ -206,7 +206,7 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
             }
 
         } catch (e: Exception) {
-            Logger.d(e)
+            Timber.d(e)
         }
 
 
@@ -219,7 +219,7 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
             try {
                 DetectorFactoryUtil.createDetectorAll(applicationContext)
             } catch (e: LangDetectException) {
-                Logger.d(e)
+                Timber.d(e)
             }
         }
     }
