@@ -17,23 +17,23 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-             <Button
+            <Button
+                android:id="@+id/launchSearchButton"
                 android:layout_width="@dimen/main_button_width"
                 android:layout_height="wrap_content"
-                android:text="@string/label_button_search"
-                android:id="@+id/launchSearchButton"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/main_button_margin"
-                android:drawableStart="@drawable/ic_action_find"/>
+                android:drawableStart="@drawable/ic_find"
+                android:text="@string/label_button_search" />
 
             <Button
+                android:id="@+id/launchCacheButton"
                 android:layout_width="@dimen/main_button_width"
                 android:layout_height="wrap_content"
-                android:text="@string/label_button_cache"
-                android:id="@+id/launchCacheButton"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="@dimen/main_button_margin"
-                android:drawableStart="@drawable/ic_action_cache"/>
+                android:drawableStart="@drawable/ic_db"
+                android:text="@string/label_button_cache" />
 
             <Button
                 android:id="@+id/launchSettingsButton"
@@ -41,8 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/main_button_margin"
-                android:text="@string/label_button_settings"
-                android:drawableStart="@drawable/ic_action_settings"/>
+                android:drawableStart="@drawable/ic_settings"
+                android:text="@string/label_button_settings" />
 
             <Button
                 android:id="@+id/launchMedolyButton"
@@ -50,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/main_button_margin"
+                android:drawableStart="@drawable/ic_medoly"
                 android:text="@string/label_button_launch_medoly" />
 
         </LinearLayout>
