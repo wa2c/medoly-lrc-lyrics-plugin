@@ -63,12 +63,11 @@ class SettingsFragment : PreferenceFragment() {
             val languageList = ArrayList<Pair<String, String>>(languages.size)
             for (i in languages.indices) {
                 val langs = languages[i].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                if (langs.size == 1)
-                    languageList.add(Pair(languages[i], Locale(langs[0]).displayName))
-                else if (langs.size == 2)
-                    languageList.add(Pair(languages[i], Locale(langs[0], langs[1]).displayName))
-                else if (langs.size >= 3)
-                    languageList.add(Pair(languages[i], Locale(langs[0], langs[1], langs[2]).displayName))
+                when {
+                    langs.size == 1 -> languageList.add(Pair(languages[i], Locale(langs[0]).displayName))
+                    langs.size == 2 -> languageList.add(Pair(languages[i], Locale(langs[0], langs[1]).displayName))
+                    langs.size >= 3 -> languageList.add(Pair(languages[i], Locale(langs[0], langs[1], langs[2]).displayName))
+                }
             }
 
             // sort

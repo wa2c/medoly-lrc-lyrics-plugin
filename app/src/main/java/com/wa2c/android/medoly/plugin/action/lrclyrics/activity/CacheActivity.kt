@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -12,12 +13,12 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
+import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.ActivityCacheBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.CacheDialogFragment
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.ConfirmDialogFragment
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
-import kotlinx.android.synthetic.main.activity_cache.*
 import kotlinx.android.synthetic.main.layout_cache_item.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -31,6 +32,9 @@ import java.util.*
  */
 class CacheActivity : Activity() {
 
+    /** Binding. */
+    private lateinit var binding: ActivityCacheBinding
+
     /** Search list adapter.  */
     private lateinit var cacheAdapter: CacheAdapter
     /** Search cache helper.  */
@@ -40,7 +44,7 @@ class CacheActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cache)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_cache)
 
         // Action Bar
         actionBar.setDisplayShowHomeEnabled(true)
@@ -49,34 +53,35 @@ class CacheActivity : Activity() {
 
         searchCacheHelper = SearchCacheHelper(this)
         cacheAdapter = CacheAdapter(this)
-        cacheListView.adapter = cacheAdapter
+        binding.cacheListView.adapter = cacheAdapter
 
-        cacheTitleEditText.setText(intent.getStringExtra(INTENT_SEARCH_TITLE))
-        cacheArtistEditText.setText(intent.getStringExtra(INTENT_SEARCH_ARTIST))
+        binding.cacheTitleEditText.setText(intent.getStringExtra(INTENT_SEARCH_TITLE))
+        binding.cacheArtistEditText.setText(intent.getStringExtra(INTENT_SEARCH_ARTIST))
 
-        cacheInputClearButton.setOnClickListener {
-            cacheTitleEditText.text = null
-            cacheArtistEditText.text = null
+        binding.cacheInputClearButton.setOnClickListener {
+            binding.cacheTitleEditText.text = null
+            binding.cacheArtistEditText.text = null
         }
 
-        cacheInputSearchButton.setOnClickListener {
+        binding.cacheInputSearchButton.setOnClickListener {
             // Hide keyboard
             val inputMethodMgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodMgr.hideSoftInputFromWindow(it.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
 
-            val title = cacheTitleEditText.text.toString()
-            val artist = cacheArtistEditText.text.toString()
+            val title = binding.cacheTitleEditText.text.toString()
+            val artist = binding.cacheArtistEditText.text.toString()
 
 
             searchCache(title, artist)
-            cacheTitleEditText.tag = title
-            cacheArtistEditText.tag = artist
+            binding.cacheTitleEditText.tag = title
+            binding.cacheArtistEditText.tag = artist
         }
 
-        cacheListView.setOnItemClickListener { _, _, position, _ ->
+        binding.cacheListView.setOnItemClickListener { _, _, position, _ ->
             val item  = cacheAdapter.getItem(position)
             val dialog = CacheDialogFragment.newInstance(item)
-            dialog.clickListener = DialogInterface.OnClickListener { _, which ->
+
+            dialog.clickListener = { _, which, _ ->
                 when (which) {
                     // Save
                     DialogInterface.BUTTON_POSITIVE -> {
@@ -92,9 +97,9 @@ class CacheActivity : Activity() {
                         startActivity(intent)
                     }
                     // Delete lyrics
-                    CacheDialogFragment.DIALOG_RESULT_DELETE_LYRICS -> searchCache(cacheTitleEditText.tag as String, cacheArtistEditText.tag as String)
+                    CacheDialogFragment.DIALOG_RESULT_DELETE_LYRICS -> searchCache(binding.cacheTitleEditText.tag as String, binding.cacheArtistEditText.tag as String)
                     // Delete cache
-                    CacheDialogFragment.DIALOG_RESULT_DELETE_CACHE -> searchCache(cacheTitleEditText.tag as String, cacheArtistEditText.tag as String)
+                    CacheDialogFragment.DIALOG_RESULT_DELETE_CACHE -> searchCache(binding.cacheTitleEditText.tag as String,binding. cacheArtistEditText.tag as String)
                 }
             }
             dialog.show(this)
@@ -142,7 +147,7 @@ class CacheActivity : Activity() {
                         getString(android.R.string.cancel)
                 )
 
-                dialog.clickListener = DialogInterface.OnClickListener { _, which ->
+                dialog.clickListener = { _, which, _ ->
                     if (which == DialogInterface.BUTTON_POSITIVE) {
                         GlobalScope.launch(Dispatchers.Main) {
                             val result = async(Dispatchers.Default) {
@@ -159,8 +164,8 @@ class CacheActivity : Activity() {
             }
             R.id.menu_cache_open_search -> {
                 val intent = Intent(this, SearchActivity::class.java)
-                intent.putExtra(SearchActivity.INTENT_SEARCH_TITLE, cacheTitleEditText.text.toString())
-                intent.putExtra(SearchActivity.INTENT_SEARCH_ARTIST, cacheArtistEditText.text.toString())
+                intent.putExtra(SearchActivity.INTENT_SEARCH_TITLE, binding.cacheTitleEditText.text.toString())
+                intent.putExtra(SearchActivity.INTENT_SEARCH_ARTIST, binding.cacheArtistEditText.text.toString())
                 startActivity(intent)
             }
         }

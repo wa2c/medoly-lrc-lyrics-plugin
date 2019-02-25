@@ -1,115 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:descendantFocusability="blocksDescendants"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:id="@+id/searchItemTitleTextView"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/searchItemRadioButton"
-        android:ellipsize="end"
-        android:lines="1"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:text="@string/label_title"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textSize="18sp"
-        android:textStyle="normal|bold" />
-
-    <LinearLayout
-        android:id="@+id/searchItemMediaTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/searchItemTitleTextView"
-        android:layout_toStartOf="@+id/searchItemRadioButton"
-        android:orientation="horizontal">
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/searchItemArtistTextView"
-            android:layout_width="wrap_content"
+            android:id="@+id/searchItemTitleTextView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/searchItemRadioButton"
             android:ellipsize="end"
             android:lines="1"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="@string/label_artist" />
+            android:text="@string/label_title"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="18sp"
+            android:textStyle="normal|bold" />
 
-        <TextView
-            android:id="@+id/searchItemSeparatorTextView"
+        <LinearLayout
+            android:id="@+id/searchItemMediaTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/label_search_item_separator" />
+            android:layout_below="@+id/searchItemTitleTextView"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/searchItemRadioButton"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/searchItemAlbumTextView"
+            <TextView
+                android:id="@+id/searchItemArtistTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@string/label_artist" />
+
+            <TextView
+                android:id="@+id/searchItemSeparatorTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_search_item_separator" />
+
+            <TextView
+                android:id="@+id/searchItemAlbumTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@string/label_album" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:lines="1"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:text="@string/label_album" />
+            android:layout_below="@+id/searchItemMediaTextView"
+            android:layout_alignParentStart="true"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/searchItemDownloadTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@string/label_search_item_download" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/searchItemMediaTextView"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/searchItemRatingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@string/label_search_item_rating" />
 
-        <TextView
-            android:id="@+id/searchItemDownloadTextView"
+            <TextView
+                android:id="@+id/searchItemFromTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@string/label_search_item_from" />
+
+        </LinearLayout>
+
+        <RadioButton
+            android:id="@+id/searchItemRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:ellipsize="end"
-            android:lines="1"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:text="@string/label_search_item_download" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
 
-        <TextView
-            android:id="@+id/searchItemRatingTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:ellipsize="end"
-            android:lines="1"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:text="@string/label_search_item_rating" />
+    </RelativeLayout>
 
-        <TextView
-            android:id="@+id/searchItemFromTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:ellipsize="end"
-            android:lines="1"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:text="@string/label_search_item_from" />
-
-    </LinearLayout>
-
-    <RadioButton
-        android:id="@+id/searchItemRadioButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
-
-</RelativeLayout>
+</layout>

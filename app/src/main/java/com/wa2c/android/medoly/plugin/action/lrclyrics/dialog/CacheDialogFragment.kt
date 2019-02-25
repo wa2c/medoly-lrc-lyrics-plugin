@@ -2,9 +2,12 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
+import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.DialogCacheBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
@@ -20,41 +23,41 @@ import kotlinx.coroutines.launch
  */
 class CacheDialogFragment : AbstractDialogFragment() {
 
-    /**
-     * onCreateDialog
-     */
+    /** Binding. */
+    private lateinit var binding: DialogCacheBinding
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
+        binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.dialog_cache, null, false)
 
         // data
         val cache = arguments.getSerializable(ARG_CACHE) as SearchCache
         val result = cache.makeResultItem()
 
         // view
-        val contentView = View.inflate(activity, R.layout.dialog_cache, null)
-        contentView.dialogCacheLyricsTextView.text = if (cache.has_lyrics != null && cache.has_lyrics!!) result!!.lyrics else getString(R.string.message_dialog_cache_none)
+        binding.dialogCacheLyricsTextView.text = if (cache.has_lyrics != null && cache.has_lyrics!!) result!!.lyrics else getString(R.string.message_dialog_cache_none)
         if (cache.has_lyrics != true) {
-            contentView.dialogCacheDeleteLyricsButton.isEnabled = false
+            binding.dialogCacheDeleteLyricsButton.isEnabled = false
         }
 
         // delete lyrics button
-        contentView.dialogCacheDeleteLyricsButton.setOnClickListener {
+        binding.dialogCacheDeleteLyricsButton.setOnClickListener {
             deleteLyrics(cache)
         }
 
         // delete cache button
-        contentView.dialogCacheDeleteCacheButton.setOnClickListener {
+        binding.dialogCacheDeleteCacheButton.setOnClickListener {
             deleteCache(cache)
         }
 
         // build dialog
         val builder = AlertDialog.Builder(activity)
         builder.setTitle(R.string.title_activity_cache)
-        builder.setView(contentView)
+        builder.setView(binding.root)
         builder.setNeutralButton(R.string.label_close, null)
-        builder.setNegativeButton(R.string.label_dialog_cache_research, clickListener)
+        builder.setNegativeButton(R.string.label_dialog_cache_research, null)
         if (result != null && !result.lyrics.isNullOrEmpty()) {
-            builder.setPositiveButton(R.string.menu_search_save_file, clickListener)
+            builder.setPositiveButton(R.string.menu_search_save_file, null)
         }
         return builder.create()
     }
@@ -75,7 +78,7 @@ class CacheDialogFragment : AbstractDialogFragment() {
             val r = deleteResult.await()
             if (r != true)
                 AppUtils.showToast(this@CacheDialogFragment.activity, R.string.message_dialog_cache_delete_error)
-            onClickButton(dialog, DIALOG_RESULT_DELETE_LYRICS)
+            clickListener?.invoke(dialog, DIALOG_RESULT_DELETE_LYRICS, null)
         }
     }
 
@@ -95,7 +98,7 @@ class CacheDialogFragment : AbstractDialogFragment() {
             val r = deleteResult.await()
             if (r != true)
                 AppUtils.showToast(this@CacheDialogFragment.activity, R.string.message_dialog_cache_delete_error)
-            onClickButton(dialog, DIALOG_RESULT_DELETE_CACHE)
+            clickListener?.invoke(dialog, DIALOG_RESULT_DELETE_CACHE, null)
         }
     }
 

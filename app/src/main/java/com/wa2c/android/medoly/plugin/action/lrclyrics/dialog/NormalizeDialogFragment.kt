@@ -2,10 +2,15 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.DialogInterface
+import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.CompoundButton
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
+import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.DialogNormalizeBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import kotlinx.android.synthetic.main.dialog_normalize.*
 import kotlinx.android.synthetic.main.dialog_normalize.view.*
@@ -16,12 +21,14 @@ import kotlinx.android.synthetic.main.dialog_normalize.view.*
  */
 class NormalizeDialogFragment : AbstractDialogFragment() {
 
+    /** Binding. */
+    private lateinit var binding: DialogNormalizeBinding
+
     /** Initial text. */
     private var initialText: String? = null
 
     /** Input text. */
-    var inputText: String? = null
-        private set
+    private var inputText: String? = null
 
     /** Check change listener */
     private val textCheckChangeListener = CompoundButton.OnCheckedChangeListener { _, _ -> setAfterText() }
@@ -30,35 +37,33 @@ class NormalizeDialogFragment : AbstractDialogFragment() {
      * onCreateDialog
      */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        val contentView = View.inflate(activity, R.layout.dialog_normalize, null)
+        super.onCreateDialog(savedInstanceState)
+        binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.dialog_normalize, null, false)
 
         initialText = arguments.getString(ARG_INITIAL_TEXT)
         inputText = arguments.getString(ARG_INPUT_TEXT)
-        contentView.dialogNormalizeBeforeTextView.text = inputText
-        contentView.dialogNormalizeAfterTextView.text = inputText
+        binding.dialogNormalizeBeforeTextView.text = inputText
+        binding.dialogNormalizeAfterTextView.text = inputText
 
         if (initialText.isNullOrEmpty()) {
-            contentView.dialogNormalizeResetButton.visibility = View.GONE
+            binding.dialogNormalizeResetButton.visibility = View.GONE
         }
 
-        contentView.dialogNormalizeCheckBox.setOnCheckedChangeListener(textCheckChangeListener)
-        contentView.dialogNormalizeParenthesesCheckBox.setOnCheckedChangeListener(textCheckChangeListener)
-        contentView.dialogNormalizeDashCheckBox.setOnCheckedChangeListener(textCheckChangeListener)
-        contentView.dialogNormalizeInfoCheckBox.setOnCheckedChangeListener(textCheckChangeListener)
-        contentView.dialogNormalizeResetButton.setOnClickListener {
-            contentView.dialogNormalizeBeforeTextView.text = initialText
+        binding.dialogNormalizeCheckBox.setOnCheckedChangeListener(textCheckChangeListener)
+        binding.dialogNormalizeParenthesesCheckBox.setOnCheckedChangeListener(textCheckChangeListener)
+        binding.dialogNormalizeDashCheckBox.setOnCheckedChangeListener(textCheckChangeListener)
+        binding.dialogNormalizeInfoCheckBox.setOnCheckedChangeListener(textCheckChangeListener)
+        binding.dialogNormalizeResetButton.setOnClickListener {
+            binding.dialogNormalizeBeforeTextView.text = initialText
             setAfterText()
         }
 
-
-
         // build dialog
         val builder = AlertDialog.Builder(activity)
-        builder.setView(contentView)
+        builder.setView(binding.root)
         builder.setTitle(R.string.title_dialog_normalize)
         builder.setNeutralButton(R.string.label_close, null)
-        builder.setPositiveButton(R.string.label_edit, clickListener)
+        builder.setPositiveButton(R.string.label_edit, null)
 
         return builder.create()
     }
@@ -81,11 +86,22 @@ class NormalizeDialogFragment : AbstractDialogFragment() {
         dialog.dialogNormalizeAfterTextView.text = text
     }
 
+
+    override fun setPositiveButton(dialog: AlertDialog, button: Button) {
+        button.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString(RESULT_INPUT_TEXT, inputText)
+            clickListener?.invoke(dialog, DialogInterface.BUTTON_POSITIVE, bundle)
+            dialog.dismiss()
+        }
+    }
+
     companion object {
 
         // argument keys
         private const val ARG_INITIAL_TEXT = "ARG_INITIAL_TEXT"
         private const val ARG_INPUT_TEXT = "ARG_INPUT_TEXT"
+        const val RESULT_INPUT_TEXT = "RESULT_INPUT_TEXT"
 
         /**
          * Create dialog instance.
@@ -94,10 +110,11 @@ class NormalizeDialogFragment : AbstractDialogFragment() {
          * @return Dialog instance.
          */
         fun newInstance(text: String?, initialText: String?): NormalizeDialogFragment {
-            val fragment = NormalizeDialogFragment()
             val args = Bundle()
             args.putString(ARG_INITIAL_TEXT, initialText)
             args.putString(ARG_INPUT_TEXT, text)
+
+            val fragment = NormalizeDialogFragment()
             fragment.arguments = args
             return fragment
         }

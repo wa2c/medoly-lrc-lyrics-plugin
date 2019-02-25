@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -13,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
+import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.ActivitySearchBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.ConfirmDialogFragment
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.NormalizeDialogFragment
@@ -21,7 +23,6 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ViewLyricsSearcher
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import com.wa2c.android.prefs.Prefs
-import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.layout_search_item.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -34,25 +35,26 @@ import timber.log.Timber
  */
 class SearchActivity : Activity() {
 
+    /** Preferences.  */
+    private lateinit var prefs: Prefs
+    /** Binding. */
+    private lateinit var binding: ActivitySearchBinding
+
     /** Search list adapter.  */
     private lateinit var searchResultAdapter: SearchResultAdapter
     /** Search cache helper.  */
     private lateinit var searchCacheHelper: SearchCacheHelper
 
-    /** Preferences.  */
-    private lateinit var prefs: Prefs
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
         prefs = Prefs(this)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
 
         val intentSearchTitle : String? = intent.getStringExtra(INTENT_SEARCH_TITLE)
         val intentSearchArtist : String? = intent.getStringExtra(INTENT_SEARCH_ARTIST)
 
-
-        searchTitleEditText.setText(intentSearchTitle)
-        searchArtistEditText.setText(intentSearchArtist)
+        binding.searchTitleEditText.setText(intentSearchTitle)
+        binding.searchArtistEditText.setText(intentSearchArtist)
 
         // Action Bar
         actionBar.setDisplayShowHomeEnabled(true)
@@ -61,42 +63,42 @@ class SearchActivity : Activity() {
 
         searchCacheHelper = SearchCacheHelper(this)
         searchResultAdapter = SearchResultAdapter(this)
-        searchResultListView.adapter = searchResultAdapter
+        binding.searchResultListView.adapter = searchResultAdapter
 
         val searchResultHeight = resources.getDimensionPixelSize(R.dimen.search_result_height)
 
         // adjust size
-        searchLyricsScrollView.post(Runnable {
+        binding.searchLyricsScrollView.post(Runnable {
             // adjust height
-            val heightResult = searchResultListView.measuredHeight
-            val heightLyrics = searchLyricsScrollView.measuredHeight
+            val heightResult = binding.searchResultListView.measuredHeight
+            val heightLyrics = binding.searchLyricsScrollView.measuredHeight
             val heightSum = heightResult + heightLyrics
             if (heightResult == 0)
                 return@Runnable
             if (heightSum < searchResultHeight * 2) {
-                val params = searchResultListView!!.layoutParams
+                val params = binding.searchResultListView.layoutParams
                 params.height = heightSum / 2
-                searchResultListView.layoutParams = params
+                binding.searchResultListView.layoutParams = params
             }
         })
 
         // Title button
-        searchTitleButton.setOnClickListener {
-            val dialogFragment = NormalizeDialogFragment.newInstance(searchTitleEditText.text.toString(), intentSearchTitle)
-            dialogFragment.clickListener = DialogInterface.OnClickListener { _, which ->
+        binding.searchTitleButton.setOnClickListener {
+            val dialogFragment = NormalizeDialogFragment.newInstance(binding.searchTitleEditText.text.toString(), intentSearchTitle)
+            dialogFragment.clickListener = { _, which, bundle ->
                 if (which == DialogInterface.BUTTON_POSITIVE) {
-                    searchTitleEditText.setText(dialogFragment.inputText)
+                    binding.searchTitleEditText.setText(bundle?.getString(NormalizeDialogFragment.RESULT_INPUT_TEXT))
                 }
             }
             dialogFragment.show(this)
         }
 
         // Artist button
-        searchArtistButton.setOnClickListener {
-            val dialogFragment = NormalizeDialogFragment.newInstance(searchArtistEditText.text.toString(), intentSearchArtist)
-            dialogFragment.clickListener = DialogInterface.OnClickListener { _, which ->
+        binding.searchArtistButton.setOnClickListener {
+            val dialogFragment = NormalizeDialogFragment.newInstance(binding.searchArtistEditText.text.toString(), intentSearchArtist)
+            dialogFragment.clickListener = { _, which, bundle ->
                 if (which == DialogInterface.BUTTON_POSITIVE) {
-                    searchArtistEditText.setText(dialogFragment.inputText)
+                    binding.searchArtistEditText.setText(bundle?.getString(NormalizeDialogFragment.RESULT_INPUT_TEXT))
                 }
             }
             dialogFragment.show(this)
@@ -104,19 +106,19 @@ class SearchActivity : Activity() {
         }
 
         // Clear[x] button
-        searchClearButton.setOnClickListener {
-            searchTitleEditText.text = null
-            searchArtistEditText.text = null
+        binding.searchClearButton.setOnClickListener {
+            binding.searchTitleEditText.text = null
+            binding.searchArtistEditText.text = null
         }
 
         // Search button
-        searchStartButton.setOnClickListener { view ->
+        binding.searchStartButton.setOnClickListener { view ->
             // Hide keyboard
             val inputMethodMgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodMgr.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
 
-            val title = searchTitleEditText.text.toString()
-            val artist = searchArtistEditText.text.toString()
+            val title = binding.searchTitleEditText.text.toString()
+            val artist = binding.searchArtistEditText.text.toString()
             if (title.isEmpty() && artist.isEmpty()) {
                 AppUtils.showToast(this, R.string.error_input_condition)
                 return@setOnClickListener
@@ -127,8 +129,8 @@ class SearchActivity : Activity() {
             showLyrics(null)
             searchResultAdapter.selectedItem = null
 
-            searchResultListView.visibility = View.INVISIBLE
-            searchResultLoadingLayout.visibility = View.VISIBLE
+            binding.searchResultListView.visibility = View.INVISIBLE
+            binding.searchResultLoadingLayout.visibility = View.VISIBLE
 
             //searchLyrics(title, artist)
             GlobalScope.launch(Dispatchers.Main) {
@@ -147,15 +149,15 @@ class SearchActivity : Activity() {
         }
 
         // List item
-        searchResultListView.setOnItemClickListener { _, _, position, _ ->
+        binding.searchResultListView.setOnItemClickListener { _, _, position, _ ->
             val inputMethodMgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodMgr.hideSoftInputFromWindow(searchResultListView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            inputMethodMgr.hideSoftInputFromWindow(binding.searchResultListView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
 
             // Clear view
             showLyrics(null)
 
-            searchLyricsScrollView.visibility = View.INVISIBLE
-            searchLyricsLoadingLayout.visibility = View.VISIBLE
+            binding.searchLyricsScrollView.visibility = View.INVISIBLE
+            binding.searchLyricsLoadingLayout.visibility = View.VISIBLE
 
             GlobalScope.launch(Dispatchers.Main) {
                 val item = searchResultAdapter.getItem(position)
@@ -173,10 +175,10 @@ class SearchActivity : Activity() {
         super.onNewIntent(intent)
         setIntent(intent)
 
-        searchResultListView.adapter = searchResultAdapter
+        binding.searchResultListView.adapter = searchResultAdapter
 
-        searchTitleEditText.setText(intent.getStringExtra(INTENT_SEARCH_TITLE))
-        searchArtistEditText.setText(intent.getStringExtra(INTENT_SEARCH_ARTIST))
+        binding.searchTitleEditText.setText(intent.getStringExtra(INTENT_SEARCH_TITLE))
+        binding.searchArtistEditText.setText(intent.getStringExtra(INTENT_SEARCH_ARTIST))
     }
 
     /**
@@ -203,8 +205,8 @@ class SearchActivity : Activity() {
                     return true
                 }
 
-                val title = searchTitleEditText.text.toString()
-                val artist = searchArtistEditText.text.toString()
+                val title = binding.searchTitleEditText.text.toString()
+                val artist = binding.searchArtistEditText.text.toString()
                 AppUtils.saveFile(this, title, artist)
             }
             R.id.menu_search_save_cache -> {
@@ -220,10 +222,10 @@ class SearchActivity : Activity() {
                         null,
                         getString(android.R.string.cancel)
                 )
-                dialog.clickListener = DialogInterface.OnClickListener { _, which ->
+                dialog.clickListener = { _, which, _ ->
                     if (which == DialogInterface.BUTTON_POSITIVE) {
-                        val title = searchTitleEditText.text.toString()
-                        val artist = searchArtistEditText.text.toString()
+                        val title = binding.searchTitleEditText.text.toString()
+                        val artist = binding.searchArtistEditText.text.toString()
 
                         GlobalScope.launch(Dispatchers.Main) {
                             val result = async(Dispatchers.Default) {
@@ -238,8 +240,8 @@ class SearchActivity : Activity() {
             }
             R.id.menu_search_open_cache -> {
                 val intent = Intent(this, CacheActivity::class.java)
-                intent.putExtra(CacheActivity.INTENT_SEARCH_TITLE, searchTitleEditText.text.toString())
-                intent.putExtra(CacheActivity.INTENT_SEARCH_ARTIST, searchArtistEditText.text.toString())
+                intent.putExtra(CacheActivity.INTENT_SEARCH_TITLE, binding.searchTitleEditText.text.toString())
+                intent.putExtra(CacheActivity.INTENT_SEARCH_ARTIST, binding.searchArtistEditText.text.toString())
                 startActivity(intent)
                 return true
             }
@@ -288,8 +290,8 @@ class SearchActivity : Activity() {
                 searchResultAdapter.addAll(result.infoList)
             searchResultAdapter.notifyDataSetChanged()
         } finally {
-            searchResultListView.visibility = View.VISIBLE
-            searchResultLoadingLayout.visibility = View.INVISIBLE
+            binding.searchResultListView.visibility = View.VISIBLE
+            binding.searchResultLoadingLayout.visibility = View.INVISIBLE
         }
     }
 
@@ -298,14 +300,14 @@ class SearchActivity : Activity() {
      */
     private fun showLyrics(item: ResultItem?) {
         if (item == null) {
-            searchLyricsTextView.text = null
+            binding.searchLyricsTextView.text = null
         } else {
-            searchLyricsTextView.text = item.lyrics
+            binding.searchLyricsTextView.text = item.lyrics
         }
         searchResultAdapter.selectedItem = item
         searchResultAdapter.notifyDataSetChanged()
-        searchLyricsScrollView.visibility = View.VISIBLE
-        searchLyricsLoadingLayout.visibility = View.INVISIBLE
+        binding.searchLyricsScrollView.visibility = View.VISIBLE
+        binding.searchLyricsLoadingLayout.visibility = View.INVISIBLE
     }
 
     /**
