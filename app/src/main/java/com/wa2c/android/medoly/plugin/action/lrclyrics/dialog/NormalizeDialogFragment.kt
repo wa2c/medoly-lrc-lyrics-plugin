@@ -13,7 +13,6 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.DialogNormalizeBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import kotlinx.android.synthetic.main.dialog_normalize.*
-import kotlinx.android.synthetic.main.dialog_normalize.view.*
 
 
 /**

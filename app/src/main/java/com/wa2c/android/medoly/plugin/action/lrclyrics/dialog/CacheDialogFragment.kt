@@ -5,13 +5,11 @@ import android.app.Dialog
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.DialogCacheBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
-import kotlinx.android.synthetic.main.dialog_cache.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async

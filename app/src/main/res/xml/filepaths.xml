@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <files-path path="lyrics/" name="lyrics" />
+    <files-path
+        name="lyrics"
+        path="lyrics/" />
 </paths>

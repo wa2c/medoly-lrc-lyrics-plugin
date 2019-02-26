@@ -1,7 +1,7 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics.activity
 
+import android.app.Activity
 import android.os.Bundle
-import android.preference.PreferenceActivity
 import android.view.MenuItem
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 
@@ -9,19 +9,22 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 /**
  * Settings activity
  */
-class SettingsActivity : PreferenceActivity() {
+class SettingsActivity : Activity() {
 
     /**
      * onCreate event.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
 
         actionBar.setDisplayShowHomeEnabled(true)
         actionBar.setDisplayHomeAsUpEnabled(true)
         actionBar.setDisplayShowTitleEnabled(true)
         actionBar.setTitle(R.string.title_activity_settings)
+
+        if (savedInstanceState == null) {
+            fragmentManager.beginTransaction().add(android.R.id.content, SettingsFragment()).commit()
+        }
     }
 
     /**

@@ -3,9 +3,7 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.util
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat
 import android.widget.Toast
-import com.pranavpandey.android.dynamic.toasts.DynamicToast
 import timber.log.Timber
 
 /**

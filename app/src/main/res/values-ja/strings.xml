@@ -94,7 +94,6 @@
     <string name="label_dialog_about_library">[Library]</string>
 
 
-
     <!-- Preferences -->
     <string name="title_preference_category_event">イベント</string>
     <string name="title_preference_category_info">情報</string>
@@ -134,7 +133,6 @@
     <!-- System -->
     <string name="error_app">エラーが発生したため、操作に失敗しました。</string>
     <string name="error_dialog_dismissed">ダイアログ操作に失敗しました。再度ダイアログを開いてください。</string>
-
 
 
     <!-- List -->

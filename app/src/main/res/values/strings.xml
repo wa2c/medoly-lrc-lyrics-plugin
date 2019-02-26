@@ -84,7 +84,6 @@
     <string name="message_dialog_cache_none">No lyrics.</string>
 
 
-
     <!-- About Dialog -->
     <string name="label_dialog_about_ver">Ver. %1$s</string>
     <string name="label_dialog_about_developer">Developer</string>
@@ -134,7 +133,6 @@
     <!-- System -->
     <string name="error_app">The operation failed due to an error.</string>
     <string name="error_dialog_dismissed">Open the dialog again.</string>
-
 
 
     <!-- List -->

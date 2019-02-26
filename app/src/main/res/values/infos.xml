@@ -26,7 +26,7 @@
 
     <!-- Library  -->
     <string-array name="about_library_names">
-       <item>AndroidAnnotation</item>
+        <item>AndroidAnnotation</item>
         <item>Orma</item>
         <item>language detection</item>
         <item>Gson</item>
