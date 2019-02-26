@@ -1,20 +1,19 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics.activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.ActivitySearchBinding
+import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.LayoutSearchItemBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.ConfirmDialogFragment
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.NormalizeDialogFragment
@@ -23,7 +22,7 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ViewLyricsSearcher
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import com.wa2c.android.prefs.Prefs
-import kotlinx.android.synthetic.main.layout_search_item.view.*
+import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -62,8 +61,9 @@ class SearchActivity : Activity() {
         actionBar.setDisplayShowTitleEnabled(true)
 
         searchCacheHelper = SearchCacheHelper(this)
-        searchResultAdapter = SearchResultAdapter(this)
+        searchResultAdapter = SearchResultAdapter()
         binding.searchResultListView.adapter = searchResultAdapter
+        binding.searchResultListView.layoutManager = LinearLayoutManager(this)
 
         val searchResultHeight = resources.getDimensionPixelSize(R.dimen.search_result_height)
 
@@ -149,11 +149,10 @@ class SearchActivity : Activity() {
         }
 
         // List item
-        binding.searchResultListView.setOnItemClickListener { _, _, position, _ ->
+        searchResultAdapter.itemClickListener = listener@{ _, position ->
             val inputMethodMgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodMgr.hideSoftInputFromWindow(binding.searchResultListView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
 
-            // Clear view
             showLyrics(null)
 
             binding.searchLyricsScrollView.visibility = View.INVISIBLE
@@ -161,8 +160,8 @@ class SearchActivity : Activity() {
 
             GlobalScope.launch(Dispatchers.Main) {
                 val item = searchResultAdapter.getItem(position)
-                item.lyrics = async(Dispatchers.Default) {
-                    return@async ViewLyricsSearcher.downloadLyricsText(item.lyricURL)
+                item?.lyrics = async(Dispatchers.Default) {
+                    return@async ViewLyricsSearcher.downloadLyricsText(item?.lyricURL)
                 }.await()
                 showLyrics(item)
             }
@@ -305,7 +304,8 @@ class SearchActivity : Activity() {
             binding.searchLyricsTextView.text = item.lyrics
         }
         searchResultAdapter.selectedItem = item
-        searchResultAdapter.notifyDataSetChanged()
+        if (item != null) // for ripple effect
+            searchResultAdapter.notifyDataSetChanged()
         binding.searchLyricsScrollView.visibility = View.VISIBLE
         binding.searchLyricsLoadingLayout.visibility = View.INVISIBLE
     }
@@ -320,57 +320,70 @@ class SearchActivity : Activity() {
 
 
 
+    /**
+     * Unsent list adapter
+     */
+    inner class SearchResultAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        /** Item list */
+        private val itemList: MutableList<ResultItem> = mutableListOf()
+        /** Selected item.  */
+        var selectedItem: ResultItem? = null
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            val binding: LayoutSearchItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.layout_search_item, parent,false)
+            val rootView = binding.root
+            rootView.tag = binding
+            return object : RecyclerView.ViewHolder(rootView) {}
+        }
+
+        @SuppressLint("ClickableViewAccessibility")
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            val item = itemList[position]
+            val binding = holder.itemView.tag as LayoutSearchItemBinding
+            val context = binding.root.context
+
+            binding.searchItemRadioButton.isChecked = (item == selectedItem)
+            binding.searchItemTitleTextView.text = item.musicTitle
+            binding.searchItemArtistTextView.text = AppUtils.coalesce(item.musicArtist, "-")
+            binding.searchItemAlbumTextView.text = AppUtils.coalesce(item.musicAlbum, "-")
+            binding.searchItemDownloadTextView.text = context.getString(R.string.label_search_item_download, item.lyricDownloadsCount)
+            binding.searchItemRatingTextView.text = context.getString(R.string.label_search_item_rating, item.lyricRate, item.lyricRatesCount)
+            binding.searchItemFromTextView.text = context.getString(R.string.label_search_item_from, item.lyricUploader)
+
+            binding.searchItemRadioButton.setOnTouchListener { _, event ->
+                binding.root.onTouchEvent(event)
+            }
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(binding.root, position)
+            }
+        }
+
+        override fun getItemCount(): Int {
+            return itemList.size
+        }
+
+        fun getItem(position: Int): ResultItem? {
+            return itemList.getOrNull(position)
+        }
+
+        fun addAll(list: Collection<ResultItem>?) {
+            if (list != null)
+                itemList.addAll(list)
+        }
+
+        fun clear() {
+            itemList.clear()
+        }
+
+        var itemClickListener: ((view: View, which: Int) -> Unit)? = null
+
+    }
+
+
+
     companion object {
         const val INTENT_SEARCH_TITLE = "INTENT_SEARCH_TITLE"
         const val INTENT_SEARCH_ARTIST = "INTENT_SEARCH_ARTIST"
-
-        /**
-         * Search result adapter.
-         */
-        private class SearchResultAdapter internal constructor(context: Context) : ArrayAdapter<ResultItem>(context, R.layout.layout_search_item) {
-
-            /** Selected item.  */
-            internal var selectedItem: ResultItem? = null
-
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val listView = parent as ListView
-                var itemView = convertView
-                val holder: ListItemViewHolder
-                if (itemView == null) {
-                    holder = ListItemViewHolder(parent.context)
-                    itemView = holder.itemView
-                } else {
-                    holder = itemView.tag as ListItemViewHolder
-                }
-
-                val item = getItem(position)
-                val listener : (View) -> Unit = {
-                    listView.performItemClick(it, position, getItemId(position))
-                }
-                holder.bind(item, (item == selectedItem), listener)
-
-                return itemView
-            }
-
-            /** List item view holder.  */
-            private class ListItemViewHolder(val context: Context) {
-                val itemView = View.inflate(context, R.layout.layout_search_item, null)!!
-                init {
-                    itemView.tag = this
-                }
-
-                fun bind(item: ResultItem, selected: Boolean, listener: (View) -> Unit) {
-                    itemView.searchItemRadioButton.isChecked = selected
-                    itemView.searchItemTitleTextView.text = item.musicTitle
-                    itemView.searchItemArtistTextView.text = AppUtils.coalesce(item.musicArtist, "-")
-                    itemView.searchItemAlbumTextView.text = AppUtils.coalesce(item.musicAlbum, "-")
-                    itemView.searchItemDownloadTextView.text = context.getString(R.string.label_search_item_download, item.lyricDownloadsCount)
-                    itemView.searchItemRatingTextView.text = context.getString(R.string.label_search_item_rating, item.lyricRate, item.lyricRatesCount)
-                    itemView.searchItemFromTextView.text = context.getString(R.string.label_search_item_from, item.lyricUploader)
-                    itemView.searchItemRadioButton.setOnClickListener(listener)
-                }
-            }
-        }
     }
 
 }

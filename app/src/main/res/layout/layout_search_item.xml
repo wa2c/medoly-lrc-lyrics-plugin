@@ -4,6 +4,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
         android:descendantFocusability="blocksDescendants"
         android:orientation="vertical">
 
@@ -111,8 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true" />
+/>
 
     </RelativeLayout>
 

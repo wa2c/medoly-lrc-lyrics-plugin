@@ -71,7 +71,6 @@ class CacheActivity : Activity() {
             val title = binding.cacheTitleEditText.text.toString()
             val artist = binding.cacheArtistEditText.text.toString()
 
-
             searchCache(title, artist)
             binding.cacheTitleEditText.tag = title
             binding.cacheArtistEditText.tag = artist
