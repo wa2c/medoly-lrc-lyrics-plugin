@@ -167,8 +167,8 @@ object AppUtils {
                 artist = ""
 
             val prefs = Prefs(activity)
-            val defaultName = prefs.getString(R.string.pref_file_name_default, defRes = R.string.file_name_default_default)
-            val separator = prefs.getString(R.string.pref_file_name_separator, defRes = R.string.file_name_separator_default)
+            val defaultName = prefs.getString(R.string.pref_file_name_default, defRes = R.string.pref_default_file_name_default)
+            val separator = prefs.getString(R.string.pref_file_name_separator, defRes = R.string.pref_default_file_name_separator)
 
             val fileName  = when (defaultName) {
                 "TITLE_ARTIST" -> title + separator + artist

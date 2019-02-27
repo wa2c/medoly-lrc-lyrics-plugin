@@ -28,8 +28,9 @@ class PluginReceivers {
 
             if (this is EventGetLyricsReceiver ||
                 this is ExecuteGetLyricsReceiver) {
-                // checks
+                // category
                 if (!pluginIntent.hasCategory(PluginTypeCategory.TYPE_GET_LYRICS)) {
+                    AppUtils.sendResult(context, pluginIntent)
                     return
                 }
                 // media
@@ -44,7 +45,7 @@ class PluginReceivers {
                     return
                 }
 
-                val operation = try { PluginOperationCategory.valueOf(prefs.getString(R.string.pref_event_get_lyrics)) } catch (ignore : Exception) { null }
+                val operation = prefs.getString(R.string.pref_event_get_lyrics, defRes = R.string.pref_default_event_get_lyrics)
                 if (!pluginIntent.hasCategory(PluginOperationCategory.OPERATION_EXECUTE) && !pluginIntent.hasCategory(operation)) {
                     AppUtils.sendResult(context, pluginIntent)
                     return

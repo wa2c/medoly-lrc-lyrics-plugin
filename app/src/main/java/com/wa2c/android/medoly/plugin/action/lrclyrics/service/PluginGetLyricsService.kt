@@ -47,12 +47,12 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
         val resultItem = findLyrics(pluginIntent)
         sendLyricsResult(resultItem)
         if (resultItem == null) {
-            if (prefs.getBoolean(R.string.pref_failure_message_show)) {
-                AppUtils.showToast(this, R.string.message_lyrics_failure)
+            if (prefs.getBoolean(R.string.pref_failure_message_show, defRes = R.bool.pref_default_failure_message_show)) {
+                AppUtils.showToast(this, R.string.message_get_lyrics_failure)
             }
         } else {
-            if (prefs.getBoolean(R.string.pref_success_message_show)) {
-                AppUtils.showToast(this, R.string.message_lyrics_success)
+            if (prefs.getBoolean(R.string.pref_success_message_show, defRes = R.bool.pref_default_success_message_show)) {
+                AppUtils.showToast(this, R.string.message_get_lyrics_success)
             }
         }
     }
@@ -69,12 +69,12 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
         var resultItem: ResultItem? = null
 
         // search cache
-        if (prefs.getBoolean(R.string.pref_use_cache, true)) {
+        if (prefs.getBoolean(R.string.pref_use_cache, defRes = R.bool.pref_default_use_cache)) {
             val cacheHelper = SearchCacheHelper(this)
             val cache = cacheHelper.select(titleText, artistText)
             if (cache != null) {
                 resultItem = cache.makeResultItem()
-                if (resultItem == null && prefs.getBoolean(R.string.pref_cache_non_result, true)) {
+                if (resultItem == null && prefs.getBoolean(R.string.pref_cache_non_result, defRes = R.bool.pref_default_cache_non_result)) {
                     return null // returns even if it is null
                 }
             }
@@ -87,10 +87,10 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
             resultItem = detectResultItem(titleText, artistText)
 
             // save to cache.
-            if (prefs.getBoolean(R.string.pref_cache_result)) {
+            if (prefs.getBoolean(R.string.pref_cache_result, defRes = R.bool.pref_default_cache_result)) {
                 if (resultItem != null) {
                     saveCache(pluginIntent, resultItem)
-                } else if (prefs.getBoolean(R.string.pref_cache_non_result, true)) {
+                } else if (prefs.getBoolean(R.string.pref_cache_non_result, defRes = R.bool.pref_default_cache_non_result)) {
                     saveCache(pluginIntent, null)
                 }
             }
@@ -108,7 +108,7 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
 
         try {
             // pre-creation profiles
-            if (!prefs.getStringOrNull(R.string.pref_search_first_language).isNullOrEmpty()) {
+            if (!prefs.getString(R.string.pref_search_first_language, defRes = R.string.pref_default_search_first_language).isEmpty()) {
                 synchronized(creatorThread) {
                     creatorThread.start() // start profiles creating
                 }
@@ -139,15 +139,18 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
                 -Integer.compare(o1Download, o2Download)
             })
 
-            // detect language
-            if (prefs.getStringOrNull(R.string.pref_search_first_language).isNullOrEmpty()) {
+            val lang1 = prefs.getString(R.string.pref_search_first_language, defRes = R.string.pref_default_search_first_language)
+            val lang2 = prefs.getString(R.string.pref_search_second_language, defRes = R.string.pref_default_search_second_language)
+            val lang3 = prefs.getString(R.string.pref_search_third_language, defRes = R.string.pref_default_search_third_language)
+
+            if (lang1.isEmpty()) {
                 // not exists preferred language
                 resultItem = itemList[0]
                 resultItem.language = null
                 resultItem.lyrics = ViewLyricsSearcher.downloadLyricsText(resultItem.lyricURL)
             } else {
                 // preferred language
-                val threshold = prefs.getInt(R.string.pref_search_language_threshold, 50)
+                val threshold = prefs.getInt(R.string.pref_search_language_threshold, defRes = R.integer.pref_default_search_language_threshold)
                 val selectedResult = arrayOfNulls<ResultItem>(3) // language 0: first, 1:second: 2: third
                 for (item in itemList) {
                     try {
@@ -160,23 +163,25 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
                         for (l in langList) {
                             if (l.prob * 100 < threshold)
                                 continue
-                            if (prefs.getStringOrNull(R.string.pref_search_first_language).isNullOrEmpty() && selectedResult[0] == null)
-                                continue
-                            if (l.lang == prefs.getString(R.string.pref_search_first_language)) {
+
+                            // First language
+                            if (selectedResult[0] == null && l.lang == lang1) {
                                 item.language = l.lang
                                 item.lyrics = text
                                 selectedResult[0] = item
                             }
-                            if (prefs.getStringOrNull(R.string.pref_search_second_language).isNullOrEmpty())
+                            // Second language
+                            if (lang2.isEmpty())
                                 continue
-                            if (l.lang == prefs.getString(R.string.pref_search_second_language) && selectedResult[1] == null) {
+                            if (selectedResult[1] == null && l.lang == lang2) {
                                 item.language = l.lang
                                 item.lyrics = text
                                 selectedResult[1] = item
                             }
-                            if (prefs.getStringOrNull(R.string.pref_search_second_language).isNullOrEmpty())
+                            // Third language
+                            if (lang3.isEmpty())
                                 continue
-                            if (l.lang == prefs.getString(R.string.pref_search_second_language) && selectedResult[2] == null) {
+                            if (selectedResult[2] == null && l.lang == lang3) {
                                 item.language = l.lang
                                 item.lyrics = text
                                 selectedResult[2] = item
@@ -199,7 +204,7 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
             }
 
             // no lyrics
-            if (resultItem == null && prefs.getBoolean(R.string.pref_search_non_preferred_language, true)) {
+            if (resultItem == null && prefs.getBoolean(R.string.pref_search_non_preferred_language, defRes = R.bool.pref_default_search_non_preferred_language)) {
                 resultItem = itemList[0]
                 resultItem.language = null
                 resultItem.lyrics = null
@@ -263,23 +268,6 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
         }
 
         return FileProvider.getUriForFile(this, PROVIDER_AUTHORITIES, sharedLyricsFile)
-
-        // file://
-        //        // Create folder
-        //        File lyricsDir = new File(getExternalCacheDir(), "lyrics");
-        //        if (!lyricsDir.exists()) {
-        //            //noinspection ResultOfMethodCallIgnored
-        //            lyricsDir.mkdir();
-        //        }
-        //
-        //        // Write lyrics.
-        //        File lyricsFile = new File(lyricsDir, "lyrics.txt");
-        //        try (FileOutputStream outputStream = new FileOutputStream(lyricsFile)) {
-        //            outputStream.write(lyricsBytes);
-        //            outputStream.flush();
-        //        }
-        //
-        //        return Uri.fromFile(lyricsFile);
     }
 
     /**

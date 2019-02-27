@@ -22,7 +22,6 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ViewLyricsSearcher
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import com.wa2c.android.prefs.Prefs
-import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -143,7 +142,7 @@ class SearchActivity : Activity() {
                 }
                 val r = result.await()
                 if (r == null)
-                    AppUtils.showToast(applicationContext, R.string.message_lyrics_failure)
+                    AppUtils.showToast(applicationContext, R.string.message_get_lyrics_failure)
                 showSearchResult(r)
             }
         }

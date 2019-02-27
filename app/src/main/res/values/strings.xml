@@ -22,8 +22,8 @@
 
     <!-- Service -->
     <string name="message_no_media">The media is not selected.</string>
-    <string name="message_lyrics_success">Succeeded to get lyrics.</string>
-    <string name="message_lyrics_failure">Failed to get lyrics.</string>
+    <string name="message_get_lyrics_success">Succeeded to get lyrics.</string>
+    <string name="message_get_lyrics_failure">Failed to get lyrics.</string>
 
     <!-- Activity -->
     <string name="title_activity_search">Search</string>
@@ -134,21 +134,7 @@
     <string name="error_app">The operation failed due to an error.</string>
     <string name="error_dialog_dismissed">Open the dialog again.</string>
 
-
     <!-- List -->
-
-    <!-- Plugin event -->
-    <string-array name="event_get_lyrics_entries">
-        <item>Invalid</item>
-        <item>@string/label_plugin_operation_media_open</item>
-        <item>@string/label_plugin_operation_play_start</item>
-    </string-array>
-
-    <!-- File name -->
-    <string-array name="file_name_default_entries">
-        <item>[Title]</item>
-        <item>[Title] [Artist]</item>
-        <item>[Artist] [Title]</item>
-    </string-array>
+    <string name="label_plugin_operation_invalid">Invalid</string>
 
 </resources>

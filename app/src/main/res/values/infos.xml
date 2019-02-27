@@ -26,18 +26,20 @@
 
     <!-- Library  -->
     <string-array name="about_library_names">
-        <item>AndroidAnnotation</item>
         <item>Orma</item>
         <item>language detection</item>
         <item>Gson</item>
         <item>ViewLyricsOpenSearcher</item>
+        <item>Dynamic Toasts</item>
+        <item>Timber</item>
     </string-array>
     <string-array name="about_library_urls">
-        <item>http://androidannotations.org/</item>
         <item>https://github.com/gfx/Android-Orma</item>
         <item>https://github.com/shuyo/language-detection/blob/wiki/ProjectHome.md</item>
         <item>https://github.com/google/gson</item>
         <item>https://github.com/PedroHLC/ViewLyricsOpenSearcher</item>
+        <item>https://github.com/pranavpandey/dynamic-toasts</item>
+        <item>https://github.com/JakeWharton/timber</item>
     </string-array>
 
     <!-- Preferences -->
@@ -58,26 +60,47 @@
     <string name="pref_application_details">pref_application_details</string>
     <string name="pref_about">pref_about</string>
 
+    <string name="prefkey_app_version_code">app_version_code</string>
 
-    <!-- List -->
-
+    <!-- Default -->
     <string name="empty_value" />
 
+    <string name="pref_default_event_get_lyrics">@string/empty_value</string>
+    <bool name="pref_default_use_cache">true</bool>
+    <bool name="pref_default_cache_result">true</bool>
+    <bool name="pref_default_cache_non_result">true</bool>
+    <string name="pref_default_search_first_language">@string/empty_value</string>
+    <string name="pref_default_search_second_language">@string/empty_value</string>
+    <string name="pref_default_search_third_language">@string/empty_value</string>
+    <bool name="pref_default_search_non_preferred_language">true</bool>
+    <integer name="pref_default_search_language_threshold">50</integer>
+    <string name="pref_default_file_name_default">ARTIST_TITLE</string>
+    <string name="pref_default_file_name_separator">" - "</string>
+    <bool name="pref_default_success_message_show">false</bool>
+    <bool name="pref_default_failure_message_show">false</bool>
+
     <!-- Plugin event -->
-    <string name="event_get_lyrics_values_default" />
     <string-array name="event_get_lyrics_values">
         <item />
-        <item>OPERATION_MEDIA_OPEN</item>
-        <item>OPERATION_PLAY_START</item>
+        <item>com.wa2c.android.medoly.plugin.category.OPERATION_MEDIA_OPEN</item>
+        <item>com.wa2c.android.medoly.plugin.category.OPERATION_PLAY_START</item>
+    </string-array>
+    <string-array name="event_get_lyrics_entries">
+        <item>@string/label_plugin_operation_invalid</item>
+        <item>@string/label_plugin_operation_media_open</item>
+        <item>@string/label_plugin_operation_play_start</item>
     </string-array>
 
     <!-- File name -->
-    <string name="file_name_default_default">ARTIST_TITLE</string>
     <string-array name="file_name_default_values">
         <item>TITLE</item>
         <item>TITLE_ARTIST</item>
         <item>ARTIST_TITLE</item>
     </string-array>
+    <string-array name="file_name_default_entries">
+        <item>[Title]</item>
+        <item>[Title] [Artist]</item>
+        <item>[Artist] [Title]</item>
+    </string-array>
 
-    <string name="file_name_separator_default">" - "</string>
 </resources>
