@@ -64,9 +64,9 @@ class SettingsFragment : PreferenceFragment() {
             for (i in languages.indices) {
                 val langs = languages[i].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 when {
-                    langs.size == 1 -> languageList.add(Pair(languages[i], Locale(langs[0]).displayName))
-                    langs.size == 2 -> languageList.add(Pair(languages[i], Locale(langs[0], langs[1]).displayName))
-                    langs.size >= 3 -> languageList.add(Pair(languages[i], Locale(langs[0], langs[1], langs[2]).displayName))
+                    langs.size == 1 -> languageList.add(Pair(langs[i], Locale(langs[0]).displayName))
+                    langs.size == 2 -> languageList.add(Pair(langs[i], Locale(langs[0], langs[1]).displayName))
+                    langs.size >= 3 -> languageList.add(Pair(langs[i], Locale(langs[0], langs[1], langs[2]).displayName))
                 }
             }
 
@@ -178,7 +178,7 @@ class SettingsFragment : PreferenceFragment() {
             is ListPreference -> {
                 // ListPreference
                 p.value = p.sharedPreferences.getString(p.key, "")
-                p.setSummary(summary.subSequence(0, labelSize).toString() + getString(R.string.settings_summary_current_value, p.entry))
+                p.summary = summary.subSequence(0, labelSize).toString() + getString(R.string.settings_summary_current_value, p.entry)
             }
             is MultiSelectListPreference -> {
                 // MultiSelectListPreference
@@ -194,7 +194,7 @@ class SettingsFragment : PreferenceFragment() {
                         text = builder.substring(0, builder.length - 1) // remove end comma
                     }
                 }
-                p.setSummary(summary.subSequence(0, labelSize).toString() + getString(R.string.settings_summary_current_value, text))
+                p.summary = summary.subSequence(0, labelSize).toString() + getString(R.string.settings_summary_current_value, text)
             }
             is EditTextPreference -> {
                 // EditTextPreference
@@ -225,11 +225,17 @@ class SettingsFragment : PreferenceFragment() {
                 }
 
                 p.text = text // update once
-                p.setSummary(summary.subSequence(0, labelSize).toString() + getString(R.string.settings_summary_current_value, text))
+                p.summary = summary.subSequence(0, labelSize).toString() + getString(R.string.settings_summary_current_value, text)
             }
         }
 
         // individual
+
+        if (key == getString(R.string.pref_search_language_threshold)) {
+            val progress = p.sharedPreferences.getInt(p.key, resources.getInteger(R.integer.pref_default_search_language_threshold))
+            p.summary = summary.subSequence(0, labelSize).toString() + getString(R.string.settings_summary_current_value, progress.toString())
+        }
+
         if (key == getString(R.string.pref_search_first_language) ||
             key == getString(R.string.pref_search_second_language) ||
             key == getString(R.string.pref_search_third_language)) {

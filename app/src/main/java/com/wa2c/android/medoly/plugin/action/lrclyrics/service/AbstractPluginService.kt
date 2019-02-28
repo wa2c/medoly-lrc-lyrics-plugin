@@ -33,8 +33,9 @@ abstract class AbstractPluginService(name: String) : IntentService(name) {
     protected lateinit var propertyData: PropertyData
     /** Received class name.  */
     protected lateinit var receivedClassName: String
+
     /** True if result sent.  */
-    protected var resultSent: Boolean = false
+    private var resultSent: Boolean = false
 
     private var notificationManager : NotificationManager? = null
 

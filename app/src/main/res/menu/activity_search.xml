@@ -4,7 +4,6 @@
         android:id="@+id/menu_search_save_file"
         android:icon="@drawable/ic_save"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
         android:title="@string/menu_search_save_file"
         android:visible="true" />
 
@@ -12,7 +11,6 @@
         android:id="@+id/menu_search_save_cache"
         android:icon="@drawable/ic_add"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
         android:title="@string/menu_search_save_cache"
         android:visible="true" />
 
@@ -20,7 +18,6 @@
         android:id="@+id/menu_search_open_cache"
         android:icon="@drawable/ic_db"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom"
         android:title="@string/title_activity_cache"
         android:visible="true" />
 

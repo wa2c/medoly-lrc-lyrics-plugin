@@ -68,7 +68,7 @@ class Migrator(private val context: Context) {
     private fun versionUpFromX(prevVersionCode: Int) {
         val pref_plugin_event = "pref_plugin_event"
         if (!prefs.contains(pref_plugin_event))
-            return;
+            return
 
         val event = prefs.getInt(pref_plugin_event)
         if (event == 1)

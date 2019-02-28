@@ -120,6 +120,11 @@ class CacheActivity : Activity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.activity_cache, menu)
+        if (menu != null) {
+            for (i in 0 until menu.size()) {
+                menu.getItem(i).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            }
+        }
         return true
     }
 

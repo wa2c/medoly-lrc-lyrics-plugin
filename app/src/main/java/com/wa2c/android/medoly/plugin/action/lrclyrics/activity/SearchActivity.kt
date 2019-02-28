@@ -21,20 +21,19 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.search.Result
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ViewLyricsSearcher
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
-import com.wa2c.android.prefs.Prefs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+
+
 /**
  * Search Activity.
  */
 class SearchActivity : Activity() {
 
-    /** Preferences.  */
-    private lateinit var prefs: Prefs
     /** Binding. */
     private lateinit var binding: ActivitySearchBinding
 
@@ -45,7 +44,6 @@ class SearchActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = Prefs(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
 
         val intentSearchTitle : String? = intent.getStringExtra(INTENT_SEARCH_TITLE)
@@ -185,6 +183,11 @@ class SearchActivity : Activity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.activity_search, menu)
+        if (menu != null) {
+            for (i in 0 until menu.size()) {
+                menu.getItem(i).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            }
+        }
         return true
     }
 
