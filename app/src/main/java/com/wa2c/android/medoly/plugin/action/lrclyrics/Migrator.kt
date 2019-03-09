@@ -31,14 +31,14 @@ class Migrator(private val context: Context) {
      * @return Saved version.
      */
     private val savedVersionCode: Int
-        get() = prefs.getInt(R.string.prefkey_app_version_code, 0)
+        get() = prefs.getInt(R.string.pref_app_version_code, 0)
 
     /**
      * Save current version.
      */
     private fun saveCurrentVersionCode() {
         val version = currentVersionCode
-        prefs[R.string.prefkey_app_version_code] = version
+        prefs[R.string.pref_app_version_code] = version
     }
 
 

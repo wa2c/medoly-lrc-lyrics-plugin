@@ -34,9 +34,9 @@ public class SearchCacheHelper {
 
 
     /** Context. */
-    private Context context;
+    private final Context context;
     /** Gson. */
-    private Gson gson;
+    private final Gson gson;
 
     /**
      * Constructor.

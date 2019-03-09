@@ -60,7 +60,7 @@
     <string name="pref_application_details">pref_application_details</string>
     <string name="pref_about">pref_about</string>
 
-    <string name="prefkey_app_version_code">app_version_code</string>
+    <string name="pref_app_version_code">pref_app_version_code</string>
 
     <!-- Default -->
     <string name="empty_value" />
