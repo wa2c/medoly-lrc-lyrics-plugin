@@ -34,9 +34,7 @@ class CacheDialogFragment : AbstractDialogFragment() {
 
         // view
         binding.dialogCacheLyricsTextView.text = if (cache.has_lyrics != null && cache.has_lyrics!!) result!!.lyrics else getString(R.string.message_dialog_cache_none)
-        if (cache.has_lyrics != true) {
-            binding.dialogCacheDeleteLyricsButton.isEnabled = false
-        }
+        binding.dialogCacheDeleteLyricsButton.isEnabled = (cache.has_lyrics == true)
 
         // delete lyrics button
         binding.dialogCacheDeleteLyricsButton.setOnClickListener {
