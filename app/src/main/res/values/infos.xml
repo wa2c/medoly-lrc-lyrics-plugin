@@ -42,6 +42,11 @@
         <item>https://github.com/JakeWharton/timber</item>
     </string-array>
 
+
+    <!-- Const -->
+    <string name="empty_value" />
+
+
     <!-- Preferences -->
     <string name="pref_event_get_lyrics">pref_event_get_lyrics</string>
     <string name="pref_use_cache">pref_use_cache</string>
@@ -64,8 +69,6 @@
     <string name="pref_app_version_code">pref_app_version_code</string>
 
     <!-- Default -->
-    <string name="empty_value" />
-
     <string name="pref_default_event_get_lyrics">@string/empty_value</string>
     <bool name="pref_default_use_cache">true</bool>
     <bool name="pref_default_cache_result">true</bool>
@@ -87,7 +90,7 @@
         <item>com.wa2c.android.medoly.plugin.category.OPERATION_PLAY_START</item>
     </string-array>
     <string-array name="event_get_lyrics_entries">
-        <item>@string/label_plugin_operation_invalid</item>
+        <item>@string/label_plugin_operation_disabled</item>
         <item>@string/label_plugin_operation_media_open</item>
         <item>@string/label_plugin_operation_play_start</item>
     </string-array>

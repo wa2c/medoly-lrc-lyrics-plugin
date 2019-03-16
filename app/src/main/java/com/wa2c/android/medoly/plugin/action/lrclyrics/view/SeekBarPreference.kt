@@ -3,6 +3,8 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.view
 import android.content.Context
 import android.content.DialogInterface
 import android.preference.DialogPreference
+import android.preference.Preference.OnPreferenceChangeListener
+import android.preference.Preference.OnPreferenceClickListener
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View

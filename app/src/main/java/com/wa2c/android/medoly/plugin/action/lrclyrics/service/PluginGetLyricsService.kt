@@ -14,7 +14,6 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ViewLyricsSearcher
-import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -46,15 +45,6 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
     private fun getLyrics() {
         val resultItem = findLyrics(pluginIntent)
         sendLyricsResult(resultItem)
-        if (resultItem == null) {
-            if (prefs.getBoolean(R.string.pref_failure_message_show, defRes = R.bool.pref_default_failure_message_show)) {
-                AppUtils.showToast(this, R.string.message_get_lyrics_failure)
-            }
-        } else {
-            if (prefs.getBoolean(R.string.pref_success_message_show, defRes = R.bool.pref_default_success_message_show)) {
-                AppUtils.showToast(this, R.string.message_get_lyrics_success)
-            }
-        }
     }
 
     /**
@@ -234,15 +224,30 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
      * @param resultItem search result.
      */
     private fun sendLyricsResult(resultItem: ResultItem?) {
-        val propertyData = PropertyData()
-        if (resultItem?.lyricURL != null) {
-            val fileUri = saveLyricsFile(resultItem) // save lyrics and get uri
-            propertyData[LyricsProperty.DATA_URI] = fileUri?.toString()
-            propertyData[LyricsProperty.SOURCE_TITLE] = getString(R.string.lyrics_source_name)
-            propertyData[LyricsProperty.SOURCE_URI] = resultItem.lyricURL
-            applicationContext.grantUriPermission(pluginIntent.srcPackage, fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        var result = CommandResult.IGNORE
+        var resultProperty: PropertyData? = null
+        try {
+            resultProperty = PropertyData()
+            if (resultItem?.lyricURL != null) {
+                val fileUri = saveLyricsFile(resultItem) // save lyrics and get uri
+                resultProperty[LyricsProperty.DATA_URI] = fileUri?.toString()
+                resultProperty[LyricsProperty.SOURCE_TITLE] = getString(R.string.lyrics_source_name)
+                resultProperty[LyricsProperty.SOURCE_URI] = resultItem.lyricURL
+                applicationContext.grantUriPermission(pluginIntent.srcPackage, fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            sendResult(resultProperty)
+        } catch (e: Exception) {
+            Timber.e(e)
+            resultProperty = null
+            result = CommandResult.FAILED
+        } finally {
+            sendResult(resultProperty)
+
+            // show message
+            val succeeded = getString(R.string.message_get_lyrics_success)
+            val failed = getString(R.string.message_get_lyrics_failure)
+            showMessage(result, succeeded, failed)
         }
-        sendResult(propertyData)
     }
 
     /**

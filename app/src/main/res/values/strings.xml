@@ -138,6 +138,6 @@
     <string name="error_dialog_dismissed">Open the dialog again.</string>
 
     <!-- List -->
-    <string name="label_plugin_operation_invalid">Invalid</string>
+    <string name="label_plugin_operation_disabled">Disable</string>
 
 </resources>

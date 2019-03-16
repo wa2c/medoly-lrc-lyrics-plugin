@@ -9,22 +9,10 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 /**
  * Search cache adapter.
  */
+class SearchCacheHelper(private val context: Context) {
 
-class SearchCacheHelper
-/**
- * Constructor.
- * @param context Context.
- */
-(
-        /** Context.  */
-        private val context: Context) {
     /** Gson.  */
-    private val gson: Gson
-
-    init {
-        this.gson = Gson()
-    }
-
+    private val gson: Gson = Gson()
 
     /**
      * Get ResultItem object from title and artist.
@@ -71,14 +59,14 @@ class SearchCacheHelper
 
         var language: String? = null
         var from: String? = null
-        var file_name: String? = null
-        var has_lyrics: Boolean? = false
+        var fileName: String? = null
+        var hasLyrics: Boolean? = false
         val result = gson.toJson(resultItem)
-        if (resultItem != null && resultItem.lyricURL != null) {
+        if (resultItem?.lyricURL != null) {
             language = resultItem.language
             from = resultItem.lyricUploader
-            file_name = resultItem.lyricURL!!.substring(resultItem.lyricURL!!.lastIndexOf("/") + 1).replace(".lrc", "")
-            has_lyrics = resultItem.lyrics != null
+            fileName = resultItem.lyricURL!!.substring(resultItem.lyricURL!!.lastIndexOf("/") + 1).replace(".lrc", "")
+            hasLyrics = resultItem.lyrics != null
         }
 
         val title = AppUtils.coalesce(searchTitle)
@@ -89,8 +77,8 @@ class SearchCacheHelper
             val count = od.updateSearchCache()._idEq(cache._id)
                     .language(language)
                     .from(from)
-                    .file_name(file_name)
-                    .has_lyrics(has_lyrics)
+                    .file_name(fileName)
+                    .has_lyrics(hasLyrics)
                     .result(result)
                     .execute()
             return count > 0
@@ -102,8 +90,8 @@ class SearchCacheHelper
                     artist,
                     language,
                     from,
-                    file_name,
-                    has_lyrics,
+                    fileName,
+                    hasLyrics,
                     result,
                     null,
                     null
@@ -119,7 +107,7 @@ class SearchCacheHelper
      * @return true as succeeded.
      */
     fun delete(caches: Collection<SearchCache>?): Boolean {
-        if (caches == null || caches.size == 0)
+        if (caches == null || caches.isEmpty())
             return false
 
         val od = provideOrmaDatabase(context)

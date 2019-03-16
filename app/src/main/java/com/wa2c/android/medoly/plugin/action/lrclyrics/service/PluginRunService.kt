@@ -31,6 +31,7 @@ class PluginRunService : AbstractPluginService(PluginRunService::class.java.simp
         searchIntent.putExtra(SearchActivity.INTENT_SEARCH_TITLE, propertyData.getFirst(MediaProperty.TITLE))
         searchIntent.putExtra(SearchActivity.INTENT_SEARCH_ARTIST, propertyData.getFirst(MediaProperty.ARTIST))
         startActivity(searchIntent)
+        showMessage(CommandResult.SUCCEEDED, null, null)
     }
 
 }

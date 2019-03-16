@@ -140,6 +140,6 @@
     <string name="error_dialog_dismissed">ダイアログ操作に失敗しました。再度ダイアログを開いてください。</string>
 
     <!-- List -->
-    <string name="label_plugin_operation_invalid">イベント無効</string>
+    <string name="label_plugin_operation_disabled">イベント無効</string>
 
 </resources>
