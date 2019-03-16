@@ -61,6 +61,7 @@
     <!-- Settings Activity -->
     <string name="settings_summary_current_value">[Current Value: %1$s]</string>
     <string name="settings_not_set">Not set</string>
+    <string name="message_unsupported_device">This device is unsupported.</string>
 
     <!-- Confirm Dialog -->
     <string name="message_dialog_confirm_save_cache">Save the search result to cache.</string>
@@ -125,6 +126,8 @@
     <string name="pref_title_post_failure_message_show">Show Failure Message</string>
     <string name="pref_summary_post_failure_message_show">Show message when lyrics acquisition failed.</string>
 
+    <string name="pref_title_device_auto_start">Auto Start Manager</string>
+    <string name="pref_summary_device_auto_start">Launch the device auto start manager. Some devices need change settings to launch plugin.</string>
     <string name="pref_title_application_details">App Info</string>
     <string name="pref_summary_application_details">Show application information of this device.</string>
     <string name="pref_title_about">About</string>

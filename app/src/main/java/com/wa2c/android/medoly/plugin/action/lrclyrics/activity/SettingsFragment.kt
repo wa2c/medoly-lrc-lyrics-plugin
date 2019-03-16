@@ -9,8 +9,10 @@ import android.provider.Settings
 import android.text.InputType
 import android.util.Pair
 import com.cybozu.labs.langdetect.DetectorFactoryUtil
+import com.thelittlefireman.appkillermanager.managers.KillerManager
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.AboutDialogFragment
+import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import java.util.*
 
 
@@ -25,6 +27,15 @@ class SettingsFragment : PreferenceFragment() {
     }
 
 
+    /**
+     * Device auto start.
+     */
+    private val deviceAutoStartPreferenceClickListener = Preference.OnPreferenceClickListener {
+        if (!KillerManager.doAction(activity, managerAction)) {
+            AppUtils.showToast(activity, R.string.message_unsupported_device)
+        }
+        true
+    }
 
     /**
      * App info.
@@ -50,9 +61,9 @@ class SettingsFragment : PreferenceFragment() {
      */
     private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key -> updatePrefSummary(findPreference(key)) }
 
-    /**
-     * onCreate event.
-     */
+    /** KillerManager action */
+    private var managerAction: KillerManager.Actions? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addPreferencesFromResource(R.xml.pref_settings)
@@ -103,6 +114,19 @@ class SettingsFragment : PreferenceFragment() {
             findPreference(getString(R.string.pref_search_third_language)).isEnabled = p2.isEnabled && !p2.value.isNullOrEmpty()
         }
 
+        // Device auto start
+        KillerManager.init(activity)
+        managerAction = when {
+            KillerManager.isActionAvailable(activity, KillerManager.Actions.ACTION_POWERSAVING) -> KillerManager.Actions.ACTION_POWERSAVING
+            KillerManager.isActionAvailable(activity, KillerManager.Actions.ACTION_AUTOSTART) -> KillerManager.Actions.ACTION_AUTOSTART
+            KillerManager.isActionAvailable(activity, KillerManager.Actions.ACTION_NOTIFICATIONS) -> KillerManager.Actions.ACTION_NOTIFICATIONS
+            else -> null
+        }
+        if (managerAction != null) {
+            findPreference(getString(R.string.pref_device_auto_start)).onPreferenceClickListener = deviceAutoStartPreferenceClickListener
+        } else {
+            findPreference(getString(R.string.pref_device_auto_start)).isEnabled = false
+        }
         // App info
         findPreference(getString(R.string.pref_application_details)).onPreferenceClickListener = applicationDetailsPreferenceClickListener
         // About

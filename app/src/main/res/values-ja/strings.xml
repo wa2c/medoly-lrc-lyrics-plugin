@@ -61,6 +61,9 @@
     <!-- Settings Activity -->
     <string name="settings_summary_current_value">[現在の設定: %1$s]</string>
     <string name="settings_not_set">設定しない</string>
+    <string name="message_unsupported_device">このデバイスではサポートされていません。</string>
+
+
 
     <!-- Confirm Dialog -->
     <string name="message_dialog_confirm_save_cache">検索結果をキャッシュに保存します。</string>
@@ -125,6 +128,8 @@
     <string name="pref_title_post_failure_message_show">失敗メッセージ表示</string>
     <string name="pref_summary_post_failure_message_show">歌詞の取得に失敗した際にメッセージを表示します。</string>
 
+    <string name="pref_title_device_auto_start">自動起動管理</string>
+    <string name="pref_summary_device_auto_start">デバイスの自動起動マネージャを起動します。一部のデバイスではプラグインの起動に設定が必要です。</string>
     <string name="pref_title_application_details">アプリ情報</string>
     <string name="pref_summary_application_details">端末のアプリ情報を表示します。</string>
     <string name="pref_title_about">About</string>
