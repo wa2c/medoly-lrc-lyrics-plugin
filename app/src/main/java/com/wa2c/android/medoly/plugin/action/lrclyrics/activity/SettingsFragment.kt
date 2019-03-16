@@ -75,9 +75,9 @@ class SettingsFragment : PreferenceFragment() {
             for (i in languages.indices) {
                 val langs = languages[i].split("-".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 when {
-                    langs.size == 1 -> languageList.add(Pair(langs[i], Locale(langs[0]).displayName))
-                    langs.size == 2 -> languageList.add(Pair(langs[i], Locale(langs[0], langs[1]).displayName))
-                    langs.size >= 3 -> languageList.add(Pair(langs[i], Locale(langs[0], langs[1], langs[2]).displayName))
+                    langs.size == 1 -> languageList.add(Pair(langs[0], Locale(langs[0]).displayName))
+                    langs.size == 2 -> languageList.add(Pair(langs[0], Locale(langs[0], langs[1]).displayName))
+                    langs.size >= 3 -> languageList.add(Pair(langs[0], Locale(langs[0], langs[1], langs[2]).displayName))
                 }
             }
 
