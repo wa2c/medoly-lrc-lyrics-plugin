@@ -172,7 +172,6 @@ class SearchActivity : Activity() {
         setIntent(intent)
 
         binding.searchResultListView.adapter = searchResultAdapter
-
         binding.searchTitleEditText.setText(intent.getStringExtra(INTENT_SEARCH_TITLE))
         binding.searchArtistEditText.setText(intent.getStringExtra(INTENT_SEARCH_ARTIST))
     }

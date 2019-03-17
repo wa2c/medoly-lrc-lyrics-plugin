@@ -112,6 +112,10 @@ class CacheActivity : Activity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+
+        binding.cacheListView.adapter = cacheAdapter
+        binding.cacheTitleEditText.setText(intent.getStringExtra(INTENT_SEARCH_TITLE))
+        binding.cacheArtistEditText.setText(intent.getStringExtra(INTENT_SEARCH_ARTIST))
     }
 
     /**

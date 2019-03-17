@@ -144,11 +144,11 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
                 val selectedResult = arrayOfNulls<ResultItem>(3) // language 0: first, 1:second: 2: third
                 for (item in itemList) {
                     try {
-                        val text = ViewLyricsSearcher.downloadLyricsText(item.lyricURL)
+                        item.lyrics = ViewLyricsSearcher.downloadLyricsText(item.lyricURL)
                         creatorThread.join() // finish profiles creating
 
                         val detector = DetectorFactoryUtil.createDetectorAll(this)
-                        detector.append(text)
+                        detector.append(item.lyrics)
                         val langList = detector.probabilities
                         for (l in langList) {
                             if (l.prob * 100 < threshold)
@@ -157,7 +157,6 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
                             // First language
                             if (selectedResult[0] == null && l.lang == lang1) {
                                 item.language = l.lang
-                                item.lyrics = text
                                 selectedResult[0] = item
                             }
                             // Second language
@@ -165,7 +164,6 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
                                 continue
                             if (selectedResult[1] == null && l.lang == lang2) {
                                 item.language = l.lang
-                                item.lyrics = text
                                 selectedResult[1] = item
                             }
                             // Third language
@@ -173,7 +171,6 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
                                 continue
                             if (selectedResult[2] == null && l.lang == lang3) {
                                 item.language = l.lang
-                                item.lyrics = text
                                 selectedResult[2] = item
                             }
                         }
@@ -193,17 +190,15 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
                     resultItem = selectedResult[2]
             }
 
-            // no lyrics
+            // language undetected
             if (resultItem == null && prefs.getBoolean(R.string.pref_search_non_preferred_language, defRes = R.bool.pref_default_search_non_preferred_language)) {
                 resultItem = itemList[0]
                 resultItem.language = null
-                resultItem.lyrics = null
             }
 
         } catch (e: Exception) {
             Timber.d(e)
         }
-
 
         return resultItem
     }
@@ -234,8 +229,10 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
                 resultProperty[LyricsProperty.SOURCE_TITLE] = getString(R.string.lyrics_source_name)
                 resultProperty[LyricsProperty.SOURCE_URI] = resultItem.lyricURL
                 applicationContext.grantUriPermission(pluginIntent.srcPackage, fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                result = CommandResult.SUCCEEDED
+            } else {
+                result = CommandResult.FAILED
             }
-            sendResult(resultProperty)
         } catch (e: Exception) {
             Timber.e(e)
             resultProperty = null
