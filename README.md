@@ -1,33 +1,37 @@
 Medoly LRC Lyrics Plugin
-============================
+========================
 
-LRC format lyrics plugin app for Medoly.
+## About
 
-## Description
+**Medoly LRC Lyrics Plugin** is an Android app to get the lrc lyrics of the media playing on [Medoly](https://play.google.com/store/apps/details?id=com.wa2c.android.medoly) from other sites .
 
-Medoly LRC Lyrics Plugin は、[Medoly](https://play.google.com/store/apps/details?id=com.wa2c.android.medoly) で再生しているメディアのLRC形式歌詞を取得する Android アプリです。
-[Google Play](https://play.google.com/store/apps/details?id=com.wa2c.android.medoly.plugin.action.lrclyrics) で配信しています。
+See the following site to see details.
+
+  * [Medoly LRC Lyricsics Plugin (EN)](https://www.wa2c.com/documents/dokuwiki/doku.php?id=en:medoly_lrc_lyrics_plugin:start)
+  * [Medoly LRC Lyricsics Plugin (JA)](https://www.wa2c.com/documents/dokuwiki/doku.php?id=ja:medoly_lrc_lyrics_plugin:start)
+
+## Public Site
+
+* [Google Play](https://play.google.com/store/apps/details?id=com.wa2c.android.medoly.plugin.action.lrclyrics)
+* [APK Files](https://wa2c.com/android/medoly/apk/)
+* [Source Code (GitHub)](https://github.com/wa2c/medoly-lrc-lyrics-plugin)
+
 
 ## Requirement
 
 * Android Studio
+* API level 19 and above
 
 ## Build
 
-1. プロジェクトのクローンを作成します。
-
-2. Android Studio にプロジェクトをインポートします。
-
-3. Android Studio でビルドします。
-
-## Usage
-
-* 使い方については、[Google Play](https://play.google.com/store/apps/details?id=com.wa2c.android.medoly.plugin.action.lrclyrics) のページを参考にしてください。
+1. Clone the source code from GitHub.
+2. Import the source code to Android Studio.
+3. Build the source code on Android Studio.
 
 ## Licence
 
-[MIT](https://bitbucket.org/wa2c/medoly-lrc-lyrics-plugin/raw/ae8523638c9e6ea3772a279f0287c9207577d870/LICENSE.txt)
+[MIT](https://github.com/wa2c/medoly-lrc-lyrics-plugin/blob/master/LICENSE)
 
 ## Author
 
-[wa2c](https://bitbucket.org/wa2c/)
+[wa2c](https://github.com/wa2c)
