@@ -1,6 +1,7 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics
 
 import android.app.Application
+import com.wa2c.android.medoly.plugin.action.lrclyrics.service.AbstractPluginService
 import timber.log.Timber
 
 
@@ -15,6 +16,9 @@ class App : Application() {
             Timber.plant(Timber.DebugTree())
         }
 
+        // Create channel
+        AbstractPluginService.createChannel(this)
+        // Migrator
         Migrator(this).versionUp()
     }
 }

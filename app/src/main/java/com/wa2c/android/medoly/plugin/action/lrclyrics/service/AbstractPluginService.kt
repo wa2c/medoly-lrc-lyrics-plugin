@@ -48,8 +48,6 @@ abstract class AbstractPluginService(name: String) : IntentService(name) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, getString(R.string.app_name), NotificationManager.IMPORTANCE_LOW)
-                notificationManager?.createNotificationChannel(channel)
                 val builder = Notification.Builder(this, NOTIFICATION_CHANNEL_ID)
                         .setContentTitle(getString(R.string.app_name))
                         .setContentText("")
@@ -78,7 +76,6 @@ abstract class AbstractPluginService(name: String) : IntentService(name) {
         Timber.d("onDestroy" + this.javaClass.simpleName)
 
         if (notificationManager != null) {
-            notificationManager?.deleteNotificationChannel(NOTIFICATION_CHANNEL_ID)
             notificationManager?.cancel(NOTIFICATION_ID)
             stopForeground(true)
         }
@@ -97,7 +94,6 @@ abstract class AbstractPluginService(name: String) : IntentService(name) {
         }
     }
 
-
     /**
      * Show message.
      */
@@ -115,6 +111,8 @@ abstract class AbstractPluginService(name: String) : IntentService(name) {
         }
     }
 
+
+
     companion object {
         /** Notification ID */
         private const val NOTIFICATION_ID = 1
@@ -123,6 +121,20 @@ abstract class AbstractPluginService(name: String) : IntentService(name) {
 
         /** Received receiver class name.  */
         const val RECEIVED_CLASS_NAME = "RECEIVED_CLASS_NAME"
+
+        /**
+         * Create notification
+         */
+        fun createChannel(context: Context) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+                return
+
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID) == null) {
+                val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, context.getString(R.string.app_name), NotificationManager.IMPORTANCE_MIN)
+                notificationManager.createNotificationChannel(channel)
+            }
+        }
     }
 
 
