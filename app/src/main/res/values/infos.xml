@@ -30,6 +30,7 @@
         <item>language detection</item>
         <item>Gson</item>
         <item>ViewLyricsOpenSearcher</item>
+        <item>AppKillerManager</item>
         <item>Dynamic Toasts</item>
         <item>Timber</item>
     </string-array>
@@ -38,6 +39,7 @@
         <item>https://github.com/shuyo/language-detection/blob/wiki/ProjectHome.md</item>
         <item>https://github.com/google/gson</item>
         <item>https://github.com/PedroHLC/ViewLyricsOpenSearcher</item>
+        <item>https://github.com/thelittlefireman/AppKillerManager</item>
         <item>https://github.com/pranavpandey/dynamic-toasts</item>
         <item>https://github.com/JakeWharton/timber</item>
     </string-array>
