@@ -54,18 +54,18 @@ class Migrator(private val context: Context) {
             return false
 
         // migration
-        //versionUpFromX(prevVersionCode)
-        //versionUpFrom10(prevVersionCode)
+        versionUpFrom0(prevVersionCode)
+        versionUpFrom10(prevVersionCode)
 
         // save version
-        //saveCurrentVersionCode()
+        saveCurrentVersionCode()
         return true
     }
 
     /**
      * Ver > ?
      */
-    private fun versionUpFromX(prevVersionCode: Int) {
+    private fun versionUpFrom0(prevVersionCode: Int) {
         val pref_plugin_event = "pref_plugin_event"
         if (!prefs.contains(pref_plugin_event))
             return

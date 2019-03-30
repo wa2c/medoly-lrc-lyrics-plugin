@@ -339,7 +339,8 @@ class SearchActivity : Activity() {
 
         @SuppressLint("ClickableViewAccessibility")
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            val item = itemList[position]
+            val listPosition = holder.adapterPosition
+            val item = itemList[listPosition]
             val binding = holder.itemView.tag as LayoutSearchItemBinding
             val context = binding.root.context
 
@@ -355,7 +356,7 @@ class SearchActivity : Activity() {
                 binding.root.onTouchEvent(event)
             }
             binding.root.setOnClickListener {
-                itemClickListener?.invoke(binding.root, position)
+                itemClickListener?.invoke(binding.root, listPosition)
             }
         }
 
