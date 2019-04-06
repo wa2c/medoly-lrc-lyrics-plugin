@@ -19,68 +19,68 @@ object DetectorFactoryUtil {
     private val languageProfileMap = object : LinkedHashMap<String, Int>() {
         init {
             // large size profiles (first reading)
-            put("ko", R.string.language_profile_ko)
-            put("lv", R.string.language_profile_lv)
-            put("et", R.string.language_profile_et)
-            put("lt", R.string.language_profile_lt)
-            put("vi", R.string.language_profile_vi)
-            put("sl", R.string.language_profile_sl)
-            put("ro", R.string.language_profile_ro)
+            put("ko", R.raw.ko)
+            put("lv", R.raw.lv)
+            put("et", R.raw.et)
+            put("lt", R.raw.lt)
+            put("vi", R.raw.vi)
+            put("sl", R.raw.sl)
+            put("ro", R.raw.ro)
 
             // normal size profiles
-            put("af", R.string.language_profile_af)
-            put("ar", R.string.language_profile_ar)
-            put("bg", R.string.language_profile_bg)
-            put("bn", R.string.language_profile_bn)
-            put("cs", R.string.language_profile_cs)
-            put("da", R.string.language_profile_da)
-            put("de", R.string.language_profile_de)
-            put("el", R.string.language_profile_el)
-            put("en", R.string.language_profile_en)
-            put("es", R.string.language_profile_es)
-            //put("et"    ,  R.string.language_profile_et    );
-            put("fa", R.string.language_profile_fa)
-            put("fi", R.string.language_profile_fi)
-            put("fr", R.string.language_profile_fr)
-            put("gu", R.string.language_profile_gu)
-            put("he", R.string.language_profile_he)
-            put("hi", R.string.language_profile_hi)
-            put("hr", R.string.language_profile_hr)
-            put("hu", R.string.language_profile_hu)
-            put("id", R.string.language_profile_id)
-            put("it", R.string.language_profile_it)
-            put("ja", R.string.language_profile_ja)
-            put("kn", R.string.language_profile_kn)
-            //put("ko"    ,  R.string.language_profile_ko    );
-            //put("lt"    ,  R.string.language_profile_lt    );
-            //put("lv"    ,  R.string.language_profile_lv    );
-            put("mk", R.string.language_profile_mk)
-            put("ml", R.string.language_profile_ml)
-            put("mr", R.string.language_profile_mr)
-            put("ne", R.string.language_profile_ne)
-            put("nl", R.string.language_profile_nl)
-            put("no", R.string.language_profile_no)
-            put("pa", R.string.language_profile_pa)
-            put("pl", R.string.language_profile_pl)
-            put("pt", R.string.language_profile_pt)
-            //put("ro"    ,  R.string.language_profile_ro    );
-            put("ru", R.string.language_profile_ru)
-            put("sk", R.string.language_profile_sk)
-            //put("sl"    ,  R.string.language_profile_sl    );
-            put("so", R.string.language_profile_so)
-            put("sq", R.string.language_profile_sq)
-            put("sv", R.string.language_profile_sv)
-            put("sw", R.string.language_profile_sw)
-            put("ta", R.string.language_profile_ta)
-            put("te", R.string.language_profile_te)
-            put("th", R.string.language_profile_th)
-            put("tl", R.string.language_profile_tl)
-            put("tr", R.string.language_profile_tr)
-            put("uk", R.string.language_profile_uk)
-            put("ur", R.string.language_profile_ur)
-            //put("vi"    ,  R.string.language_profile_vi    );
-            put("zh-cn", R.string.language_profile_zh_cn)
-            put("zh-tw", R.string.language_profile_zh_tw)
+            put("af", R.raw.af)
+            put("ar", R.raw.ar)
+            put("bg", R.raw.bg)
+            put("bn", R.raw.bn)
+            put("cs", R.raw.cs)
+            put("da", R.raw.da)
+            put("de", R.raw.de)
+            put("el", R.raw.el)
+            put("en", R.raw.en)
+            put("es", R.raw.es)
+            //put("et", R.raw.et)
+            put("fa", R.raw.fa)
+            put("fi", R.raw.fi)
+            put("fr", R.raw.fr)
+            put("gu", R.raw.gu)
+            put("he", R.raw.he)
+            put("hi", R.raw.hi)
+            put("hr", R.raw.hr)
+            put("hu", R.raw.hu)
+            put("id", R.raw.id)
+            put("it", R.raw.it)
+            put("ja", R.raw.ja)
+            put("kn", R.raw.kn)
+            //put("ko",  R.raw.ko)
+            //put("lt",  R.raw.lt)
+            //put("lv",  R.raw.lv)
+            put("mk", R.raw.mk)
+            put("ml", R.raw.ml)
+            put("mr", R.raw.mr)
+            put("ne", R.raw.ne)
+            put("nl", R.raw.nl)
+            put("no", R.raw.no)
+            put("pa", R.raw.pa)
+            put("pl", R.raw.pl)
+            put("pt", R.raw.pt)
+            //put("ro",  R.raw.ro)
+            put("ru", R.raw.ru)
+            put("sk", R.raw.sk)
+            //put("sl",  R.raw.sl)
+            put("so", R.raw.so)
+            put("sq", R.raw.sq)
+            put("sv", R.raw.sv)
+            put("sw", R.raw.sw)
+            put("ta", R.raw.ta)
+            put("te", R.raw.te)
+            put("th", R.raw.th)
+            put("tl", R.raw.tl)
+            put("tr", R.raw.tr)
+            put("uk", R.raw.uk)
+            put("ur", R.raw.ur)
+            //put("vi",  R.raw.vi)
+            put("zh-cn", R.raw.zh_cn)
+            put("zh-tw", R.raw.zh_tw)
         }
     }
 
@@ -102,7 +102,24 @@ object DetectorFactoryUtil {
         if (DetectorFactory.getLangList() == null || DetectorFactory.getLangList().size == 0) {
             val startTime = System.currentTimeMillis()
             val coreCount = Runtime.getRuntime().availableProcessors()
-            Timber.d("Detector creating begin. Core: " + coreCount)
+            Timber.d("Detector creating begin. Core: %s", coreCount)
+
+//            val gson = Gson()
+//            var index = 0
+//            for (item in languageProfileMap) {
+//                try {
+//                    context.resources.openRawResource(item.value).use {
+//                        val size = it.available()
+//                        it.reader().use {
+//                            val profile = gson.fromJson(it, LangProfile::class.java)
+//                            if (profile != null)
+//                                DetectorFactory.addProfile(profile, index++, languageProfileMap.size)
+//                        }
+//                    }
+//                } catch (e: Exception) {
+//                    Timber.e(e)
+//                }
+//            }
 
             val executorService = Executors.newFixedThreadPool(coreCount)
             val futures = ArrayList<Future<LangProfile>>(languageProfileMap.size)
@@ -113,7 +130,7 @@ object DetectorFactoryUtil {
             Timber.d("Adding profiles.")
             for (i in futures.indices) {
                 try {
-                    DetectorFactory.addProfile(futures[i].get(), i, languageProfileMap.size)
+                    DetectorFactory.addProfile(futures[i].get(), i, 200)
                 } catch (e: Exception) {
                     Timber.e(e)
                 }
@@ -121,7 +138,7 @@ object DetectorFactoryUtil {
             }
 
             executorService.shutdown()
-            Timber.d("Detector creating end. Time: " + (System.currentTimeMillis() - startTime))
+            Timber.d("Detector creating end. Time: %s", (System.currentTimeMillis() - startTime))
         }
 
         return DetectorFactory.create()
@@ -130,14 +147,18 @@ object DetectorFactoryUtil {
     /**
      * Profile creator.
      */
-    private class ProfileCreator internal constructor(private val context: Context, private val key: String, private val stringId: Int) : Callable<LangProfile> {
+    private class ProfileCreator internal constructor(val context: Context, private val key: String, private val resourceId: Int) : Callable<LangProfile> {
 
         @Throws(Exception::class)
         override fun call(): LangProfile {
-            Timber.d("creating begin: " + key)
-            val profile = gson.fromJson(context.getString(stringId), LangProfile::class.java)
-            Timber.d("creating end: " + key)
-            return profile
+            context.resources.openRawResource(resourceId).use {
+                it.reader().use { reader ->
+                    Timber.d("creating begin: %s", key)
+                    val profile = gson.fromJson(reader, LangProfile::class.java)
+                    Timber.d("creating end: %s", key)
+                    return profile
+                }
+            }
         }
 
         companion object {
