@@ -1,8 +1,8 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics.util
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import com.wa2c.android.medoly.library.ExtraData
 import com.wa2c.android.medoly.library.MediaPluginIntent
 import com.wa2c.android.medoly.library.PropertyData
@@ -157,7 +157,7 @@ object AppUtils {
      * @param inputTitle Title (searching text).
      * @param inputArtist Artist (searching text).
      */
-    fun saveFile(activity: Activity, inputTitle: String?, inputArtist: String?) {
+    fun saveFile(activity: AppCompatActivity, inputTitle: String?, inputArtist: String?) {
         var title = inputTitle
         var artist = inputArtist
         try {

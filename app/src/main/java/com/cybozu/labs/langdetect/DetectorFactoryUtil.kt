@@ -104,23 +104,6 @@ object DetectorFactoryUtil {
             val coreCount = Runtime.getRuntime().availableProcessors()
             Timber.d("Detector creating begin. Core: %s", coreCount)
 
-//            val gson = Gson()
-//            var index = 0
-//            for (item in languageProfileMap) {
-//                try {
-//                    context.resources.openRawResource(item.value).use {
-//                        val size = it.available()
-//                        it.reader().use {
-//                            val profile = gson.fromJson(it, LangProfile::class.java)
-//                            if (profile != null)
-//                                DetectorFactory.addProfile(profile, index++, languageProfileMap.size)
-//                        }
-//                    }
-//                } catch (e: Exception) {
-//                    Timber.e(e)
-//                }
-//            }
-
             val executorService = Executors.newFixedThreadPool(coreCount)
             val futures = ArrayList<Future<LangProfile>>(languageProfileMap.size)
             for (item in languageProfileMap) {

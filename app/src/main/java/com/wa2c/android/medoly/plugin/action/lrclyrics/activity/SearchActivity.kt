@@ -1,16 +1,14 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics.activity
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.ActivitySearchBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.LayoutSearchItemBinding
@@ -28,11 +26,10 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-
 /**
  * Search Activity.
  */
-class SearchActivity : Activity() {
+class SearchActivity : AppCompatActivity() {
 
     /** Binding. */
     private lateinit var binding: ActivitySearchBinding
@@ -53,14 +50,16 @@ class SearchActivity : Activity() {
         binding.searchArtistEditText.setText(intentSearchArtist)
 
         // Action Bar
-        actionBar.setDisplayShowHomeEnabled(true)
-        actionBar.setDisplayHomeAsUpEnabled(true)
-        actionBar.setDisplayShowTitleEnabled(true)
+        actionBar?.let {
+            it.setDisplayShowHomeEnabled(true)
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setDisplayShowTitleEnabled(true)
+        }
 
         searchCacheHelper = SearchCacheHelper(this)
         searchResultAdapter = SearchResultAdapter()
         binding.searchResultListView.adapter = searchResultAdapter
-        binding.searchResultListView.layoutManager = LinearLayoutManager(this)
+        binding.searchResultListView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
 
         val searchResultHeight = resources.getDimensionPixelSize(R.dimen.search_result_height)
 
@@ -253,17 +252,17 @@ class SearchActivity : Activity() {
     /**
      * On activity result
      */
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent) {
-        if (requestCode == AppUtils.REQUEST_CODE_SAVE_FILE && resultCode == Activity.RESULT_OK) {
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+        if (requestCode == AppUtils.REQUEST_CODE_SAVE_FILE && resultCode == RESULT_OK) {
             // Save to lyrics file
             if (!existsLyrics()) {
                 AppUtils.showToast(this, R.string.error_exists_lyrics)
                 return
             }
 
-            val uri = resultData.data
             try {
-                contentResolver.openOutputStream(uri).bufferedWriter(Charsets.UTF_8).use {
+                val uri = resultData?.data!!
+                contentResolver.openOutputStream(uri)!!.bufferedWriter(Charsets.UTF_8).use {
                     it.write(searchResultAdapter.selectedItem?.lyrics)
                 }
                 AppUtils.showToast(this, R.string.message_lyrics_save_succeeded)
@@ -276,7 +275,7 @@ class SearchActivity : Activity() {
         // Hide keyboard
         if (currentFocus != null) {
             val inputMethodMgr = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodMgr.hideSoftInputFromWindow(currentFocus.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            inputMethodMgr.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
         }
     }
 
@@ -324,21 +323,21 @@ class SearchActivity : Activity() {
     /**
      * Unsent list adapter
      */
-    inner class SearchResultAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class SearchResultAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
         /** Item list */
         private val itemList: MutableList<ResultItem> = mutableListOf()
         /** Selected item.  */
         var selectedItem: ResultItem? = null
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
             val binding: LayoutSearchItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.layout_search_item, parent,false)
             val rootView = binding.root
             rootView.tag = binding
-            return object : RecyclerView.ViewHolder(rootView) {}
+            return object : androidx.recyclerview.widget.RecyclerView.ViewHolder(rootView) {}
         }
 
         @SuppressLint("ClickableViewAccessibility")
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
             val listPosition = holder.adapterPosition
             val item = itemList[listPosition]
             val binding = holder.itemView.tag as LayoutSearchItemBinding

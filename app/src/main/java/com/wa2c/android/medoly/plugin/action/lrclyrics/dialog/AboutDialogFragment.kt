@@ -1,9 +1,7 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics.dialog
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.pm.PackageManager
-import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
@@ -13,6 +11,8 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.DialogAboutBinding
 import timber.log.Timber
@@ -26,13 +26,13 @@ class AboutDialogFragment : AbstractDialogFragment() {
     /** Binding. */
     private lateinit var binding: DialogAboutBinding
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
-        binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.dialog_about, null, false)
+        binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_about, null, false)
 
         // Version
         try {
-            val packageInfo = activity.packageManager.getPackageInfo(activity.packageName, PackageManager.GET_ACTIVITIES)
+            val packageInfo = context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_ACTIVITIES)
             binding.dialogAboutAppVersionTextView.text = getString(R.string.label_dialog_about_ver, packageInfo.versionName)
         } catch (e: PackageManager.NameNotFoundException) {
             Timber.e(e)
@@ -68,7 +68,7 @@ class AboutDialogFragment : AbstractDialogFragment() {
         val libraryNames = resources.getStringArray(R.array.about_library_names)
         val libraryUrls = resources.getStringArray(R.array.about_library_urls)
         for (i in libraryNames.indices) {
-            val libTextView = TextView(activity)
+            val libTextView = TextView(context)
             libTextView.movementMethod = LinkMovementMethod.getInstance()
             if (Build.VERSION.SDK_INT >= 24) {
                 libTextView.text = Html.fromHtml("<a href=\"" + libraryUrls[i] + "\">" + libraryNames[i] + "</a>", Html.FROM_HTML_MODE_COMPACT)
@@ -82,7 +82,7 @@ class AboutDialogFragment : AbstractDialogFragment() {
         }
 
         // Build
-        val builder = AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(context)
         builder.setTitle(R.string.pref_title_about)
         builder.setView(binding.root)
         builder.setNeutralButton(android.R.string.ok, null)

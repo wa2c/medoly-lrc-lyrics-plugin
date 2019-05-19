@@ -1,14 +1,14 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics.dialog
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
-import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.CompoundButton
+import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.DialogNormalizeBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
@@ -37,10 +37,10 @@ class NormalizeDialogFragment : AbstractDialogFragment() {
      */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
-        binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.dialog_normalize, null, false)
+        binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_normalize, null, false)
 
-        initialText = arguments.getString(ARG_INITIAL_TEXT)
-        inputText = arguments.getString(ARG_INPUT_TEXT)
+        initialText = arguments?.getString(ARG_INITIAL_TEXT)
+        inputText = arguments?.getString(ARG_INPUT_TEXT)
         binding.dialogNormalizeBeforeTextView.text = inputText
         binding.dialogNormalizeAfterTextView.text = inputText
 
@@ -58,7 +58,7 @@ class NormalizeDialogFragment : AbstractDialogFragment() {
         }
 
         // build dialog
-        val builder = AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(context)
         builder.setView(binding.root)
         builder.setTitle(R.string.title_dialog_normalize)
         builder.setNeutralButton(R.string.label_close, null)

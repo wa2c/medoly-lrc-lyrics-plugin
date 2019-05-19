@@ -1,8 +1,8 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics.dialog
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 
 /**
  * Confirmation dialog
@@ -11,10 +11,10 @@ class ConfirmDialogFragment : AbstractDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
-        val args = arguments
+        val args = arguments!!
 
         // dialog build
-        val builder = AlertDialog.Builder(activity)
+        val builder = AlertDialog.Builder(context)
         builder.setTitle(args.getCharSequence(ARG_TITLE))
         builder.setMessage(args.getCharSequence(ARG_MESSAGE))
 
@@ -59,23 +59,6 @@ class ConfirmDialogFragment : AbstractDialogFragment() {
         private const val ARG_NEUTRAL_BUTTON = "NEUTRAL_BUTTON"
         /** Negative button key.  */
         private const val ARG_NEGATIVE_BUTTON = "NEGATIVE_BUTTON"
-
-        /**
-         * Create dialog instance. (OK/Cancel)
-         * @param message A message.
-         * @param title A title.
-         * @return New dialog instance.
-         */
-        fun newInstance(message: CharSequence, title: CharSequence?): ConfirmDialogFragment {
-            val args = Bundle()
-            args.putCharSequence(ARG_MESSAGE, message)
-            args.putCharSequence(ARG_TITLE, title)
-            args.putBoolean(ARG_IS_BUTTON_DEFAULT, true)
-
-            val fragment = ConfirmDialogFragment()
-            fragment.arguments = args
-            return fragment
-        }
 
         /**
          * Create dialog instance. (Customized button)

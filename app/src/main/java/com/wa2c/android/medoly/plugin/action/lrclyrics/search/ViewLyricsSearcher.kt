@@ -219,7 +219,7 @@ object ViewLyricsSearcher {
         val data = elem.getAttribute(attr)
         try {
             if (!data.isNullOrEmpty())
-                return Integer.valueOf(data)!!
+                return Integer.valueOf(data)
         } catch (e: NumberFormatException) {
             Timber.d(e)
         }
@@ -231,7 +231,7 @@ object ViewLyricsSearcher {
         val data = elem.getAttribute(attr)
         try {
             if (!data.isNullOrEmpty())
-                return java.lang.Double.valueOf(data)!!
+                return java.lang.Double.valueOf(data)
         } catch (e: NumberFormatException) {
             Timber.d(e)
         }

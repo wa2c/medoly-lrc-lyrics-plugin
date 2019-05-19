@@ -1,15 +1,15 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics.activity
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 
 
 /**
  * Settings activity
  */
-class SettingsActivity : Activity() {
+class SettingsActivity : AppCompatActivity() {
 
     /**
      * onCreate event.
@@ -17,13 +17,15 @@ class SettingsActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        actionBar.setDisplayShowHomeEnabled(true)
-        actionBar.setDisplayHomeAsUpEnabled(true)
-        actionBar.setDisplayShowTitleEnabled(true)
-        actionBar.setTitle(R.string.title_activity_settings)
+        actionBar?.let {
+            it.setDisplayShowHomeEnabled(true)
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setDisplayShowTitleEnabled(true)
+            it.setTitle(R.string.title_activity_settings)
+        }
 
         if (savedInstanceState == null) {
-            fragmentManager.beginTransaction().add(android.R.id.content, SettingsFragment()).commit()
+            supportFragmentManager.beginTransaction().add(android.R.id.content, SettingsFragment()).commit()
         }
     }
 

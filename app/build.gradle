@@ -4,8 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
-    //buildToolsVersion '28.0.3'
+    compileSdkVersion 28
 
     defaultConfig {
         applicationId "com.wa2c.android.medoly.plugin.action.lrclyrics"
@@ -13,6 +12,8 @@ android {
         targetSdkVersion 27
         versionCode 11
         versionName "1.8.1"
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -57,15 +58,14 @@ dependencies {
     // Prefs
     implementation 'com.wa2c.android:prefs:0.1.1'
 
-    // https://mvnrepository.com/artifact/com.android.support/appcompat-v7
-    implementation group: 'com.android.support', name: 'appcompat-v7', version: '27.1.1'
-    // https://mvnrepository.com/artifact/com.android.support/support-vector-drawable
-    implementation group: 'com.android.support', name: 'support-vector-drawable', version: '27.1.1'
-    // https://mvnrepository.com/artifact/com.android.support/recyclerview-v7
-    implementation group: 'com.android.support', name: 'recyclerview-v7', version: '27.1.1'
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
-    implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.1.1'
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-android
+    // Support library
+    implementation group: 'androidx.appcompat', name: 'appcompat', version: '1.0.2'
+    implementation group: "androidx.preference", name: 'preference', version: '1.0.0'
+    implementation group: 'androidx.vectordrawable', name: 'vectordrawable', version: '1.0.1'
+    implementation group: 'androidx.recyclerview', name: 'recyclerview', version: '1.0.0'
+
+    // Kotlin
+    implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.2.1'
     implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-android', version: '1.1.1'
 
     // https://mvnrepository.com/artifact/com.jakewharton.timber/timber
@@ -73,8 +73,8 @@ dependencies {
     // https://mvnrepository.com/artifact/com.pranavpandey.android/dynamic-toasts
     implementation group: 'com.pranavpandey.android', name: 'dynamic-toasts', version: '1.2.0'
     // Orma
-    kapt 'com.github.gfx.android.orma:orma-processor:4.2.5'
-    implementation 'com.github.gfx.android.orma:orma:4.2.5'
+    kapt 'com.github.maskarade.android.orma:orma-processor:6.0.2'
+    implementation 'com.github.maskarade.android.orma:orma:6.0.2'
     // Gson
     implementation 'com.google.code.gson:gson:2.8.5'
     // https://mvnrepository.com/artifact/com.norconex.language/langdetect
@@ -83,7 +83,7 @@ dependencies {
     implementation 'com.thelittlefireman:AppKillerManager:2.1.1'
 
     // Debug
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testImplementation  'junit:junit:4.12'

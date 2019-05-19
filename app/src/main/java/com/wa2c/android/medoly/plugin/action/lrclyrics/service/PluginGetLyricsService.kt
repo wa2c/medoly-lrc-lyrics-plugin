@@ -2,7 +2,7 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.service
 
 import android.content.Intent
 import android.net.Uri
-import android.support.v4.content.FileProvider
+import androidx.core.content.FileProvider
 import com.cybozu.labs.langdetect.DetectorFactoryUtil
 import com.cybozu.labs.langdetect.LangDetectException
 import com.wa2c.android.medoly.library.LyricsProperty
