@@ -1,6 +1,6 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 import com.wa2c.android.medoly.plugin.action.lrclyrics.service.AbstractPluginService
 import timber.log.Timber
 
@@ -8,12 +8,15 @@ import timber.log.Timber
 /**
  * App
  */
-class App : Application() {
+class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+            //Timber.plant(CrashlyticsTree())
+        } else {
+            Timber.plant(CrashlyticsTree())
         }
 
         // Create channel
