@@ -5,9 +5,10 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.core.content.pm.PackageInfoCompat
 import com.wa2c.android.medoly.library.PluginOperationCategory
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.AppDatabase
-import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache2
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache
 import com.wa2c.android.prefs.Prefs
 import timber.log.Timber
+import java.io.File
 
 /**
  * Migrator
@@ -54,15 +55,13 @@ class Migrator(private val context: Context) {
         val prevVersionCode = savedVersionCode
         val currentVersionCode = currentVersionCode
 
-        versionUpFrom11(prevVersionCode)
-
         if (currentVersionCode <= prevVersionCode || prevVersionCode == 0)
             return false
 
         // migration
         versionUpFrom0(prevVersionCode)
         versionUpFrom10(prevVersionCode)
-        versionUpFrom11(prevVersionCode)
+        //versionUpFrom11(prevVersionCode)
 
         // save version
         saveCurrentVersionCode()
@@ -111,12 +110,12 @@ class Migrator(private val context: Context) {
             val roomDb = AppDatabase.buildDb(context)
             roomDb.runInTransaction {
                 val dao = roomDb.getSearchCacheDao()
-                val dbPath = context.getDatabasePath("com.wa2c.android.medoly.plugin.action.lrclyrics.orma.db") // Orma DB
-                val ormaDb: SQLiteDatabase = SQLiteDatabase.openDatabase(dbPath.absolutePath, null, SQLiteDatabase.OPEN_READWRITE)
+                val dbFile = context.getDatabasePath("com.wa2c.android.medoly.plugin.action.lrclyrics.orma.db") // Orma DB
+                val ormaDb: SQLiteDatabase = SQLiteDatabase.openDatabase(dbFile.absolutePath, null, SQLiteDatabase.OPEN_READWRITE)
                 val columns = arrayOf("_id", "title", "artist", "language", "`from`", "file_name", "has_lyrics", "result", "date_added", "date_modified")
                 ormaDb.query("search_cache", columns, null, null, null, null, "_id").use {
                     while (it.moveToNext()) {
-                        val row = SearchCache2(
+                        val row = SearchCache(
                                 it.getLong(0), // _id
                                 it.getString(1), // title
                                 it.getString(2), // artist
@@ -132,12 +131,11 @@ class Migrator(private val context: Context) {
                         Timber.d(row.toString())
                     }
                 }
+                //SQLiteDatabase.deleteDatabase(dbFile)
             }
         } catch (e: Exception) {
             Timber.e(e)
         }
     }
-
-
 
 }

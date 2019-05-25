@@ -44,6 +44,12 @@ android {
         }
     }
 
+    signingConfigs {
+        debug {
+            storeFile file("../debug.keystore")
+        }
+    }
+
     packagingOptions {
         exclude 'META-INF/LICENSE'
     }
@@ -83,7 +89,7 @@ dependencies {
 
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.9'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     // Room
     implementation "android.arch.persistence.room:runtime:1.1.1"
@@ -94,13 +100,6 @@ dependencies {
     implementation group: 'com.jakewharton.timber', name: 'timber', version: '4.7.1'
     // https://mvnrepository.com/artifact/com.pranavpandey.android/dynamic-toasts
     implementation group: 'com.pranavpandey.android', name: 'dynamic-toasts', version: '2.3.0'
-
-    // Orma
-    implementation "io.reactivex.rxjava2:rxjava:2.1.14"
-    kapt 'com.github.maskarade.android.orma:orma-processor:6.0.2'
-    implementation 'com.github.maskarade.android.orma:orma:6.0.2'
-    // https://mvnrepository.com/artifact/com.github.maskarade.android.orma/orma-core
-    implementation group: 'com.github.maskarade.android.orma', name: 'orma-core', version: '6.0.2'
 
     // Gson
     implementation 'com.google.code.gson:gson:2.8.5'

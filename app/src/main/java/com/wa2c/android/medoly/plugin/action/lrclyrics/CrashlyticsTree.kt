@@ -1,8 +1,8 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics
 
 import android.util.Log
-import timber.log.Timber
 import com.crashlytics.android.Crashlytics
+import timber.log.Timber
 
 /**
  * Crashlytics tree

@@ -14,7 +14,7 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.ActivitySearchBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.LayoutSearchItemBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.AppDatabase
-import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache2
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheDao
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.ConfirmDialogFragment
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.NormalizeDialogFragment
@@ -55,7 +55,7 @@ class SearchActivity : AppCompatActivity() {
         binding.searchArtistEditText.setText(intentSearchArtist)
 
         // Action Bar
-        actionBar?.let {
+        supportActionBar?.let {
             it.setDisplayShowHomeEnabled(true)
             it.setDisplayHomeAsUpEnabled(true)
             it.setDisplayShowTitleEnabled(true)
@@ -233,7 +233,7 @@ class SearchActivity : AppCompatActivity() {
 
                         GlobalScope.launch(Dispatchers.Main) {
                             val result = async(Dispatchers.Default) {
-                                val cache = SearchCache2.create(AppUtils.coalesce(title), AppUtils.coalesce(artist), searchResultAdapter.selectedItem)
+                                val cache = SearchCache.create(AppUtils.coalesce(title), AppUtils.coalesce(artist), searchResultAdapter.selectedItem)
                                 return@async dao.create(cache) > 0
                             }
                             if (result.await())

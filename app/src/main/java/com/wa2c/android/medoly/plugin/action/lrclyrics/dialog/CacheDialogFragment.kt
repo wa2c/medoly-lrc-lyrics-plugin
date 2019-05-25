@@ -7,7 +7,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.DialogCacheBinding
-import com.wa2c.android.medoly.plugin.action.lrclyrics.db.*
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.AppDatabase
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheDao
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -30,7 +32,7 @@ class CacheDialogFragment : AbstractDialogFragment() {
         dao = AppDatabase.buildDb(context).getSearchCacheDao()
 
         // data
-        val cache = arguments!!.getSerializable(ARG_CACHE) as SearchCache2
+        val cache = arguments!!.getSerializable(ARG_CACHE) as SearchCache
         val result = cache.makeResultItem()
 
         // view
@@ -62,7 +64,7 @@ class CacheDialogFragment : AbstractDialogFragment() {
     /**
      * Delete cache lyrics.
      */
-    private fun deleteLyrics(cache: SearchCache2) {
+    private fun deleteLyrics(cache: SearchCache) {
         GlobalScope.launch(Dispatchers.Main) {
             val deleteResult = async(Dispatchers.Default) {
                 try {
@@ -88,7 +90,7 @@ class CacheDialogFragment : AbstractDialogFragment() {
     /**
      * Delete cache.
      */
-    private fun deleteCache(cache: SearchCache2) {
+    private fun deleteCache(cache: SearchCache) {
         GlobalScope.launch(Dispatchers.Main) {
             val deleteResult = async(Dispatchers.Default) {
                 try {
@@ -120,7 +122,7 @@ class CacheDialogFragment : AbstractDialogFragment() {
          * @param cache Search cache.
          * @return Dialog instance.
          */
-        fun newInstance(cache: SearchCache2): CacheDialogFragment {
+        fun newInstance(cache: SearchCache): CacheDialogFragment {
             val fragment = CacheDialogFragment()
             val args = Bundle()
             args.putSerializable(ARG_CACHE, cache)

@@ -1,0 +1,113 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "385c85c8a53c8682deb6680a61515df8",
+    "entities": [
+      {
+        "tableName": "search_cache",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `artist` TEXT, `language` TEXT, `from` TEXT, `file_name` TEXT, `has_lyrics` INTEGER, `result` TEXT, `date_added` INTEGER, `date_modified` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "_id",
+            "columnName": "_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "artist",
+            "columnName": "artist",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "language",
+            "columnName": "language",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "from",
+            "columnName": "from",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "file_name",
+            "columnName": "file_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "has_lyrics",
+            "columnName": "has_lyrics",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "result",
+            "columnName": "result",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "date_added",
+            "columnName": "date_added",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "date_modified",
+            "columnName": "date_modified",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_search_cache_title_artist",
+            "unique": false,
+            "columnNames": [
+              "title",
+              "artist"
+            ],
+            "createSql": "CREATE  INDEX `index_search_cache_title_artist` ON `${TABLE_NAME}` (`title`, `artist`)"
+          },
+          {
+            "name": "index_search_cache_title",
+            "unique": false,
+            "columnNames": [
+              "title"
+            ],
+            "createSql": "CREATE  INDEX `index_search_cache_title` ON `${TABLE_NAME}` (`title`)"
+          },
+          {
+            "name": "index_search_cache_artist",
+            "unique": false,
+            "columnNames": [
+              "artist"
+            ],
+            "createSql": "CREATE  INDEX `index_search_cache_artist` ON `${TABLE_NAME}` (`artist`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"385c85c8a53c8682deb6680a61515df8\")"
+    ]
+  }
+}

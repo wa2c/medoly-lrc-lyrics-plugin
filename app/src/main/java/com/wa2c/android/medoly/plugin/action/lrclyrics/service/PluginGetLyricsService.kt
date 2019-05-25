@@ -12,7 +12,7 @@ import com.wa2c.android.medoly.library.PropertyData
 import com.wa2c.android.medoly.plugin.action.lrclyrics.BuildConfig
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.AppDatabase
-import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache2
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ViewLyricsSearcher
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
@@ -286,7 +286,7 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
 
         val title = propertyData.getFirst(MediaProperty.TITLE)
         val artist = propertyData.getFirst(MediaProperty.ARTIST)
-        val cache = SearchCache2.create(AppUtils.coalesce(title), AppUtils.coalesce(artist), resultItem)
+        val cache = SearchCache.create(AppUtils.coalesce(title), AppUtils.coalesce(artist), resultItem)
         val dao = AppDatabase.buildDb(this).getSearchCacheDao()
         dao.create(cache)
     }

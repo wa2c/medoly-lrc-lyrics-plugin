@@ -14,7 +14,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.ActivityCacheBinding
-import com.wa2c.android.medoly.plugin.action.lrclyrics.db.*
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.AppDatabase
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheDao
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.CacheDialogFragment
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.ConfirmDialogFragment
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
@@ -39,14 +41,14 @@ class CacheActivity : AppCompatActivity() {
     /** Search cache DAO. */
     private lateinit var dao: SearchCacheDao
     /** Current cache item. */
-    private var currentCacheItem: SearchCache2? = null
+    private var currentCacheItem: SearchCache? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_cache)
 
         // Action Bar
-        actionBar?.let {
+        supportActionBar?.let {
             it.setDisplayShowHomeEnabled(true)
             it.setDisplayHomeAsUpEnabled(true)
             it.setDisplayShowTitleEnabled(true)
@@ -226,11 +228,11 @@ class CacheActivity : AppCompatActivity() {
     /**
      * Search result adapter.
      */
-    private class CacheAdapter internal constructor(context: Context) : ArrayAdapter<SearchCache2>(context, R.layout.layout_search_item) {
+    private class CacheAdapter internal constructor(context: Context) : ArrayAdapter<SearchCache>(context, R.layout.layout_search_item) {
         /** Checked item. */
-        val checkedSet = HashSet<SearchCache2>()
+        val checkedSet = HashSet<SearchCache>()
         /** SearchCache list.  */
-        private var cacheList: MutableList<SearchCache2> = ArrayList()
+        private var cacheList: MutableList<SearchCache> = ArrayList()
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             var itemView = convertView
@@ -248,7 +250,7 @@ class CacheActivity : AppCompatActivity() {
             return itemView
         }
 
-        fun setList(list: MutableList<SearchCache2>) {
+        fun setList(list: MutableList<SearchCache>) {
             cacheList = list
             showCacheList()
         }
@@ -276,7 +278,7 @@ class CacheActivity : AppCompatActivity() {
                 itemView.tag = this
             }
 
-            fun bind(item: SearchCache2, checkedSet: HashSet<SearchCache2>) {
+            fun bind(item: SearchCache, checkedSet: HashSet<SearchCache>) {
                 itemView.cacheItemCheckBox.isChecked = checkedSet.contains(item)
                 itemView.cacheItemTitleTextView.text = context.getString(R.string.label_cache_item_title, AppUtils.coalesce(item.title))
                 itemView.cacheItemArtistTextView.text = context.getString(R.string.label_cache_item_artist, AppUtils.coalesce(item.artist))

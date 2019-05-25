@@ -5,7 +5,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -92,6 +91,7 @@ class NormalizeDialogFragment : AbstractDialogFragment() {
         }
         super.invokeListener(which, result, close)
     }
+
 
     companion object {
 

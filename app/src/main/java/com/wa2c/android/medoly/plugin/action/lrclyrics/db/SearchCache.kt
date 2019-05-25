@@ -1,28 +1,30 @@
 package com.wa2c.android.medoly.plugin.action.lrclyrics.db
 
-import com.github.gfx.android.orma.annotation.*
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.google.gson.Gson
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem
+import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import java.io.Serializable
-import java.util.*
 
-/**
- * Search condition. (Orma Model)
- */
-@Table(value = "search_cache", indexes = [Index(value = ["title", "artist"])])
+@Entity(
+        tableName = SearchCache.SEARCH_CACHE_TABLE_NAME,
+        indices = [Index(value = ["title", "artist"]), Index(value = ["title"]), Index(value = ["artist"])]
+)
 data class SearchCache (
-        @Setter @PrimaryKey(autoincrement = true) var _id: Long,
-        @Setter @Column(indexed = true) var title: String?,
-        @Setter @Column(indexed = true) var artist: String?,
-        @Setter @Column var language: String?,
-        @Setter
-        @Column var from: String?,
-        @Setter @Column var file_name: String?,
-        @Setter @Column var has_lyrics: Boolean?,
-        @Setter @Column var result: String?,
-        @Setter @Column(defaultExpr = "CURRENT_TIMESTAMP") var date_added: Date?,
-        @Setter @Column(defaultExpr = "CURRENT_TIMESTAMP") var date_modified: Date?
+        @PrimaryKey(autoGenerate = true) var _id: Long,
+        var title: String?,
+        var artist: String?,
+        var language: String?,
+        var from: String?,
+        var file_name: String?,
+        var has_lyrics: Boolean?,
+        var result: String?,
+        var date_added: Long?,
+        var date_modified: Long?
 ): Serializable {
+
 
     /**
      * Get ResultItem from result field.
@@ -32,14 +34,26 @@ data class SearchCache (
         return if (result == null || result!!.isEmpty()) null else Gson().fromJson(result, ResultItem::class.java)
     }
 
-    /**
-     * Set ResultItem to result field.
-     * @param item result item.
-     */
-    fun updateResultItem(item: ResultItem?) {
-        if (item == null)
-            return
-        result = Gson().toJson(item)
+    companion object {
+        const val SEARCH_CACHE_TABLE_NAME = "search_cache"
+
+        /**
+         * Create new object.
+         */
+        fun create(title: String, artist: String, result: ResultItem?): SearchCache {
+            val now = System.currentTimeMillis()
+            return SearchCache(
+                    0,
+                    AppUtils.coalesce(title),
+                    AppUtils.coalesce(artist),
+                    result?.language,
+                    result?.lyricUploader,
+                    result?.lyricsFileName,
+                    !result?.lyrics.isNullOrEmpty(),
+                    Gson().toJson(result),
+                    now,
+                    now)
+        }
     }
 
 }
