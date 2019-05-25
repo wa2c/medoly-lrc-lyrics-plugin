@@ -14,8 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.ActivityCacheBinding
-import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache
-import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.*
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.CacheDialogFragment
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.ConfirmDialogFragment
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
@@ -37,10 +36,10 @@ class CacheActivity : AppCompatActivity() {
 
     /** Search list adapter.  */
     private lateinit var cacheAdapter: CacheAdapter
-    /** Search cache helper.  */
-    private lateinit var searchCacheHelper: SearchCacheHelper
+    /** Search cache DAO. */
+    private lateinit var dao: SearchCacheDao
     /** Current cache item. */
-    private var currentCacheItem: SearchCache? = null
+    private var currentCacheItem: SearchCache2? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +52,7 @@ class CacheActivity : AppCompatActivity() {
             it.setDisplayShowTitleEnabled(true)
         }
 
-        searchCacheHelper = SearchCacheHelper(this)
+        dao = AppDatabase.buildDb(this).getSearchCacheDao()
         cacheAdapter = CacheAdapter(this)
         binding.cacheListView.adapter = cacheAdapter
 
@@ -161,7 +160,7 @@ class CacheActivity : AppCompatActivity() {
                     if (which == DialogInterface.BUTTON_POSITIVE) {
                         GlobalScope.launch(Dispatchers.Main) {
                             val result = async(Dispatchers.Default) {
-                                return@async searchCacheHelper.delete(cacheAdapter.checkedSet)
+                                return@async (dao.deleteIn(cacheAdapter.checkedSet.map{ r -> r._id }.toList()) > 0)
                             }
                             if (result.await()) {
                                 cacheAdapter.removeCheckedItem()
@@ -216,7 +215,7 @@ class CacheActivity : AppCompatActivity() {
     private fun searchCache(title: String, artist: String) {
         GlobalScope.launch(Dispatchers.Main) {
             val result = async(Dispatchers.Default) {
-                return@async searchCacheHelper.search(title, artist)
+                return@async dao.search(title, artist)
             }
             cacheAdapter.setList(result.await().toMutableList())
         }
@@ -227,11 +226,11 @@ class CacheActivity : AppCompatActivity() {
     /**
      * Search result adapter.
      */
-    private class CacheAdapter internal constructor(context: Context) : ArrayAdapter<SearchCache>(context, R.layout.layout_search_item) {
+    private class CacheAdapter internal constructor(context: Context) : ArrayAdapter<SearchCache2>(context, R.layout.layout_search_item) {
         /** Checked item. */
-        val checkedSet = HashSet<SearchCache>()
+        val checkedSet = HashSet<SearchCache2>()
         /** SearchCache list.  */
-        private var cacheList: MutableList<SearchCache> = ArrayList()
+        private var cacheList: MutableList<SearchCache2> = ArrayList()
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             var itemView = convertView
@@ -249,7 +248,7 @@ class CacheActivity : AppCompatActivity() {
             return itemView
         }
 
-        fun setList(list: MutableList<SearchCache>) {
+        fun setList(list: MutableList<SearchCache2>) {
             cacheList = list
             showCacheList()
         }
@@ -277,7 +276,7 @@ class CacheActivity : AppCompatActivity() {
                 itemView.tag = this
             }
 
-            fun bind(item: SearchCache, checkedSet: HashSet<SearchCache>) {
+            fun bind(item: SearchCache2, checkedSet: HashSet<SearchCache2>) {
                 itemView.cacheItemCheckBox.isChecked = checkedSet.contains(item)
                 itemView.cacheItemTitleTextView.text = context.getString(R.string.label_cache_item_title, AppUtils.coalesce(item.title))
                 itemView.cacheItemArtistTextView.text = context.getString(R.string.label_cache_item_artist, AppUtils.coalesce(item.artist))

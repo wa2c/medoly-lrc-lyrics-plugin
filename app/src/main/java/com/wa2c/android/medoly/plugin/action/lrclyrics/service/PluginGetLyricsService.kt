@@ -11,9 +11,11 @@ import com.wa2c.android.medoly.library.MediaProperty
 import com.wa2c.android.medoly.library.PropertyData
 import com.wa2c.android.medoly.plugin.action.lrclyrics.BuildConfig
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
-import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.AppDatabase
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache2
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ResultItem
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.ViewLyricsSearcher
+import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -60,8 +62,8 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
 
         // search cache
         if (prefs.getBoolean(R.string.pref_use_cache, defRes = R.bool.pref_default_use_cache)) {
-            val cacheHelper = SearchCacheHelper(this)
-            val cache = cacheHelper.select(titleText, artistText)
+            val dao = AppDatabase.buildDb(this).getSearchCacheDao()
+            val cache = dao.search(titleText, artistText).firstOrNull()
             if (cache != null) {
                 resultItem = cache.makeResultItem()
                 if (resultItem == null && prefs.getBoolean(R.string.pref_cache_non_result, defRes = R.bool.pref_default_cache_non_result)) {
@@ -98,7 +100,7 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
 
         try {
             // pre-creation profiles
-            if (!prefs.getString(R.string.pref_search_first_language, defRes = R.string.pref_default_search_first_language).isEmpty()) {
+            if (prefs.getString(R.string.pref_search_first_language, defRes = R.string.pref_default_search_first_language).isNotEmpty()) {
                 synchronized(creatorThread) {
                     creatorThread.start() // start profiles creating
                 }
@@ -284,8 +286,9 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
 
         val title = propertyData.getFirst(MediaProperty.TITLE)
         val artist = propertyData.getFirst(MediaProperty.ARTIST)
-        val searchCacheHelper = SearchCacheHelper(this)
-        searchCacheHelper.insertOrUpdate(title!!, artist, resultItem)
+        val cache = SearchCache2.create(AppUtils.coalesce(title), AppUtils.coalesce(artist), resultItem)
+        val dao = AppDatabase.buildDb(this).getSearchCacheDao()
+        dao.create(cache)
     }
 
 

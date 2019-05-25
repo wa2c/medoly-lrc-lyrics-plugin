@@ -2,9 +2,7 @@ package com.wa2c.android.medoly.plugin.action.lrclyrics.dialog
 
 import android.app.Dialog
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.util.TypedValue
@@ -12,6 +10,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.DialogAboutBinding
@@ -70,11 +69,7 @@ class AboutDialogFragment : AbstractDialogFragment() {
         for (i in libraryNames.indices) {
             val libTextView = TextView(context)
             libTextView.movementMethod = LinkMovementMethod.getInstance()
-            if (Build.VERSION.SDK_INT >= 24) {
-                libTextView.text = Html.fromHtml("<a href=\"" + libraryUrls[i] + "\">" + libraryNames[i] + "</a>", Html.FROM_HTML_MODE_COMPACT)
-            } else {
-                libTextView.text = Html.fromHtml("<a href=\"" + libraryUrls[i] + "\">" + libraryNames[i] + "</a>")
-            }
+            libTextView.text = HtmlCompat.fromHtml("<a href=\"" + libraryUrls[i] + "\">" + libraryNames[i] + "</a>", HtmlCompat.FROM_HTML_MODE_COMPACT)
             libTextView.gravity = Gravity.CENTER_HORIZONTAL
             libTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
             binding.dialogAboutLibraryLayout.setPadding(2, 2, 2, 2)

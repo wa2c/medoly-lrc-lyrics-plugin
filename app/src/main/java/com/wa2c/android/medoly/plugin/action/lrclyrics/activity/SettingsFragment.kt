@@ -31,7 +31,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
      */
     private val deviceAutoStartPreferenceClickListener = Preference.OnPreferenceClickListener {
         activity?.let {
-            if (!KillerManager.doAction(activity, managerAction)) {
+            if (!KillerManager.doAction(it, managerAction)) {
                 AppUtils.showToast(it, R.string.message_unsupported_device)
             }
         }

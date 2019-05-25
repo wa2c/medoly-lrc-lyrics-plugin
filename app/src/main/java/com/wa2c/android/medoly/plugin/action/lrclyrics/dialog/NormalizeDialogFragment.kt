@@ -85,14 +85,12 @@ class NormalizeDialogFragment : AbstractDialogFragment() {
         dialog.dialogNormalizeAfterTextView.text = text
     }
 
-
-    override fun setPositiveButton(dialog: AlertDialog, button: Button) {
-        button.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putString(RESULT_INPUT_TEXT, inputText)
-            clickListener?.invoke(dialog, DialogInterface.BUTTON_POSITIVE, bundle)
-            dialog.dismiss()
+    override fun invokeListener(which: Int, bundle: Bundle?, close: Boolean) {
+        val result = bundle ?: Bundle()
+        if (which == DialogInterface.BUTTON_POSITIVE) {
+            result.putString(RESULT_INPUT_TEXT, inputText)
         }
+        super.invokeListener(which, result, close)
     }
 
     companion object {

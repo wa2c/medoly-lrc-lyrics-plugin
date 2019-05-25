@@ -7,8 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.DialogCacheBinding
-import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache
-import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.*
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -23,13 +22,15 @@ class CacheDialogFragment : AbstractDialogFragment() {
 
     /** Binding. */
     private lateinit var binding: DialogCacheBinding
+    private lateinit var dao: SearchCacheDao
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
         binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_cache, null, false)
+        dao = AppDatabase.buildDb(context).getSearchCacheDao()
 
         // data
-        val cache = arguments!!.getSerializable(ARG_CACHE) as SearchCache
+        val cache = arguments!!.getSerializable(ARG_CACHE) as SearchCache2
         val result = cache.makeResultItem()
 
         // view
@@ -61,12 +62,18 @@ class CacheDialogFragment : AbstractDialogFragment() {
     /**
      * Delete cache lyrics.
      */
-    private fun deleteLyrics(cache: SearchCache) {
-        val searchCacheHelper = SearchCacheHelper(context)
+    private fun deleteLyrics(cache: SearchCache2) {
         GlobalScope.launch(Dispatchers.Main) {
             val deleteResult = async(Dispatchers.Default) {
                 try {
-                    searchCacheHelper.insertOrUpdate(cache.title, cache.artist, null)
+                    cache.language = null
+                    cache.from = null
+                    cache.file_name = null
+                    cache.has_lyrics = null
+                    cache.result = null
+                    cache.date_modified = System.currentTimeMillis()
+                    dao.update(cache)
+                    return@async true
                 } catch (e: Exception) {
                     return@async null
                 }
@@ -74,20 +81,19 @@ class CacheDialogFragment : AbstractDialogFragment() {
             val r = deleteResult.await()
             if (r != true)
                 AppUtils.showToast(context, R.string.message_dialog_cache_delete_error)
-            clickListener?.invoke(dialog, DIALOG_RESULT_DELETE_LYRICS, null)
-            dialog.dismiss()
+            invokeListener(DIALOG_RESULT_DELETE_LYRICS)
         }
     }
 
     /**
      * Delete cache.
      */
-    private fun deleteCache(cache: SearchCache) {
-        val searchCacheHelper = SearchCacheHelper(context)
+    private fun deleteCache(cache: SearchCache2) {
         GlobalScope.launch(Dispatchers.Main) {
             val deleteResult = async(Dispatchers.Default) {
                 try {
-                    searchCacheHelper.delete(listOf(cache))
+                    dao.delete(cache)
+                    return@async true
                 } catch (e: Exception) {
                     return@async null
                 }
@@ -95,8 +101,7 @@ class CacheDialogFragment : AbstractDialogFragment() {
             val r = deleteResult.await()
             if (r != true)
                 AppUtils.showToast(context, R.string.message_dialog_cache_delete_error)
-            clickListener?.invoke(dialog, DIALOG_RESULT_DELETE_CACHE, null)
-            dialog.dismiss()
+            invokeListener(DIALOG_RESULT_DELETE_CACHE)
         }
     }
 
@@ -115,7 +120,7 @@ class CacheDialogFragment : AbstractDialogFragment() {
          * @param cache Search cache.
          * @return Dialog instance.
          */
-        fun newInstance(cache: SearchCache): CacheDialogFragment {
+        fun newInstance(cache: SearchCache2): CacheDialogFragment {
             val fragment = CacheDialogFragment()
             val args = Bundle()
             args.putSerializable(ARG_CACHE, cache)

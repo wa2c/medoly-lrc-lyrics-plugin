@@ -9,10 +9,13 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.google.gson.Gson
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.ActivitySearchBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.LayoutSearchItemBinding
-import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheHelper
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.AppDatabase
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache2
+import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCacheDao
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.ConfirmDialogFragment
 import com.wa2c.android.medoly.plugin.action.lrclyrics.dialog.NormalizeDialogFragment
 import com.wa2c.android.medoly.plugin.action.lrclyrics.search.Result
@@ -36,8 +39,10 @@ class SearchActivity : AppCompatActivity() {
 
     /** Search list adapter.  */
     private lateinit var searchResultAdapter: SearchResultAdapter
-    /** Search cache helper.  */
-    private lateinit var searchCacheHelper: SearchCacheHelper
+    /** Search cache DAO. */
+    private lateinit var dao: SearchCacheDao
+
+    private val gson by lazy { Gson() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +61,7 @@ class SearchActivity : AppCompatActivity() {
             it.setDisplayShowTitleEnabled(true)
         }
 
-        searchCacheHelper = SearchCacheHelper(this)
+        dao = AppDatabase.buildDb(this).getSearchCacheDao()
         searchResultAdapter = SearchResultAdapter()
         binding.searchResultListView.adapter = searchResultAdapter
         binding.searchResultListView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
@@ -228,7 +233,8 @@ class SearchActivity : AppCompatActivity() {
 
                         GlobalScope.launch(Dispatchers.Main) {
                             val result = async(Dispatchers.Default) {
-                                return@async searchCacheHelper.insertOrUpdate(title, artist, searchResultAdapter.selectedItem)
+                                val cache = SearchCache2.create(AppUtils.coalesce(title), AppUtils.coalesce(artist), searchResultAdapter.selectedItem)
+                                return@async dao.create(cache) > 0
                             }
                             if (result.await())
                                 AppUtils.showToast(this@SearchActivity, R.string.message_save_cache)

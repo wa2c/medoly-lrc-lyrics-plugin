@@ -15,7 +15,8 @@ data class SearchCache (
         @Setter @Column(indexed = true) var title: String?,
         @Setter @Column(indexed = true) var artist: String?,
         @Setter @Column var language: String?,
-        @Setter @Column var from: String?,
+        @Setter
+        @Column var from: String?,
         @Setter @Column var file_name: String?,
         @Setter @Column var has_lyrics: Boolean?,
         @Setter @Column var result: String?,
