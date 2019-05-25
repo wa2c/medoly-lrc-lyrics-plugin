@@ -61,7 +61,7 @@ class Migrator(private val context: Context) {
         // migration
         versionUpFrom0(prevVersionCode)
         versionUpFrom10(prevVersionCode)
-        //versionUpFrom11(prevVersionCode)
+        versionUpFrom11(prevVersionCode)
 
         // save version
         saveCurrentVersionCode()
@@ -131,7 +131,7 @@ class Migrator(private val context: Context) {
                         Timber.d(row.toString())
                     }
                 }
-                //SQLiteDatabase.deleteDatabase(dbFile)
+                SQLiteDatabase.deleteDatabase(dbFile)
             }
         } catch (e: Exception) {
             Timber.e(e)
