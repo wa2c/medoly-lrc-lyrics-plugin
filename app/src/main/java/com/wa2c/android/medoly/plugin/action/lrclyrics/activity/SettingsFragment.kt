@@ -68,11 +68,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private var managerAction: KillerManager.Actions? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.pref_settings, rootKey)
+        //addPreferencesFromResource(R.xml.pref_settings)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        addPreferencesFromResource(R.xml.pref_settings)
 
         // language priority
         run {
@@ -235,11 +236,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         // individual
-
-        if (key == getString(R.string.pref_search_language_threshold)) {
-            val progress = p.sharedPreferences.getInt(p.key, resources.getInteger(R.integer.pref_default_search_language_threshold))
-            p.summary = summary.subSequence(0, labelSize).toString() + getString(R.string.settings_summary_current_value, progress.toString())
-        }
 
         if (key == getString(R.string.pref_search_first_language) ||
             key == getString(R.string.pref_search_second_language) ||

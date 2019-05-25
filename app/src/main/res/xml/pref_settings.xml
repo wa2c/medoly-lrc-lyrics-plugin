@@ -53,7 +53,7 @@
             android:summary="@string/pref_summary_search_non_preferred_language"
             android:title="@string/pref_title_search_non_preferred_language" />
 
-        <com.wa2c.android.medoly.plugin.action.lrclyrics.view.SeekBarPreference
+        <SeekBarPreference
             android:defaultValue="50"
             android:dialogMessage=""
             android:key="@string/pref_search_language_threshold"
