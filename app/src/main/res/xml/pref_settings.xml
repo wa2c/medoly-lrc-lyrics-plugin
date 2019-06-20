@@ -98,6 +98,11 @@
             android:title="@string/pref_title_device_auto_start" />
 
         <Preference
+            android:key="@string/prefkey_privacy_policy"
+            android:summary="@string/pref_summary_privacy_policy"
+            android:title="@string/pref_title_privacy_policy" />
+
+        <Preference
             android:key="@string/pref_application_details"
             android:summary="@string/pref_summary_application_details"
             android:title="@string/pref_title_application_details" />
