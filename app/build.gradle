@@ -72,9 +72,9 @@ repositories {
 
 dependencies {
     // Medoly library
-    implementation 'com.wa2c.android:medolylibrary:1.2.6'
+    implementation 'com.wa2c.android:medolylibrary:1.2.7'
     // Prefs
-    implementation 'com.wa2c.android:prefs:0.1.1'
+    implementation 'com.wa2c.android:prefs:0.1.2'
 
     // Support library
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -88,7 +88,7 @@ dependencies {
     implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-android', version: '1.2.1'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     // Room
