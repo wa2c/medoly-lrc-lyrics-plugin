@@ -9,7 +9,6 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.google.gson.Gson
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.ActivitySearchBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.LayoutSearchItemBinding
@@ -41,8 +40,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchResultAdapter: SearchResultAdapter
     /** Search cache DAO. */
     private lateinit var dao: SearchCacheDao
-
-    private val gson by lazy { Gson() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

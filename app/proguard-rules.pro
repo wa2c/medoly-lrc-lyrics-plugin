@@ -21,3 +21,9 @@
 -keep class com.cybozu.labs.langdetect.** { *; }
 -dontwarn net.arnx.jsonic.**
 -dontwarn com.cybozu.labs.langdetect.**
+
+# Crashlytics
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**

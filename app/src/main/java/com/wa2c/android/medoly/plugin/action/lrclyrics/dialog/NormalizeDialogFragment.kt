@@ -107,13 +107,12 @@ class NormalizeDialogFragment : AbstractDialogFragment() {
          * @return Dialog instance.
          */
         fun newInstance(text: String?, initialText: String?): NormalizeDialogFragment {
-            val args = Bundle()
-            args.putString(ARG_INITIAL_TEXT, initialText)
-            args.putString(ARG_INPUT_TEXT, text)
-
-            val fragment = NormalizeDialogFragment()
-            fragment.arguments = args
-            return fragment
+            return NormalizeDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_INITIAL_TEXT, initialText)
+                    putString(ARG_INPUT_TEXT, text)
+                }
+            }
         }
     }
 

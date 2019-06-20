@@ -50,15 +50,17 @@ class CacheDialogFragment : AbstractDialogFragment() {
         }
 
         // build dialog
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle(R.string.title_activity_cache)
-        builder.setView(binding.root)
-        builder.setNeutralButton(R.string.label_close, null)
-        builder.setNegativeButton(R.string.label_dialog_cache_research, null)
-        if (result != null && !result.lyrics.isNullOrEmpty()) {
-            builder.setPositiveButton(R.string.menu_search_save_file, null)
-        }
-        return builder.create()
+        return AlertDialog.Builder(context).apply {
+            setTitle(R.string.title_activity_cache)
+            setView(binding.root)
+            setNeutralButton(R.string.label_close, null)
+            setNegativeButton(R.string.label_dialog_cache_research, null)
+            result?.let {
+                if (!result.lyrics.isNullOrEmpty())
+                    setPositiveButton(R.string.menu_search_save_file, null)
+            }
+            create()
+        }.create()
     }
 
     /**
@@ -123,12 +125,11 @@ class CacheDialogFragment : AbstractDialogFragment() {
          * @return Dialog instance.
          */
         fun newInstance(cache: SearchCache): CacheDialogFragment {
-            val fragment = CacheDialogFragment()
-            val args = Bundle()
-            args.putSerializable(ARG_CACHE, cache)
-            fragment.arguments = args
-
-            return fragment
+            return CacheDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_CACHE, cache)
+                }
+            }
         }
     }
 }
