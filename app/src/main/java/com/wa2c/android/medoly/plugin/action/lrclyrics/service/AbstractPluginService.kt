@@ -17,6 +17,7 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.util.AppUtils
 import com.wa2c.android.prefs.Prefs
 import timber.log.Timber
+import java.io.InvalidObjectException
 
 
 /**
@@ -37,7 +38,7 @@ abstract class AbstractPluginService(name: String) : IntentService(name) {
 
     /** True if result sent.  */
     private var resultSent: Boolean = false
-
+    /** Notification manager. */
     private var notificationManager : NotificationManager? = null
 
 
@@ -45,38 +46,33 @@ abstract class AbstractPluginService(name: String) : IntentService(name) {
     override fun onHandleIntent(intent: Intent?) {
         Timber.d("onHandleIntent")
 
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                val builder = Notification.Builder(this, NOTIFICATION_CHANNEL_ID)
-                        .setContentTitle(getString(R.string.app_name))
-                        .setContentText("")
-                        .setSmallIcon(R.drawable.ic_notification)
-                startForeground(NOTIFICATION_ID, builder.build())
-            }
-
-            if (intent == null)
-                return
-
-            resultSent = false
-            context = applicationContext
-            prefs = Prefs(this)
-            pluginIntent = MediaPluginIntent(intent)
-            propertyData = pluginIntent.propertyData ?: PropertyData()
-            receivedClassName = pluginIntent.getStringExtra(RECEIVED_CLASS_NAME)
-
-        } catch (e: Exception) {
-            Timber.e(e)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val builder = Notification.Builder(this, NOTIFICATION_CHANNEL_ID)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText("")
+                    .setSmallIcon(R.drawable.ic_notification)
+            startForeground(NOTIFICATION_ID, builder.build())
         }
+
+        if (intent == null)
+            throw InvalidObjectException("Null intent")
+
+        resultSent = false
+        context = applicationContext
+        prefs = Prefs(this)
+        pluginIntent = MediaPluginIntent(intent)
+        propertyData = pluginIntent.propertyData ?: PropertyData()
+        receivedClassName = pluginIntent.getStringExtra(RECEIVED_CLASS_NAME)
     }
 
     @SuppressLint("NewApi")
     override fun onDestroy() {
         super.onDestroy()
-        Timber.d("onDestroy" + this.javaClass.simpleName)
+        Timber.d("onDestroy%s", this.javaClass.simpleName)
 
-        if (notificationManager != null) {
-            notificationManager?.cancel(NOTIFICATION_ID)
+        notificationManager?.let {
+            it.cancel(NOTIFICATION_ID)
             stopForeground(true)
         }
         sendResult(null)

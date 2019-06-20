@@ -30,14 +30,12 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
     private val creatorThread = Thread(ProfileCreator())
 
     override fun onHandleIntent(intent: Intent?) {
-        super.onHandleIntent(intent)
         Timber.d("onStartCommand")
-
         try {
+            super.onHandleIntent(intent)
             getLyrics()
         } catch (e: Exception) {
             Timber.e(e)
-            //AppUtils.showToast(this, R.string.error_app);
         }
     }
 
