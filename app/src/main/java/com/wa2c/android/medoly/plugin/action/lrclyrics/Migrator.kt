@@ -71,16 +71,16 @@ class Migrator(private val context: Context) {
      * Ver > ?
      */
     private fun versionUpFrom0(prevVersionCode: Int) {
-        val pref_plugin_event = "pref_plugin_event"
-        if (!prefs.contains(pref_plugin_event))
+        val key = "pref_plugin_event"
+        if (!prefs.contains(key))
             return
 
-        val event = prefs.getInt(pref_plugin_event)
+        val event = prefs.getInt(key)
         if (event == 1)
             prefs[R.string.pref_event_get_lyrics] = PluginOperationCategory.OPERATION_MEDIA_OPEN.name
         else if (event == 2)
             prefs[R.string.pref_event_get_lyrics] = PluginOperationCategory.OPERATION_PLAY_START.name
-        prefs.remove(pref_plugin_event)
+        prefs.remove(key)
     }
 
     /**
@@ -106,10 +106,10 @@ class Migrator(private val context: Context) {
             return
 
         try {
+            val ormaDbFile = context.getDatabasePath("com.wa2c.android.medoly.plugin.action.lrclyrics.orma.db") // Orma DB
             val roomDb = AppDatabase.buildDb(context)
             roomDb.runInTransaction {
                 val dao = roomDb.getSearchCacheDao()
-                val ormaDbFile = context.getDatabasePath("com.wa2c.android.medoly.plugin.action.lrclyrics.orma.db") // Orma DB
                 // Data copy
                 SQLiteDatabase.openDatabase(ormaDbFile.absolutePath, null, SQLiteDatabase.OPEN_READONLY).use { ormaDb ->
                     val columns = arrayOf("_id", "title", "artist", "language", "`from`", "file_name", "has_lyrics", "result", "date_added", "date_modified")
@@ -132,8 +132,8 @@ class Migrator(private val context: Context) {
                         }
                     }
                 }
-                SQLiteDatabase.deleteDatabase(ormaDbFile)
             }
+            SQLiteDatabase.deleteDatabase(ormaDbFile)
         } catch (e: Exception) {
             Timber.e(e)
         }
