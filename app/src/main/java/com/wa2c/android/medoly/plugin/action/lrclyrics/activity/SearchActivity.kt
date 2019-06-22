@@ -9,6 +9,8 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.wa2c.android.medoly.plugin.action.lrclyrics.R
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.ActivitySearchBinding
 import com.wa2c.android.medoly.plugin.action.lrclyrics.databinding.LayoutSearchItemBinding
@@ -61,7 +63,7 @@ class SearchActivity : AppCompatActivity() {
         dao = AppDatabase.buildDb(this).getSearchCacheDao()
         searchResultAdapter = SearchResultAdapter()
         binding.searchResultListView.adapter = searchResultAdapter
-        binding.searchResultListView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        binding.searchResultListView.layoutManager = LinearLayoutManager(this)
 
         val searchResultHeight = resources.getDimensionPixelSize(R.dimen.search_result_height)
 
@@ -124,7 +126,6 @@ class SearchActivity : AppCompatActivity() {
 
             // Clear view
             showSearchResult(null)
-            showLyrics(null)
             searchResultAdapter.selectedItem = null
 
             binding.searchResultListView.visibility = View.INVISIBLE
@@ -175,6 +176,8 @@ class SearchActivity : AppCompatActivity() {
         binding.searchResultListView.adapter = searchResultAdapter
         binding.searchTitleEditText.setText(intent.getStringExtra(INTENT_SEARCH_TITLE))
         binding.searchArtistEditText.setText(intent.getStringExtra(INTENT_SEARCH_ARTIST))
+
+        showSearchResult(null)
     }
 
     /**
@@ -291,6 +294,7 @@ class SearchActivity : AppCompatActivity() {
             if (result != null)
                 searchResultAdapter.addAll(result.infoList)
             searchResultAdapter.notifyDataSetChanged()
+            showLyrics(null)
         } finally {
             binding.searchResultListView.visibility = View.VISIBLE
             binding.searchResultLoadingLayout.visibility = View.INVISIBLE
@@ -326,39 +330,39 @@ class SearchActivity : AppCompatActivity() {
     /**
      * Unsent list adapter
      */
-    inner class SearchResultAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+    inner class SearchResultAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         /** Item list */
         private val itemList: MutableList<ResultItem> = mutableListOf()
         /** Selected item.  */
         var selectedItem: ResultItem? = null
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
-            val binding: LayoutSearchItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.layout_search_item, parent,false)
-            val rootView = binding.root
-            rootView.tag = binding
-            return object : androidx.recyclerview.widget.RecyclerView.ViewHolder(rootView) {}
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            val itemBinding: LayoutSearchItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.layout_search_item, parent,false)
+            val rootView = itemBinding.root
+            rootView.tag = itemBinding
+            return object : RecyclerView.ViewHolder(rootView) {}
         }
 
         @SuppressLint("ClickableViewAccessibility")
-        override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val listPosition = holder.adapterPosition
             val item = itemList[listPosition]
-            val binding = holder.itemView.tag as LayoutSearchItemBinding
-            val context = binding.root.context
+            (holder.itemView.tag as LayoutSearchItemBinding).apply {
+                val context = root.context
+                searchItemRadioButton.isChecked = (item == selectedItem)
+                searchItemTitleTextView.text = item.musicTitle
+                searchItemArtistTextView.text = AppUtils.coalesce(item.musicArtist, "-")
+                searchItemAlbumTextView.text = AppUtils.coalesce(item.musicAlbum, "-")
+                searchItemDownloadTextView.text = context.getString(R.string.label_search_item_download, item.lyricDownloadsCount)
+                searchItemRatingTextView.text = context.getString(R.string.label_search_item_rating, item.lyricRate, item.lyricRatesCount)
+                searchItemFromTextView.text = context.getString(R.string.label_search_item_from, item.lyricUploader)
 
-            binding.searchItemRadioButton.isChecked = (item == selectedItem)
-            binding.searchItemTitleTextView.text = item.musicTitle
-            binding.searchItemArtistTextView.text = AppUtils.coalesce(item.musicArtist, "-")
-            binding.searchItemAlbumTextView.text = AppUtils.coalesce(item.musicAlbum, "-")
-            binding.searchItemDownloadTextView.text = context.getString(R.string.label_search_item_download, item.lyricDownloadsCount)
-            binding.searchItemRatingTextView.text = context.getString(R.string.label_search_item_rating, item.lyricRate, item.lyricRatesCount)
-            binding.searchItemFromTextView.text = context.getString(R.string.label_search_item_from, item.lyricUploader)
-
-            binding.searchItemRadioButton.setOnTouchListener { _, event ->
-                binding.root.onTouchEvent(event)
-            }
-            binding.root.setOnClickListener {
-                itemClickListener?.invoke(binding.root, listPosition)
+                searchItemRadioButton.setOnTouchListener { _, event ->
+                    root.onTouchEvent(event)
+                }
+                root.setOnClickListener {
+                    itemClickListener?.invoke(root, listPosition)
+                }
             }
         }
 

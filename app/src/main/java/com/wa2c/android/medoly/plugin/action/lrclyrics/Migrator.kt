@@ -8,7 +8,6 @@ import com.wa2c.android.medoly.plugin.action.lrclyrics.db.AppDatabase
 import com.wa2c.android.medoly.plugin.action.lrclyrics.db.SearchCache
 import com.wa2c.android.prefs.Prefs
 import timber.log.Timber
-import java.io.File
 
 /**
  * Migrator
@@ -110,28 +109,30 @@ class Migrator(private val context: Context) {
             val roomDb = AppDatabase.buildDb(context)
             roomDb.runInTransaction {
                 val dao = roomDb.getSearchCacheDao()
-                val dbFile = context.getDatabasePath("com.wa2c.android.medoly.plugin.action.lrclyrics.orma.db") // Orma DB
-                val ormaDb: SQLiteDatabase = SQLiteDatabase.openDatabase(dbFile.absolutePath, null, SQLiteDatabase.OPEN_READWRITE)
-                val columns = arrayOf("_id", "title", "artist", "language", "`from`", "file_name", "has_lyrics", "result", "date_added", "date_modified")
-                ormaDb.query("search_cache", columns, null, null, null, null, "_id").use {
-                    while (it.moveToNext()) {
-                        val row = SearchCache(
-                                it.getLong(0), // _id
-                                it.getString(1), // title
-                                it.getString(2), // artist
-                                it.getString(3), // language
-                                it.getString(4), // from
-                                it.getString(5), // file_name
-                                it.getString(6) == "1", // has_lyrics
-                                it.getString(7), // result
-                                it.getString(8)?.toLongOrNull(), // date_added
-                                it.getString(9)?.toLongOrNull() // date_modified
-                        )
-                        dao.create(row)
-                        Timber.d(row.toString())
+                val ormaDbFile = context.getDatabasePath("com.wa2c.android.medoly.plugin.action.lrclyrics.orma.db") // Orma DB
+                // Data copy
+                SQLiteDatabase.openDatabase(ormaDbFile.absolutePath, null, SQLiteDatabase.OPEN_READONLY).use { ormaDb ->
+                    val columns = arrayOf("_id", "title", "artist", "language", "`from`", "file_name", "has_lyrics", "result", "date_added", "date_modified")
+                    ormaDb.query("search_cache", columns, null, null, null, null, "_id").use {
+                        while (it.moveToNext()) {
+                            val row = SearchCache(
+                                    it.getLong(0), // _id
+                                    it.getString(1), // title
+                                    it.getString(2), // artist
+                                    it.getString(3), // language
+                                    it.getString(4), // from
+                                    it.getString(5), // file_name
+                                    it.getString(6) == "1", // has_lyrics
+                                    it.getString(7), // result
+                                    it.getString(8)?.toLongOrNull(), // date_added
+                                    it.getString(9)?.toLongOrNull() // date_modified
+                            )
+                            dao.create(row)
+                            Timber.d(row.toString())
+                        }
                     }
                 }
-                SQLiteDatabase.deleteDatabase(dbFile)
+                SQLiteDatabase.deleteDatabase(ormaDbFile)
             }
         } catch (e: Exception) {
             Timber.e(e)

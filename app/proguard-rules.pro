@@ -17,9 +17,7 @@
 #}
 
 -keepattributes *Annotation*
--keep class net.arnx.jsonic.** { *; }
 -keep class com.cybozu.labs.langdetect.** { *; }
--dontwarn net.arnx.jsonic.**
 -dontwarn com.cybozu.labs.langdetect.**
 
 # Crashlytics
