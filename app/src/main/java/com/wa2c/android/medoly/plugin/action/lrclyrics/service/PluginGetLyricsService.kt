@@ -74,15 +74,19 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
         if (resultItem == null) {
 
             // detect result item
-            resultItem = detectResultItem(titleText, artistText)
+            try {
+                resultItem = detectResultItem(titleText, artistText)
 
-            // save to cache.
-            if (prefs.getBoolean(R.string.pref_cache_result, defRes = R.bool.pref_default_cache_result)) {
-                if (resultItem != null) {
-                    saveCache(pluginIntent, resultItem)
-                } else if (prefs.getBoolean(R.string.pref_cache_non_result, defRes = R.bool.pref_default_cache_non_result)) {
-                    saveCache(pluginIntent, null)
+                // save to cache.
+                if (prefs.getBoolean(R.string.pref_cache_result, defRes = R.bool.pref_default_cache_result)) {
+                    if (resultItem != null) {
+                        saveCache(pluginIntent, resultItem)
+                    } else if (prefs.getBoolean(R.string.pref_cache_non_result, defRes = R.bool.pref_default_cache_non_result)) {
+                        saveCache(pluginIntent, null)
+                    }
                 }
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
 
@@ -96,108 +100,103 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
     private fun detectResultItem(titleText: String, artistText: String): ResultItem? {
         var resultItem: ResultItem? = null
 
-        try {
-            // pre-creation profiles
-            if (prefs.getString(R.string.pref_search_first_language, defRes = R.string.pref_default_search_first_language).isNotEmpty()) {
-                synchronized(creatorThread) {
-                    creatorThread.start() // start profiles creating
-                }
+        // pre-creation profiles
+        if (prefs.getString(R.string.pref_search_first_language, defRes = R.string.pref_default_search_first_language).isNotEmpty()) {
+            synchronized(creatorThread) {
+                creatorThread.start() // start profiles creating
             }
+        }
 
-            // search
-            val result = ViewLyricsSearcher.search(titleText, artistText, 0)
+        // search
+        val result = ViewLyricsSearcher.search(titleText, artistText, 0)
 
-            // sort
-            val itemList = result?.infoList
-            if (itemList == null || itemList.size == 0)
-                return null
+        // sort
+        val itemList = result?.infoList
+        if (itemList == null || itemList.size == 0)
+            return null
 
-            Collections.sort(itemList, Comparator { o1, o2 ->
-                // order by rating
-                val o1Rating = o1.lyricRate!!
-                val o2Rating = o2.lyricRate!!
-                if (o1Rating != o2Rating)
-                    return@Comparator -java.lang.Double.compare(o1Rating, o2Rating)
-                // order by rating count
-                val o1RatingCount = o1.lyricRatesCount!!
-                val o2RatingCount = o2.lyricRatesCount!!
-                if (o1RatingCount != o2RatingCount)
-                    return@Comparator -Integer.compare(o1RatingCount, o2RatingCount)
-                // order by download count
-                val o1Download = o1.lyricDownloadsCount!!
-                val o2Download = o2.lyricDownloadsCount!!
-                -Integer.compare(o1Download, o2Download)
-            })
+        Collections.sort(itemList, Comparator { o1, o2 ->
+            // order by rating
+            val o1Rating = o1.lyricRate!!
+            val o2Rating = o2.lyricRate!!
+            if (o1Rating != o2Rating)
+                return@Comparator -java.lang.Double.compare(o1Rating, o2Rating)
+            // order by rating count
+            val o1RatingCount = o1.lyricRatesCount!!
+            val o2RatingCount = o2.lyricRatesCount!!
+            if (o1RatingCount != o2RatingCount)
+                return@Comparator -Integer.compare(o1RatingCount, o2RatingCount)
+            // order by download count
+            val o1Download = o1.lyricDownloadsCount!!
+            val o2Download = o2.lyricDownloadsCount!!
+            -Integer.compare(o1Download, o2Download)
+        })
 
-            val lang1 = prefs.getString(R.string.pref_search_first_language, defRes = R.string.pref_default_search_first_language)
-            val lang2 = prefs.getString(R.string.pref_search_second_language, defRes = R.string.pref_default_search_second_language)
-            val lang3 = prefs.getString(R.string.pref_search_third_language, defRes = R.string.pref_default_search_third_language)
+        val lang1 = prefs.getString(R.string.pref_search_first_language, defRes = R.string.pref_default_search_first_language)
+        val lang2 = prefs.getString(R.string.pref_search_second_language, defRes = R.string.pref_default_search_second_language)
+        val lang3 = prefs.getString(R.string.pref_search_third_language, defRes = R.string.pref_default_search_third_language)
 
-            if (lang1.isEmpty()) {
-                // not exists preferred language
-                resultItem = itemList[0]
-                resultItem.language = null
-                resultItem.lyrics = ViewLyricsSearcher.downloadLyricsText(resultItem.lyricURL)
-            } else {
-                // preferred language
-                val threshold = prefs.getInt(R.string.pref_search_language_threshold, defRes = R.integer.pref_default_search_language_threshold)
-                val selectedResult = arrayOfNulls<ResultItem>(3) // language 0: first, 1:second: 2: third
-                for (item in itemList) {
-                    try {
-                        item.lyrics = ViewLyricsSearcher.downloadLyricsText(item.lyricURL)
-                        creatorThread.join() // finish profiles creating
+        if (lang1.isEmpty()) {
+            // not exists preferred language
+            resultItem = itemList[0]
+            resultItem.language = null
+            resultItem.lyrics = ViewLyricsSearcher.downloadLyricsText(resultItem.lyricURL)
+        } else {
+            // preferred language
+            val threshold = prefs.getInt(R.string.pref_search_language_threshold, defRes = R.integer.pref_default_search_language_threshold)
+            val selectedResult = arrayOfNulls<ResultItem>(3) // language 0: first, 1:second: 2: third
+            for (item in itemList) {
+                try {
+                    item.lyrics = ViewLyricsSearcher.downloadLyricsText(item.lyricURL)
+                    creatorThread.join() // finish profiles creating
 
-                        val detector = DetectorFactoryUtil.createDetectorAll(this)
-                        detector.append(item.lyrics)
-                        val langList = detector.probabilities
-                        for (l in langList) {
-                            if (l.prob * 100 < threshold)
-                                continue
+                    val detector = DetectorFactoryUtil.createDetectorAll(this)
+                    detector.append(item.lyrics)
+                    val langList = detector.probabilities
+                    for (l in langList) {
+                        if (l.prob * 100 < threshold)
+                            continue
 
-                            // First language
-                            if (selectedResult[0] == null && l.lang == lang1) {
-                                item.language = l.lang
-                                selectedResult[0] = item
-                            }
-                            // Second language
-                            if (lang2.isEmpty())
-                                continue
-                            if (selectedResult[1] == null && l.lang == lang2) {
-                                item.language = l.lang
-                                selectedResult[1] = item
-                            }
-                            // Third language
-                            if (lang3.isEmpty())
-                                continue
-                            if (selectedResult[2] == null && l.lang == lang3) {
-                                item.language = l.lang
-                                selectedResult[2] = item
-                            }
+                        // First language
+                        if (selectedResult[0] == null && l.lang == lang1) {
+                            item.language = l.lang
+                            selectedResult[0] = item
                         }
-
-                        if (selectedResult[0] != null) {
-                            resultItem = selectedResult[0]
-                            break
+                        // Second language
+                        if (lang2.isEmpty())
+                            continue
+                        if (selectedResult[1] == null && l.lang == lang2) {
+                            item.language = l.lang
+                            selectedResult[1] = item
                         }
-                    } catch (e: LangDetectException) {
-                        Timber.e(e)
+                        // Third language
+                        if (lang3.isEmpty())
+                            continue
+                        if (selectedResult[2] == null && l.lang == lang3) {
+                            item.language = l.lang
+                            selectedResult[2] = item
+                        }
                     }
 
+                    if (selectedResult[0] != null) {
+                        resultItem = selectedResult[0]
+                        break
+                    }
+                } catch (e: LangDetectException) {
+                    Timber.e(e)
                 }
-                if (resultItem == null)
-                    resultItem = selectedResult[1]
-                if (resultItem == null)
-                    resultItem = selectedResult[2]
-            }
 
-            // language undetected
-            if (resultItem == null && prefs.getBoolean(R.string.pref_search_non_preferred_language, defRes = R.bool.pref_default_search_non_preferred_language)) {
-                resultItem = itemList[0]
-                resultItem.language = null
             }
+            if (resultItem == null)
+                resultItem = selectedResult[1]
+            if (resultItem == null)
+                resultItem = selectedResult[2]
+        }
 
-        } catch (e: Exception) {
-            Timber.d(e)
+        // language undetected
+        if (resultItem == null && prefs.getBoolean(R.string.pref_search_non_preferred_language, defRes = R.bool.pref_default_search_non_preferred_language)) {
+            resultItem = itemList[0]
+            resultItem.language = null
         }
 
         return resultItem
@@ -253,10 +252,8 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
      * @return Saved lyrics URI.
      */
     private fun saveLyricsFile(resultItem: ResultItem?): Uri? {
-        if (resultItem == null)
+        if (resultItem == null || resultItem.lyrics.isNullOrEmpty())
             return null
-
-        val lyricsBytes = ViewLyricsSearcher.downloadLyricsBytes(resultItem.lyricURL) ?: return null
 
         // Create folder
         val sharedLyricsDir = File(this.filesDir, SHARED_DIR_NAME)
@@ -265,7 +262,7 @@ class PluginGetLyricsService : AbstractPluginService(PluginGetLyricsService::cla
         }
         val sharedLyricsFile = File(sharedLyricsDir, SHARED_FILE_NAME)
         FileOutputStream(sharedLyricsFile).use { outputStream ->
-            outputStream.write(lyricsBytes)
+            outputStream.write(resultItem.lyrics!!.toByteArray())
             outputStream.flush()
         }
 
