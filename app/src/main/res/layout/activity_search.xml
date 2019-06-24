@@ -50,7 +50,7 @@
                     android:layout_height="@android:dimen/app_icon_size"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/ic_close" />
+                    android:src="@drawable/ic_close" />
             </TableRow>
 
             <TableRow
@@ -81,7 +81,7 @@
                     android:layout_height="@android:dimen/app_icon_size"
                     android:contentDescription="@null"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/ic_search" />
+                    android:src="@drawable/ic_search" />
 
             </TableRow>
 
