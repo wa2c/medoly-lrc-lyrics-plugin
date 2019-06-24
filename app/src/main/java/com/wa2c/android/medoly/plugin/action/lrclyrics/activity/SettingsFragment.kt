@@ -78,11 +78,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.pref_settings, rootKey)
-        //addPreferencesFromResource(R.xml.pref_settings)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
         // language priority
         run {
@@ -150,6 +145,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // About
         findPreference(getString(R.string.pref_about)).onPreferenceClickListener = aboutPreferenceClickListener
 
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         initSummary(preferenceScreen)
     }
 

@@ -20,7 +20,6 @@ android {
         versionName "1.9.0"
 
         multiDexEnabled true
-        vectorDrawables.useSupportLibrary = true
         kapt {
             arguments {
                 arg("room.schemaLocation", "$projectDir/schemas".toString())
@@ -69,7 +68,7 @@ android {
     // output file
     applicationVariants.all { variant ->
         if (variant.buildType.name == "release") {
-            def newName = "MedolyLrcLyricsPlugin_${defaultConfig.versionName}"
+            def newName = "MedolyLRCLyricsPlugin_${defaultConfig.versionName}"
             variant.outputs.all {
                 // filename
                 outputFileName = "${newName}.apk"
